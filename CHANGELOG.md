@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-24 — 提炼陈化期 + skill 生命周期管理
+
+- [框架] 提炼门槛升级：notes 条目须同时满足 重复 2 次以上 + 陈化 ≥ 14 天 + 至少 1 次实战验证，才可固化为规则（防止冲动固化）
+- [框架] 新增 skill 生命周期机制：月度评审三问（最近用过吗 / 被工具原生能力取代了吗 / 与其他 skill 或规则冲突吗）；退役流程 = 撤出全部发布点 + 源目录移入 archive/skills/ + CHANGELOG 记废止；归档可复活
+- [框架] 看板新增「使用热度」列：扫描 ~/.claude/projects、~/.codex/sessions、~/.kimi/sessions 会话日志，统计每个 skill 的近似使用次数与最后使用时间；>90 天零使用进入「待处理」预警
+- 首次扫描基线：scope-guard 966 次、vps-server-info 744 次、grsai-image-gen 54 次（均为日志出现近似值，含索引注入）；新建 3 个 skill 为 0（正常，刚创建）
+
 ## 2026-07-23 — skill 导入三个工具
 
 - [框架] `publish_skills.py` 扩展为 6 个自有 skill × 3 个读取池（~/.agents/skills 共享池、~/.codex/skills Codex 池、~/.claude/skills Claude 池）共 18 个发布点；修复符号链接目标的处理（Codex 池 vps-server-info 原为符号链接，已备份并替换为实体目录）

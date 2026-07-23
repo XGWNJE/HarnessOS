@@ -10,7 +10,9 @@
 """
 
 import html
+import os
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -33,6 +35,13 @@ SKILL_PUBLISH = [
 ]
 
 
+SESSION_LOGS = [
+    HOME / ".claude" / "projects",
+    HOME / ".codex" / "sessions",
+    HOME / ".kimi" / "sessions",
+]
+
+
 def dir_same(a, b) -> bool:
     import filecmp
     if not b.is_dir():
@@ -41,6 +50,32 @@ def dir_same(a, b) -> bool:
     if cmp.left_only or cmp.right_only or cmp.diff_files or cmp.funny_files:
         return False
     return all(dir_same(a / s, b / s) for s in cmp.common_dirs)
+
+
+def collect_usage(names: list[str]) -> dict[str, dict]:
+    """扫描各 Agent 会话日志，统计 skill 名的近似使用次数与最后使用时间。
+    说明：日志出现 ≠ 精确调用（可能是索引注入或提及），作为热度近似值足够。"""
+    usage = {n: {"count": 0, "last": 0.0} for n in names}
+    for base in SESSION_LOGS:
+        if not base.is_dir():
+            continue
+        for dirpath, _dirs, files in os.walk(base):
+            for fn in files:
+                if not fn.endswith((".jsonl", ".json")):
+                    continue
+                p = Path(dirpath) / fn
+                try:
+                    if p.stat().st_size > 20 * 1024 * 1024:
+                        continue
+                    text = p.read_text(encoding="utf-8", errors="ignore")
+                except OSError:
+                    continue
+                for n in names:
+                    c = text.count(n)
+                    if c:
+                        usage[n]["count"] += c
+                        usage[n]["last"] = max(usage[n]["last"], p.stat().st_mtime)
+    return usage
 
 
 def esc(s: str) -> str:
@@ -145,7 +180,9 @@ def render() -> str:
     log = collect_changelog()
     builds = collect_builds()
     pubs = collect_skill_publish()
+    usage = collect_usage([s["name"] for s in skills])
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    now_ts = time.time()
 
     # ---- 矩阵行 + 待办信号 ----
     alerts = []
@@ -165,8 +202,17 @@ def render() -> str:
         for p in pubs.get(s["dir"], []):
             if not p["sync"]:
                 alerts.append(f"{s['name']} {p['pool']}漂移，需 publish_skills")
+        u = usage.get(s["name"], {"count": 0, "last": 0.0})
+        if u["last"]:
+            days = int((now_ts - u["last"]) / 86400)
+            ago = "今天" if days == 0 else f"{days} 天前"
+            usage_html = f'{u["count"]} 次 · {ago}'
+            if days > 90:
+                alerts.append(f"{s['name']} 已 {days} 天无使用记录，下次月度评审考虑退役")
+        else:
+            usage_html = '<span class="dim">0 次</span>'
         matrix_rows += (f'<tr><td class="mono">{esc(s["name"])}</td><td>v{esc(s["version"])}</td>'
-                        f'<td>{build_html}</td><td>{pub_html}</td></tr>')
+                        f'<td>{build_html}</td><td>{pub_html}</td><td class="dim">{usage_html}</td></tr>')
 
     g_badges = " ".join(f'{t["label"]}{"*" if t["overlay"] else ""}{badge(t["sync"])}' for t in g["targets"])
     for t in g["targets"]:
@@ -245,8 +291,8 @@ def render() -> str:
   <div class="kpi"><div class="n">{len(alerts)}</div><div class="l">待处理</div></div>
 </div>
 
-<h2>Skill 构建 × 发布</h2>
-<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th></tr>{matrix_rows}</table>
+<h2>Skill 构建 × 发布 × 使用</h2>
+<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th><th>使用热度（会话日志近似）</th></tr>{matrix_rows}</table>
 
 <h2>全局规则（* = 含 Claude 专属 overlay）</h2>
 <div class="row">v{esc(g['version'])} · {g_badges} <span class="dim">· Kimi Code 无全局注入，不发布</span></div>
