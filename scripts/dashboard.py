@@ -41,12 +41,31 @@ def dir_same(a, b) -> bool:
     return all(dir_same(a / s, b / s) for s in cmp.common_dirs)
 
 
-def collect_skill_publish() -> list[dict]:
-    out = []
+def collect_skill_publish() -> dict[str, list[dict]]:
+    """目录发布状态：skill 名 -> [{pool, path, sync}]。"""
+    out: dict[str, list[dict]] = {}
     for name, target in SKILL_PUBLISH:
         src = ROOT / "skills" / name
-        pool = ".claude" if ".claude" in str(target) else ".agents"
-        out.append({"name": name, "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
+        pool = "Claude 池 ~/.claude/skills" if ".claude" in str(target) else "共享池 ~/.agents/skills"
+        out.setdefault(name, []).append({
+            "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
+    return out
+
+
+def collect_matrix(skills: list[dict]) -> list[dict]:
+    """构建 × 发布矩阵：每个自有 skill 一行。"""
+    builds = collect_builds()
+    pubs = collect_skill_publish() or {}
+    out = []
+    for s in skills:
+        built = builds.get(s["name"])
+        if built == s["version"]:
+            build = {"state": "ok", "text": f"v{built} 已打包（待手动导入 Kimi Code / Codex / Claude Code）"}
+        elif built:
+            build = {"state": "drift", "text": f"dist 里是旧版 v{built}，源已 v{s['version']}，需重新 pack"}
+        else:
+            build = {"state": "none", "text": "未打包"}
+        out.append({**s, "build": build, "pubs": pubs.get(s["dir"], [])})
     return out
 
 
@@ -78,6 +97,7 @@ def collect_skills(base: Path, own: bool) -> list[dict]:
         sources = sorted(set(re.findall(r"来源：([\w/.\-一-鿿]+\.md)", text)))
         rules = len(re.findall(r"^#{2,3} ", text, re.M))
         out.append({
+            "dir": d.name,
             "name": meta.get("name", d.name),
             "version": meta.get("version", "?"),
             "desc": meta.get("description", ""),
@@ -85,6 +105,18 @@ def collect_skills(base: Path, own: bool) -> list[dict]:
             "sources": sources,
             "own": own,
         })
+    return out
+
+
+def collect_builds() -> dict[str, str]:
+    """dist/ 下已构建的 .skill 包：name -> 最新已构建版本。"""
+    out = {}
+    dist = ROOT / "dist"
+    if dist.is_dir():
+        for f in sorted(dist.glob("*.skill")):
+            m = re.match(r"(.+)-([\d.]+)\.skill$", f.name)
+            if m:
+                out[m.group(1)] = m.group(2)
     return out
 
 
@@ -178,10 +210,22 @@ def render() -> str:
       <tr><td>{esc(t['label'])}{' <span class="tag">+overlay</span>' if t['overlay'] else ''}</td>
           <td>{badge(t['sync'])}</td></tr>""" for t in g["targets"])
 
-    skill_pub = collect_skill_publish()
-    skill_pub_rows = "".join(
-        f"<tr><td class=\"mono\">{esc(t['name'])}</td><td>{esc(t['pool'])}</td><td>{badge(t['sync'])}</td></tr>"
-        for t in skill_pub)
+    matrix = collect_matrix(skills)
+
+    def build_cell(b: dict) -> str:
+        if b["state"] == "ok":
+            return f'<span class="badge ok">已构建</span> <span class="dim">{esc(b["text"])}</span>'
+        if b["state"] == "drift":
+            return f'<span class="badge drift">待重建</span> <span class="dim">{esc(b["text"])}</span>'
+        return f'<span class="badge none">未构建</span>'
+
+    matrix_rows = "".join(
+        "<tr><td class=\"mono\">{name}</td><td>v{ver}</td><td>{build}</td><td>{pubs}</td></tr>".format(
+            name=esc(m["name"]), ver=esc(m["version"]), build=build_cell(m["build"]),
+            pubs="<br>".join(
+                f'{esc(p["pool"])} {badge(p["sync"])}' for p in m["pubs"]
+            ) or '<span class="dim">无目录发布（仅 .skill 包）</span>')
+        for m in matrix)
 
     log_html = "".join(f"""
       <div class="log-entry"><div class="log-title">{esc(e['title'])}</div>
@@ -220,6 +264,7 @@ def render() -> str:
   .badge {{ font-size:11px; padding:2px 8px; border-radius:99px; font-weight:600; }}
   .badge.ok {{ background:#e4f4ec; color:var(--ok); }}
   .badge.drift {{ background:#fbe7e7; color:var(--drift); }}
+  .badge.none {{ background:#f0eee9; color:var(--dim); }}
   .tag {{ font-size:11px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:1px 7px; }}
   .log-entry {{ border-left:2px solid var(--line); padding:2px 0 14px 16px; position:relative; }}
   .log-entry::before {{ content:""; position:absolute; left:-5px; top:8px; width:8px; height:8px; border-radius:50%; background:var(--accent); }}
@@ -242,8 +287,9 @@ def render() -> str:
 <h2>生产线 · 经验 → Skill</h2>
 {skill_cards or '<p class="dim">暂无</p>'}
 
-<h2>Skill 发布同步（~/.agents/skills 为准）</h2>
-<table><tr><th>Skill</th><th>发布池</th><th>状态</th></tr>{skill_pub_rows}</table>
+<h2>构建 × 发布矩阵（每个 skill 构建了什么、发到了哪些 Agent）</h2>
+<table><tr><th>Skill</th><th>版本</th><th>.skill 构建（dist/）</th><th>目录发布（同步状态）</th></tr>{matrix_rows}</table>
+<p class="dim" style="font-size:12px;margin-top:6px">目录发布以仓库源为准：~/.agents/skills 为共享池（Codex / OpenCode 等读取），~/.claude/skills 为 Claude 池。.skill 包需手动导入 Kimi Code / Codex / Claude Code。Kimi Code 另有托管技能体系，不在此矩阵。</p>
 
 <h2>全局规则 · 经验 → 用户规则</h2>
 <div class="card">

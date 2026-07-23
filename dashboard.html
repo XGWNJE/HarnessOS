@@ -30,6 +30,7 @@
   .badge { font-size:11px; padding:2px 8px; border-radius:99px; font-weight:600; }
   .badge.ok { background:#e4f4ec; color:var(--ok); }
   .badge.drift { background:#fbe7e7; color:var(--drift); }
+  .badge.none { background:#f0eee9; color:var(--dim); }
   .tag { font-size:11px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:1px 7px; }
   .log-entry { border-left:2px solid var(--line); padding:2px 0 14px 16px; position:relative; }
   .log-entry::before { content:""; position:absolute; left:-5px; top:8px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
@@ -40,7 +41,7 @@
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · 2026-07-23 23:28</div>
+  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · 2026-07-23 23:35</div>
 </header>
 <div class="stats">
   <div class="stat"><div class="num">6</div><div class="lbl">自有 Skill</div></div>
@@ -88,8 +89,9 @@
         <p>VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用。</p>
       </div>
 
-<h2>Skill 发布同步（~/.agents/skills 为准）</h2>
-<table><tr><th>Skill</th><th>发布池</th><th>状态</th></tr><tr><td class="mono">grsai-image-gen</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">init-project</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">scope-guard</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>.claude</td><td><span class="badge ok">同步</span></td></tr></table>
+<h2>构建 × 发布矩阵（每个 skill 构建了什么、发到了哪些 Agent）</h2>
+<table><tr><th>Skill</th><th>版本</th><th>.skill 构建（dist/）</th><th>目录发布（同步状态）</th></tr><tr><td class="mono">ai-coding-workflow</td><td>v1.0.0</td><td><span class="badge ok">已构建</span> <span class="dim">v1.0.0 已打包（待手动导入 Kimi Code / Codex / Claude Code）</span></td><td><span class="dim">无目录发布（仅 .skill 包）</span></td></tr><tr><td class="mono">ai-stack-harness</td><td>v1.1.0</td><td><span class="badge ok">已构建</span> <span class="dim">v1.1.0 已打包（待手动导入 Kimi Code / Codex / Claude Code）</span></td><td><span class="dim">无目录发布（仅 .skill 包）</span></td></tr><tr><td class="mono">grsai-image-gen</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">init-project</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">scope-guard</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span><br>Claude 池 ~/.claude/skills <span class="badge ok">同步</span></td></tr></table>
+<p class="dim" style="font-size:12px;margin-top:6px">目录发布以仓库源为准：~/.agents/skills 为共享池（Codex / OpenCode 等读取），~/.claude/skills 为 Claude 池。.skill 包需手动导入 Kimi Code / Codex / Claude Code。Kimi Code 另有托管技能体系，不在此矩阵。</p>
 
 <h2>全局规则 · 经验 → 用户规则</h2>
 <div class="card">
@@ -118,6 +120,8 @@
 
 <h2>加工历史</h2>
 
+      <div class="log-entry"><div class="log-title">2026-07-23 — 纳管 ~/.agents/skills 共享 skill 池</div>
+        <ul><li>[新增] 4 个自有 skill 入库（以 ~/.agents/skills 版本为准，补齐 version 1.0.0）：`grsai-image-gen`（Grsai 付费图像 API）、`init-project`（项目 AGENTS.md 初始化）、`scope-guard`（语义失败捕获，流水线运行时采集器）、`vps-server-info`（VPS 连接信息）</li><li>[修订] `vps-server-info` 分叉合并：~/.claude/skills 旧副本（77 行，visionguard 别名）已被 ~/.agents 新版（148 行，xgwnje 别名 + 2026-05-25 核验记录）覆盖，旧版备份于 backups/</li><li>[框架] `security-review`（origin: ECC）物理引入 vendor/；`skill-creator`（anthropics/skills git clone）仅登记来源不入库；~/.claude/skills 大池约 30 个 skill 暂不计入管理——均见 vendor/SOURCES.md</li><li>[框架] 新增 `scripts/publish_skills.py`：skills/ 目录镜像发布到 ~/.agents/skills/（+ Claude 池 vps 副本），--check 查漂移，覆盖前自动备份</li><li>[框架] 看板新增「Skill 发布同步」区块</li></ul></div>
       <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则多目标发布 + 看板</div>
         <ul><li>[框架] 新增 `scripts/publish_global.py`：核心规则发布到 4 个位置（~/AGENTS.md、Codex、OpenCode、Claude Code）；Claude 目标拼接 `global/overlays/claude.md`（迁移自原 ~/.claude/CLAUDE.md 的专属内容，原规则零丢失）；`--check` 检查漂移，覆盖前自动备份；Kimi Code 无全局注入机制，确认为非发布目标</li><li>[框架] 新增 `scripts/dashboard.py` + `dashboard.html`：单文件看板，扫描仓库自动生成——skill 清单与溯源、全局规则发布同步状态、笔记加工进度、加工历史；不维护自有状态</li></ul></div>
       <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则纳入管理</div>
