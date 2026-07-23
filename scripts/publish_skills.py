@@ -5,13 +5,14 @@
     python scripts/publish_skills.py            # 发布全部映射
     python scripts/publish_skills.py --check    # 只检查同步状态，不写入
 
-发布映射（源 = skills/<name>/）：
-    ~/.agents/skills/<name>/          跨 Agent 共享 skill 池（agentskills.io 标准位置）
-    ~/.claude/skills/vps-server-info/ 仅 vps-server-info（Claude 池的同名副本，以仓库为准）
+发布映射（源 = skills/<name>/，6 个自有 skill × 3 个读取池）：
+    ~/.agents/skills/<name>/   跨 Agent 共享池（agentskills.io 标准位置，OpenCode 等）
+    ~/.codex/skills/<name>/    Codex 池
+    ~/.claude/skills/<name>/   Claude Code 池
+Kimi Code CLI 无独立 skills 目录（config 有 merge_all_available_skills，推测读取共享池），不单独发布。
 
 发布以目录为单位做整目录镜像（源多余文件全拷、目标多余文件删除）。
 目标被视为发布产物：写入前若不一致，先备份到 backups/ 再覆盖。
-.ai-stack-harness / ai-coding-workflow 走 pack.py 打包 .skill，不经本脚本发布。
 """
 
 import filecmp
@@ -24,9 +25,10 @@ ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 BACKUPS = ROOT / "backups"
 
-SHARED = ["grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
-TARGETS = [(name, HOME / ".agents" / "skills" / name) for name in SHARED]
-TARGETS.append(("vps-server-info", HOME / ".claude" / "skills" / "vps-server-info"))
+OWN_SKILLS = ["ai-stack-harness", "ai-coding-workflow",
+              "grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
+POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
+TARGETS = [(name, pool / name) for name in OWN_SKILLS for pool in POOLS]
 
 
 def dir_same(a: Path, b: Path) -> bool:
@@ -39,7 +41,9 @@ def dir_same(a: Path, b: Path) -> bool:
 
 
 def mirror(src: Path, dst: Path) -> None:
-    if dst.exists():
+    if dst.is_symlink() or dst.is_file():
+        dst.unlink()
+    elif dst.exists():
         shutil.rmtree(dst)
     shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".git", "__pycache__"))
 

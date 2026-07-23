@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-23 — skill 导入三个工具
+
+- [框架] `publish_skills.py` 扩展为 6 个自有 skill × 3 个读取池（~/.agents/skills 共享池、~/.codex/skills Codex 池、~/.claude/skills Claude 池）共 18 个发布点；修复符号链接目标的处理（Codex 池 vps-server-info 原为符号链接，已备份并替换为实体目录）
+- [修订] 消除 Codex 池 vps-server-info 旧版分叉（第 3 处分叉）
+- Kimi Code CLI 无独立 skills 目录（config 仅有 merge_all_available_skills 开关），不单独发布，待实测确认其读取来源；.skill 包保留为分发格式
+- 看板同步徽章增至 22 个（18 skill 发布点 + 4 全局规则发布点），全绿
+
 ## 2026-07-23 — 规则体系分层对齐
 
 - [修订] `init-project` v1.0.0 → v1.1.0：明确分层——通用规则内容与归属判断以 HarnessOS `global/AGENTS.md` 源文件为准（~/AGENTS.md 为发布产物），本 skill 只做项目侧（调查项目事实、起草项目级 AGENTS.md、清理副本漂移）；「规则上浮」明确指向改 HarnessOS 源文件 + sync.py；不再自行重复定义全局/项目边界

@@ -26,10 +26,11 @@ PUBLISH_TARGETS = [
 ]
 
 SKILL_PUBLISH = [
-    (name, HOME / ".agents" / "skills" / name)
-    for name in ["grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
+    (name, pool / name)
+    for name in ["ai-stack-harness", "ai-coding-workflow",
+                 "grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
+    for pool in [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
 ]
-SKILL_PUBLISH.append(("vps-server-info", HOME / ".claude" / "skills" / "vps-server-info"))
 
 
 def dir_same(a, b) -> bool:
@@ -86,7 +87,8 @@ def collect_skill_publish() -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = {}
     for name, target in SKILL_PUBLISH:
         src = ROOT / "skills" / name
-        pool = "Claude 池" if ".claude" in str(target) else "共享池"
+        root = str(target.parent.parent)
+        pool = "Claude 池" if ".claude" in root else ("Codex 池" if ".codex" in root else "共享池")
         out.setdefault(name, []).append({
             "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
     return out
