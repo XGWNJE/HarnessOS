@@ -1,0 +1,8 @@
+interface:
+  display_name: "Grsai 图片生成"
+  short_description: "通过 Grsai API 生成图片，使用环境变量密钥并支持 Codex 预览"
+  brand_color: "#9373EE"
+  default_prompt: "使用 $grsai-image-gen 生成一张 16:9 插画，主题是..."
+
+policy:
+  allow_implicit_invocation: false

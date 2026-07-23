@@ -24,6 +24,31 @@ PUBLISH_TARGETS = [
     ("Claude Code · ~/.claude/CLAUDE.md", HOME / ".claude" / "CLAUDE.md",    "claude"),
 ]
 
+SKILL_PUBLISH = [
+    (name, HOME / ".agents" / "skills" / name)
+    for name in ["grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
+]
+SKILL_PUBLISH.append(("vps-server-info", HOME / ".claude" / "skills" / "vps-server-info"))
+
+
+def dir_same(a, b) -> bool:
+    import filecmp
+    if not b.is_dir():
+        return False
+    cmp = filecmp.dircmp(a, b)
+    if cmp.left_only or cmp.right_only or cmp.diff_files or cmp.funny_files:
+        return False
+    return all(dir_same(a / s, b / s) for s in cmp.common_dirs)
+
+
+def collect_skill_publish() -> list[dict]:
+    out = []
+    for name, target in SKILL_PUBLISH:
+        src = ROOT / "skills" / name
+        pool = ".claude" if ".claude" in str(target) else ".agents"
+        out.append({"name": name, "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
+    return out
+
 
 def esc(s: str) -> str:
     return html.escape(s, quote=True)
@@ -153,6 +178,11 @@ def render() -> str:
       <tr><td>{esc(t['label'])}{' <span class="tag">+overlay</span>' if t['overlay'] else ''}</td>
           <td>{badge(t['sync'])}</td></tr>""" for t in g["targets"])
 
+    skill_pub = collect_skill_publish()
+    skill_pub_rows = "".join(
+        f"<tr><td class=\"mono\">{esc(t['name'])}</td><td>{esc(t['pool'])}</td><td>{badge(t['sync'])}</td></tr>"
+        for t in skill_pub)
+
     log_html = "".join(f"""
       <div class="log-entry"><div class="log-title">{esc(e['title'])}</div>
         <ul>{''.join(f'<li>{esc(i)}</li>' for i in e['items'])}</ul></div>""" for e in log)
@@ -211,6 +241,9 @@ def render() -> str:
 
 <h2>生产线 · 经验 → Skill</h2>
 {skill_cards or '<p class="dim">暂无</p>'}
+
+<h2>Skill 发布同步（~/.agents/skills 为准）</h2>
+<table><tr><th>Skill</th><th>发布池</th><th>状态</th></tr>{skill_pub_rows}</table>
 
 <h2>全局规则 · 经验 → 用户规则</h2>
 <div class="card">

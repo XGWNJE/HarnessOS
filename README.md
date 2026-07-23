@@ -72,7 +72,7 @@ notes/ 允许粗糙，但每条笔记必须带两行元信息，否则月度提�
 1. **每次踩坑后**：往 notes/ 记一条，带上日期和场景两行元信息。
 2. **每月 / 每项目收尾**：翻笔记，重复出现 2 次以上的坑提炼成规则，合入对应 skill，标注来源，版本号 +1，记入 CHANGELOG（新增/修订/废止）。
 3. **每次大模型换代**：过一遍所有 skill，失效规则按「废止」处理，不直接删。
-4. **发布**：skill 源文件改动后运行 `python scripts/pack.py` 重新打包为 .skill（输出到 dist/），导入 Kimi Code / Codex / Claude Code 更新；`global/AGENTS.md`（或 overlay）改动后运行 `python scripts/publish_global.py` 发布到各 Agent 读取位置，版本号 +1，记入 CHANGELOG。
+4. **发布**：skill 源文件改动后运行 `python scripts/pack.py` 重新打包为 .skill（输出到 dist/），导入 Kimi Code / Codex / Claude Code 更新；`global/AGENTS.md`（或 overlay）改动后运行 `python scripts/publish_global.py` 发布到各 Agent 读取位置，版本号 +1，记入 CHANGELOG；共享 skill（grsai-image-gen、init-project、scope-guard、vps-server-info）改动后运行 `python scripts/publish_skills.py` 镜像发布到 `~/.agents/skills/`（vps-server-info 另发 `~/.claude/skills/`）。
 5. **看板**：规则或笔记变化后运行 `python scripts/dashboard.py` 重新生成 `dashboard.html`，浏览器打开即可总览全局。
 
 ## 全局规则发布映射

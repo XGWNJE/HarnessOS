@@ -40,11 +40,11 @@
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · 2026-07-23 23:17</div>
+  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · 2026-07-23 23:28</div>
 </header>
 <div class="stats">
-  <div class="stat"><div class="num">2</div><div class="lbl">自有 Skill</div></div>
-  <div class="stat"><div class="num">15</div><div class="lbl">规则章节</div></div>
+  <div class="stat"><div class="num">6</div><div class="lbl">自有 Skill</div></div>
+  <div class="stat"><div class="num">44</div><div class="lbl">规则章节</div></div>
   <div class="stat"><div class="num">v1.1.0</div><div class="lbl">全局规则版本</div></div>
   <div class="stat"><div class="num">78%</div><div class="lbl">原料加工率</div></div>
 </div>
@@ -63,6 +63,33 @@
         <div class="meta">9 个章节 · 来源：notes/2026-07-vibe-coding-观察.md</div>
         <p>AI 编程时代的技术栈选型与评估 Harness。当需要为项目（尤其是 Agent 应用、桌面应用、AI Coding 工作流）选择语言、框架、运行时或工具链时使用。核心判断标准：不只看 AI 能否生成代码，更看生成后能否快速检查、验证、修正。适用于技术选型、架构评审、技术栈争议判断（如 Tauri vs Electron）。</p>
       </div>
+      <div class="card">
+        <div class="card-head"><span class="name">grsai-image-gen</span>
+          <span class="ver">v1.0.0</span></div>
+        <div class="meta">11 个章节 · 来源：—</div>
+        <p>Grsai API 图片/视频生成。Use only when the user explicitly asks to use Grsai, `$grsai-image-gen`, Grsai API, an external paid image API, Grsai-specific models such as nano-banana or gpt-image-2, Grsai price/cost routing, or OpenAI-compatible Grsai image endpoints. Do not trigger for generic image creation requests; let Codex native image generation handle ordinary &quot;draw/generate an image&quot; tasks unless Grsai is named or API/price/model control is required. Supports aspect ratio, resolution, async polling, reference-image handling, and Codex preview compatibility.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="name">init-project</span>
+          <span class="ver">v1.0.0</span></div>
+        <div class="meta">3 个章节 · 来源：—</div>
+        <p>初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求&quot;初始化项目规则&quot;&quot;为项目生成 AGENTS.md&quot;&quot;重构/精简项目规则&quot;&quot;新项目接入 agent 协作&quot;时使用。以全局规则 ~/AGENTS.md 为唯一通用事实来源（唯一可靠依据），项目级文件只补充项目特有约束。</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="name">scope-guard</span>
+          <span class="ver">v1.0.0</span></div>
+        <div class="meta">5 个章节 · 来源：—</div>
+        <p>Use when SCOPE_GUARD_PENDING appears, or whenever an Agent action has a semantic failure involving a violated assumption, wrong target, wrong path, or wrong scope.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="name">vps-server-info</span>
+          <span class="ver">v1.0.0</span></div>
+        <div class="meta">10 个章节 · 来源：—</div>
+        <p>VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用。</p>
+      </div>
+
+<h2>Skill 发布同步（~/.agents/skills 为准）</h2>
+<table><tr><th>Skill</th><th>发布池</th><th>状态</th></tr><tr><td class="mono">grsai-image-gen</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">init-project</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">scope-guard</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>.agents</td><td><span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>.claude</td><td><span class="badge ok">同步</span></td></tr></table>
 
 <h2>全局规则 · 经验 → 用户规则</h2>
 <div class="card">
@@ -87,10 +114,12 @@
         <td>ai-coding-workflow、ai-stack-harness</td></tr></table>
 
 <h2>引入区 · vendor（原样不改）</h2>
-<table><tr><th>Skill</th><th>版本</th><th>来源</th></tr><tr><td>coding-protocol</td><td>v1.1.0</td><td>引入 · 原样不改</td></tr><tr><td>keel</td><td>v1.0.0</td><td>引入 · 原样不改</td></tr></table>
+<table><tr><th>Skill</th><th>版本</th><th>来源</th></tr><tr><td>coding-protocol</td><td>v1.1.0</td><td>引入 · 原样不改</td></tr><tr><td>keel</td><td>v1.0.0</td><td>引入 · 原样不改</td></tr><tr><td>security-review</td><td>v?</td><td>引入 · 原样不改</td></tr></table>
 
 <h2>加工历史</h2>
 
+      <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则多目标发布 + 看板</div>
+        <ul><li>[框架] 新增 `scripts/publish_global.py`：核心规则发布到 4 个位置（~/AGENTS.md、Codex、OpenCode、Claude Code）；Claude 目标拼接 `global/overlays/claude.md`（迁移自原 ~/.claude/CLAUDE.md 的专属内容，原规则零丢失）；`--check` 检查漂移，覆盖前自动备份；Kimi Code 无全局注入机制，确认为非发布目标</li><li>[框架] 新增 `scripts/dashboard.py` + `dashboard.html`：单文件看板，扫描仓库自动生成——skill 清单与溯源、全局规则发布同步状态、笔记加工进度、加工历史；不维护自有状态</li></ul></div>
       <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则纳入管理</div>
         <ul><li>[框架] 新增 `global/AGENTS.md`：全局协作规则纳入仓库流水线，源文件在仓库维护，`~/AGENTS.md` 变为发布产物（单向加工）</li><li>[修订] 全局规则整理为 v1.1.0：新增「全局 / 项目的边界」一节置顶（全局放跨项目通用规则，项目放仓库特有约束，一处事实只在一处维护）；原「文档边界」节精简为「文档维护」，去除重复条目；文件头加管理来源与版本标注</li><li>边界管理（哪些规则归全局、哪些归项目、何时上浮）后续视积累情况提炼为独立 skill</li></ul></div>
       <div class="log-entry"><div class="log-title">2026-07-23 — 首批规则提炼</div>
