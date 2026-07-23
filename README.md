@@ -5,21 +5,25 @@
 ## 三层流水线
 
 ```
-notes/（原料区）  →  本仓库（加工厂）  →  skills/（生产线）
- 随手记，2分钟一条      筛选、提炼、版本管理      当前生效的规则，打包发布
+notes/（原料区）  →  本仓库（加工厂）  →  发布产物
+ 随手记，2分钟一条      筛选、提炼、版本管理      skills/ → .skill 导入各 AI 工具
+                                          global/ → ~/AGENTS.md 供所有 Agent 注入
 ```
 
 - **notes/**：原始输入。踩坑记录、判断、实验结论。允许粗糙和矛盾，事后证明错了也没关系。唯一硬性要求：2 分钟内能记完，且带最低限度的结构（见下）。
 - **skills/**：加工完成品。**只放自有 skill**，只含当前生效的规则，按场景拆分成单一职责的小 skill，靠 description 精准触发。
+- **global/**：全局协作规则的源文件，发布为 `~/AGENTS.md`（如 `C:\Users\Administrator\AGENTS.md`）。只放跨项目通用、与具体仓库无关的规则；全局/项目的归属边界写在文件开头。注：Kimi Code 不注入全局规则，但此文件服务于所有注入它的 Agent，且「哪些规则归全局、哪些归项目」的边界本身需要一处维护——后续视情况把边界管理提炼为独立 skill。
 - **vendor/**：引入的第三方 skill，原样保留，不做任何修改。上游更新时整目录替换，并在 CHANGELOG 记录来源与新版本。
-- **加工是单向的**：永远改仓库里的源文件，绝不直接改已发布的 .skill 产物。
+- **加工是单向的**：永远改仓库里的源文件，绝不直接改已发布的产物（.skill、~/AGENTS.md）。
 
 ## 目录结构
 
 ```
 ├── notes/               # 原料区：踩坑笔记、观察记录
 ├── skills/              # 生产线：自有 Skill 源文件
-│   └── ai-stack-harness/    # AI 编程技术栈选型 Harness
+│   ├── ai-stack-harness/    # AI 编程技术栈选型 Harness
+│   └── ai-coding-workflow/  # AI 编程工作流 Harness
+├── global/              # 全局规则：AGENTS.md 源文件，发布到 ~/AGENTS.md
 ├── vendor/              # 引入区：第三方 Skill（原样不改）
 │   ├── keel/                # 架构治理协议（来源 lencx/skills）
 │   └── coding-protocol/     # 风险分级编码执行协议（来源 lencx/skills）
@@ -67,7 +71,7 @@ notes/ 允许粗糙，但每条笔记必须带两行元信息，否则月度提�
 1. **每次踩坑后**：往 notes/ 记一条，带上日期和场景两行元信息。
 2. **每月 / 每项目收尾**：翻笔记，重复出现 2 次以上的坑提炼成规则，合入对应 skill，标注来源，版本号 +1，记入 CHANGELOG（新增/修订/废止）。
 3. **每次大模型换代**：过一遍所有 skill，失效规则按「废止」处理，不直接删。
-4. **发布**：skill 源文件改动后运行 `python scripts/pack.py` 重新打包为 .skill（输出到 dist/），导入 Kimi Code / Codex / Claude Code 更新。
+4. **发布**：skill 源文件改动后运行 `python scripts/pack.py` 重新打包为 .skill（输出到 dist/），导入 Kimi Code / Codex / Claude Code 更新；`global/AGENTS.md` 改动后复制覆盖 `~/AGENTS.md`，版本号 +1，记入 CHANGELOG。
 
 ## 引入 Skill 来源
 
