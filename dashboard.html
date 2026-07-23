@@ -3,136 +3,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HarnessOS 看板</title>
 <style>
-  :root { --ink:#1a1d21; --dim:#6b7280; --line:#e5e7eb; --accent:#b3541e; --ok:#1a7f4b; --drift:#b91c1c; --bg:#fafaf7; }
+  :root { --ink:#20242a; --dim:#828a94; --line:#e6e4de; --accent:#b3541e; --ok:#1a7f4b; --bad:#b91c1c; --warn:#a16207; --bg:#fafaf7; }
   * { margin:0; box-sizing:border-box; }
-  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
-  .wrap { max-width:960px; margin:0 auto; padding:48px 24px 80px; }
-  header h1 { font-size:28px; letter-spacing:.02em; }
-  header .sub { color:var(--dim); font-size:13px; margin-top:4px; }
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:28px 0 40px; }
-  .stat { border:1px solid var(--line); border-radius:10px; padding:16px; background:#fff; }
-  .stat .num { font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; }
-  .stat .lbl { font-size:12px; color:var(--dim); margin-top:2px; }
-  h2 { font-size:16px; margin:36px 0 14px; padding-left:10px; border-left:3px solid var(--accent); }
-  .card { border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:#fff; margin-bottom:10px; }
-  .card-head { display:flex; justify-content:space-between; align-items:baseline; }
-  .name { font-weight:700; font-family:ui-monospace,Consolas,monospace; }
-  .ver { color:var(--accent); font-size:13px; font-weight:600; }
-  .meta { font-size:12px; color:var(--dim); margin:2px 0 8px; }
-  .card p { font-size:13px; color:#3f454d; }
-  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; font-size:13px; }
-  td,th { padding:10px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:middle; }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); font-size:13px; line-height:1.55; }
+  .wrap { max-width:880px; margin:0 auto; padding:28px 20px 40px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px; }
+  h1 { font-size:20px; }
+  header .sub { color:var(--dim); font-size:11px; }
+  .kpis { display:flex; gap:10px; margin:16px 0 18px; flex-wrap:wrap; }
+  .kpi { flex:1; min-width:120px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }
+  .kpi .n { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .kpi .l { font-size:11px; color:var(--dim); }
+  h2 { font-size:12px; color:var(--dim); font-weight:600; letter-spacing:.08em; margin:18px 0 6px; text-transform:uppercase; }
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  td,th { padding:6px 10px; border-bottom:1px solid var(--line); text-align:left; font-size:12px; }
+  th { color:var(--dim); font-weight:600; background:#f5f4f0; }
   tr:last-child td { border-bottom:none; }
-  .mono { font-family:ui-monospace,Consolas,monospace; font-size:12px; }
+  .mono { font-family:ui-monospace,Consolas,monospace; font-size:11.5px; }
   .dim { color:var(--dim); }
-  .bar { display:inline-block; width:90px; height:6px; background:#eceae4; border-radius:3px; margin-right:8px; vertical-align:middle; overflow:hidden; }
-  .fill { height:100%; background:var(--accent); }
-  .badge { font-size:11px; padding:2px 8px; border-radius:99px; font-weight:600; }
-  .badge.ok { background:#e4f4ec; color:var(--ok); }
-  .badge.drift { background:#fbe7e7; color:var(--drift); }
-  .badge.none { background:#f0eee9; color:var(--dim); }
-  .tag { font-size:11px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:1px 7px; }
-  .log-entry { border-left:2px solid var(--line); padding:2px 0 14px 16px; position:relative; }
-  .log-entry::before { content:""; position:absolute; left:-5px; top:8px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
-  .log-title { font-weight:600; font-size:14px; }
-  .log-entry ul { margin:4px 0 0 18px; font-size:13px; color:#3f454d; }
-  footer { margin-top:48px; font-size:12px; color:var(--dim); }
-  code { background:#f0eee9; padding:1px 5px; border-radius:4px; font-size:12px; }
+  .b { font-size:10.5px; padding:1px 7px; border-radius:99px; font-weight:600; margin-left:4px; white-space:nowrap; }
+  .b.ok { background:#e4f4ec; color:var(--ok); }
+  .b.bad { background:#fbe7e7; color:var(--bad); }
+  .b.warn { background:#fdf3e0; color:var(--warn); }
+  .b.off { background:#f0eee9; color:var(--dim); }
+  .bar { display:inline-block; width:64px; height:5px; background:#eceae4; border-radius:3px; margin-right:6px; vertical-align:middle; overflow:hidden; }
+  .bar span { display:block; height:100%; background:var(--accent); }
+  .alerts { border:1px solid #f0d9b5; background:#fffaf2; border-radius:8px; padding:8px 12px; margin-top:18px; }
+  .alerts b { color:var(--warn); font-size:12px; }
+  .alerts ul { margin:4px 0 0 18px; font-size:12px; }
+  .allok { border:1px solid #cde8da; background:#f2faf6; color:var(--ok); border-radius:8px; padding:8px 12px; margin-top:18px; font-size:12px; }
+  .row { background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; }
+  footer { margin-top:20px; font-size:11px; color:var(--dim); }
+  code { background:#f0eee9; padding:0 4px; border-radius:3px; font-size:11px; }
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · 2026-07-23 23:35</div>
+  <div class="sub">scripts/dashboard.py 生成 · 2026-07-23 23:44 · 细节查仓库 CHANGELOG 与源文件</div>
 </header>
-<div class="stats">
-  <div class="stat"><div class="num">6</div><div class="lbl">自有 Skill</div></div>
-  <div class="stat"><div class="num">44</div><div class="lbl">规则章节</div></div>
-  <div class="stat"><div class="num">v1.1.0</div><div class="lbl">全局规则版本</div></div>
-  <div class="stat"><div class="num">78%</div><div class="lbl">原料加工率</div></div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">6</div><div class="l">自有 Skill</div></div>
+  <div class="kpi"><div class="n">9/9</div><div class="l">发布点同步</div></div>
+  <div class="kpi"><div class="n">v1.1.0</div><div class="l">全局规则版本</div></div>
+  <div class="kpi"><div class="n">78%</div><div class="l">原料加工率（7/9）</div></div>
+  <div class="kpi"><div class="n">0</div><div class="l">待处理</div></div>
 </div>
 
-<h2>生产线 · 经验 → Skill</h2>
+<h2>Skill 构建 × 发布</h2>
+<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th></tr><tr><td class="mono">ai-coding-workflow</td><td>v1.0.0</td><td><span class="b ok">v1.0.0</span></td><td><span class="dim">仅 .skill 包</span></td></tr><tr><td class="mono">ai-stack-harness</td><td>v1.1.0</td><td><span class="b ok">v1.1.0</span></td><td><span class="dim">仅 .skill 包</span></td></tr><tr><td class="mono">grsai-image-gen</td><td>v1.0.0</td><td><span class="b ok">v1.0.0</span></td><td>共享池<span class="b ok">同步</span></td></tr><tr><td class="mono">init-project</td><td>v1.0.0</td><td><span class="b ok">v1.0.0</span></td><td>共享池<span class="b ok">同步</span></td></tr><tr><td class="mono">scope-guard</td><td>v1.0.0</td><td><span class="b ok">v1.0.0</span></td><td>共享池<span class="b ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>v1.0.0</td><td><span class="b ok">v1.0.0</span></td><td>共享池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td></tr></table>
 
-      <div class="card">
-        <div class="card-head"><span class="name">ai-coding-workflow</span>
-          <span class="ver">v1.0.0</span></div>
-        <div class="meta">6 个章节 · 来源：notes/2026-07-vibe-coding-观察.md</div>
-        <p>AI 编程的工作流 Harness：如何组织人、模型与验证环节。当需要设计 AI 编程协作流程、评估模型真实干活水平、判断任务该用单模型还是多模型交叉验证、或反思 AI 产出效率时使用。核心：Token 消耗不是产出指标，榜单不代表干活水平，复杂任务靠交叉验证与证据链收敛。适用于 AI 编程流程设计、模型选型实战评估、编程效率复盘。</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="name">ai-stack-harness</span>
-          <span class="ver">v1.1.0</span></div>
-        <div class="meta">9 个章节 · 来源：notes/2026-07-vibe-coding-观察.md</div>
-        <p>AI 编程时代的技术栈选型与评估 Harness。当需要为项目（尤其是 Agent 应用、桌面应用、AI Coding 工作流）选择语言、框架、运行时或工具链时使用。核心判断标准：不只看 AI 能否生成代码，更看生成后能否快速检查、验证、修正。适用于技术选型、架构评审、技术栈争议判断（如 Tauri vs Electron）。</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="name">grsai-image-gen</span>
-          <span class="ver">v1.0.0</span></div>
-        <div class="meta">11 个章节 · 来源：—</div>
-        <p>Grsai API 图片/视频生成。Use only when the user explicitly asks to use Grsai, `$grsai-image-gen`, Grsai API, an external paid image API, Grsai-specific models such as nano-banana or gpt-image-2, Grsai price/cost routing, or OpenAI-compatible Grsai image endpoints. Do not trigger for generic image creation requests; let Codex native image generation handle ordinary &quot;draw/generate an image&quot; tasks unless Grsai is named or API/price/model control is required. Supports aspect ratio, resolution, async polling, reference-image handling, and Codex preview compatibility.</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="name">init-project</span>
-          <span class="ver">v1.0.0</span></div>
-        <div class="meta">3 个章节 · 来源：—</div>
-        <p>初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求&quot;初始化项目规则&quot;&quot;为项目生成 AGENTS.md&quot;&quot;重构/精简项目规则&quot;&quot;新项目接入 agent 协作&quot;时使用。以全局规则 ~/AGENTS.md 为唯一通用事实来源（唯一可靠依据），项目级文件只补充项目特有约束。</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="name">scope-guard</span>
-          <span class="ver">v1.0.0</span></div>
-        <div class="meta">5 个章节 · 来源：—</div>
-        <p>Use when SCOPE_GUARD_PENDING appears, or whenever an Agent action has a semantic failure involving a violated assumption, wrong target, wrong path, or wrong scope.</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="name">vps-server-info</span>
-          <span class="ver">v1.0.0</span></div>
-        <div class="meta">10 个章节 · 来源：—</div>
-        <p>VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用。</p>
-      </div>
+<h2>全局规则（* = 含 Claude 专属 overlay）</h2>
+<div class="row">v1.1.0 · home<span class="b ok">同步</span> Codex<span class="b ok">同步</span> OpenCode<span class="b ok">同步</span> Claude Code*<span class="b ok">同步</span> <span class="dim">· Kimi Code 无全局注入，不发布</span></div>
 
-<h2>构建 × 发布矩阵（每个 skill 构建了什么、发到了哪些 Agent）</h2>
-<table><tr><th>Skill</th><th>版本</th><th>.skill 构建（dist/）</th><th>目录发布（同步状态）</th></tr><tr><td class="mono">ai-coding-workflow</td><td>v1.0.0</td><td><span class="badge ok">已构建</span> <span class="dim">v1.0.0 已打包（待手动导入 Kimi Code / Codex / Claude Code）</span></td><td><span class="dim">无目录发布（仅 .skill 包）</span></td></tr><tr><td class="mono">ai-stack-harness</td><td>v1.1.0</td><td><span class="badge ok">已构建</span> <span class="dim">v1.1.0 已打包（待手动导入 Kimi Code / Codex / Claude Code）</span></td><td><span class="dim">无目录发布（仅 .skill 包）</span></td></tr><tr><td class="mono">grsai-image-gen</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">init-project</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">scope-guard</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span></td></tr><tr><td class="mono">vps-server-info</td><td>v1.0.0</td><td><span class="badge none">未构建</span></td><td>共享池 ~/.agents/skills <span class="badge ok">同步</span><br>Claude 池 ~/.claude/skills <span class="badge ok">同步</span></td></tr></table>
-<p class="dim" style="font-size:12px;margin-top:6px">目录发布以仓库源为准：~/.agents/skills 为共享池（Codex / OpenCode 等读取），~/.claude/skills 为 Claude 池。.skill 包需手动导入 Kimi Code / Codex / Claude Code。Kimi Code 另有托管技能体系，不在此矩阵。</p>
+<h2>原料加工</h2>
+<table><tr><th>笔记</th><th>进度</th><th>去向</th></tr><tr><td class="mono">2026-07-vibe-coding-观察.md</td><td><span class="bar"><span style="width:78%"></span></span>7/9</td><td class="dim">ai-coding-workflow、ai-stack-harness</td></tr></table>
 
-<h2>全局规则 · 经验 → 用户规则</h2>
-<div class="card">
-  <div class="card-head"><span class="name">global/AGENTS.md</span><span class="ver">v1.1.0</span></div>
-  <div class="meta">12 个章节 · 发布到 4 个 Agent 读取位置 · Kimi Code 无全局注入机制，不发布</div>
-  <table><tr><th>发布目标</th><th>状态</th></tr>
-      <tr><td>home · ~/AGENTS.md</td>
-          <td><span class="badge ok">同步</span></td></tr>
-      <tr><td>Codex · ~/.codex/AGENTS.md</td>
-          <td><span class="badge ok">同步</span></td></tr>
-      <tr><td>OpenCode · ~/.config/opencode/AGENTS.md</td>
-          <td><span class="badge ok">同步</span></td></tr>
-      <tr><td>Claude Code · ~/.claude/CLAUDE.md <span class="tag">+overlay</span></td>
-          <td><span class="badge ok">同步</span></td></tr></table>
-</div>
+<h2>其他</h2>
+<div class="row dim">引入（vendor）：coding-protocol v1.1.0、keel v1.0.0、security-review v?；另有 skill-creator（Anthropic 官方，仅登记）· 最近动态：2026-07-23 — 总入口 + 看板单屏化（共 7 条，见 CHANGELOG.md）</div>
 
-<h2>原料区 · 笔记加工进度</h2>
-<table><tr><th>笔记</th><th>加工进度</th><th>去向</th></tr>
-      <tr><td class="mono">2026-07-vibe-coding-观察.md</td>
-        <td><div class="bar"><div class="fill" style="width:78%"></div></div>
-            7/9 条已加工</td>
-        <td>ai-coding-workflow、ai-stack-harness</td></tr></table>
+<div class="allok">✓ 所有发布点与源文件一致，无待处理事项</div>
 
-<h2>引入区 · vendor（原样不改）</h2>
-<table><tr><th>Skill</th><th>版本</th><th>来源</th></tr><tr><td>coding-protocol</td><td>v1.1.0</td><td>引入 · 原样不改</td></tr><tr><td>keel</td><td>v1.0.0</td><td>引入 · 原样不改</td></tr><tr><td>security-review</td><td>v?</td><td>引入 · 原样不改</td></tr></table>
-
-<h2>加工历史</h2>
-
-      <div class="log-entry"><div class="log-title">2026-07-23 — 纳管 ~/.agents/skills 共享 skill 池</div>
-        <ul><li>[新增] 4 个自有 skill 入库（以 ~/.agents/skills 版本为准，补齐 version 1.0.0）：`grsai-image-gen`（Grsai 付费图像 API）、`init-project`（项目 AGENTS.md 初始化）、`scope-guard`（语义失败捕获，流水线运行时采集器）、`vps-server-info`（VPS 连接信息）</li><li>[修订] `vps-server-info` 分叉合并：~/.claude/skills 旧副本（77 行，visionguard 别名）已被 ~/.agents 新版（148 行，xgwnje 别名 + 2026-05-25 核验记录）覆盖，旧版备份于 backups/</li><li>[框架] `security-review`（origin: ECC）物理引入 vendor/；`skill-creator`（anthropics/skills git clone）仅登记来源不入库；~/.claude/skills 大池约 30 个 skill 暂不计入管理——均见 vendor/SOURCES.md</li><li>[框架] 新增 `scripts/publish_skills.py`：skills/ 目录镜像发布到 ~/.agents/skills/（+ Claude 池 vps 副本），--check 查漂移，覆盖前自动备份</li><li>[框架] 看板新增「Skill 发布同步」区块</li></ul></div>
-      <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则多目标发布 + 看板</div>
-        <ul><li>[框架] 新增 `scripts/publish_global.py`：核心规则发布到 4 个位置（~/AGENTS.md、Codex、OpenCode、Claude Code）；Claude 目标拼接 `global/overlays/claude.md`（迁移自原 ~/.claude/CLAUDE.md 的专属内容，原规则零丢失）；`--check` 检查漂移，覆盖前自动备份；Kimi Code 无全局注入机制，确认为非发布目标</li><li>[框架] 新增 `scripts/dashboard.py` + `dashboard.html`：单文件看板，扫描仓库自动生成——skill 清单与溯源、全局规则发布同步状态、笔记加工进度、加工历史；不维护自有状态</li></ul></div>
-      <div class="log-entry"><div class="log-title">2026-07-23 — 全局规则纳入管理</div>
-        <ul><li>[框架] 新增 `global/AGENTS.md`：全局协作规则纳入仓库流水线，源文件在仓库维护，`~/AGENTS.md` 变为发布产物（单向加工）</li><li>[修订] 全局规则整理为 v1.1.0：新增「全局 / 项目的边界」一节置顶（全局放跨项目通用规则，项目放仓库特有约束，一处事实只在一处维护）；原「文档边界」节精简为「文档维护」，去除重复条目；文件头加管理来源与版本标注</li><li>边界管理（哪些规则归全局、哪些归项目、何时上浮）后续视积累情况提炼为独立 skill</li></ul></div>
-      <div class="log-entry"><div class="log-title">2026-07-23 — 首批规则提炼</div>
-        <ul><li>[新增] `ai-coding-workflow` v1.0.0：AI 编程工作流 Harness，6 条规则全部提炼自 notes/2026-07-vibe-coding-观察.md（Token≠产出、榜单不可信、双模型交叉验证、诚实失败、生成≠知识、Harness&gt;Loop）</li><li>[修订] `ai-stack-harness` v1.0.0 → v1.1.0：通用警示新增「封装层优先诚实失败」一条，速查区补交叉引用</li><li>notes/2026-07-vibe-coding-观察.md 全部条目标注提炼去向，原料加工完毕</li></ul></div>
-      <div class="log-entry"><div class="log-title">2026-07-23 — 框架完善</div>
-        <ul><li>[框架] 引入的第三方 skill 从 `skills/` 移入 `vendor/`，与自有 skill 物理分离；上游更新时整目录替换</li><li>[框架] 确立规则生命周期约定：CHANGELOG 条目标注 新增/修订/废止；失效规则改写为废止块保留失败原因，不直接删除</li><li>[框架] 确立规则溯源约定：规则标注来源笔记，便于废止与换代清理时回溯场景</li><li>[框架] notes/ 增加最低结构要求：日期 + 场景两行元信息</li><li>[框架] 新增 `scripts/pack.py` 打包脚本：读取 SKILL.md 版本号输出 `dist/&lt;name&gt;-&lt;version&gt;.skill`，同版本重复打包报错（强制版本 +1）</li></ul></div>
-      <div class="log-entry"><div class="log-title">2026-07-23 — 仓库初始化</div>
-        <ul><li>建立三层流水线结构：notes（原料）→ 仓库（加工）→ skills（生产）</li><li>新增自有 skill：`ai-stack-harness` v1.0.0（提炼自 lencx《编程心得：Vibe 上百亿 Token 后，我收获了什么？》，核心：选型看反馈闭环而非生成能力；Rust + TS + React/Tailwind + Electron 分层栈；Tauri 与自编译 Chromium 反面清单；长链路任务证据链收敛法）</li><li>引入第三方 skill：`keel` v1.0.0、`coding-protocol` v1.1.0（来源 github.com/lencx/skills，原样未改）</li><li>首批原料入库：notes/2026-07-vibe-coding-观察.md</li></ul></div>
-
-<footer>本文件为生成产物，不手改。数据变化后运行 <code>python scripts/dashboard.py</code> 重新生成。
-漂移状态的修复：运行 <code>python scripts/publish_global.py</code>。</footer>
+<footer>生成产物，不手改。数据变化后运行 <code>python scripts/sync.py</code>（或单独 <code>dashboard.py</code>）重新生成；修复漂移运行对应 publish 脚本。</footer>
 </div></body></html>

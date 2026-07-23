@@ -19,20 +19,27 @@ SRC_DIRS = [ROOT / "skills", ROOT / "vendor"]
 DIST = ROOT / "dist"
 
 
-def read_meta(skill_dir: Path) -> tuple[str, str]:
+def read_meta(skill_dir: Path) -> tuple[str, str] | None:
+    """frontmatter 缺 name/version 时返回 None（vendor 引入 skill 可不规范，跳过）。"""
     text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
     name = re.search(r"^name:\s*(.+)$", text, re.M)
     version = re.search(r"^version:\s*(.+)$", text, re.M)
     if not (name and version):
-        sys.exit(f"[错误] {skill_dir}/SKILL.md frontmatter 缺少 name 或 version")
+        return None
     return name.group(1).strip(), version.group(1).strip()
 
 
-def pack(skill_dir: Path) -> Path:
-    name, version = read_meta(skill_dir)
+def pack(skill_dir: Path) -> Path | None:
+    """已存在同版本包或 frontmatter 不规范时返回 None（跳过），不中断其余 skill。"""
+    meta = read_meta(skill_dir)
+    if meta is None:
+        print(f"[跳过] {skill_dir.name}（frontmatter 无 name/version，通常为 vendor 引入）")
+        return None
+    name, version = meta
     out = DIST / f"{name}-{version}.skill"
     if out.exists():
-        sys.exit(f"[错误] {out.name} 已存在。内容有改动请先把 SKILL.md 的 version +1。")
+        print(f"[跳过] {out.name} 已存在（无版本变更）")
+        return None
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
         for f in sorted(skill_dir.rglob("*")):
             if f.is_file():
@@ -52,7 +59,9 @@ def main() -> None:
         sys.exit("[错误] 没有可打包的 skill")
     DIST.mkdir(exist_ok=True)
     for d in dirs:
-        print(f"[完成] {pack(d).relative_to(ROOT)}")
+        out = pack(d)
+        if out:
+            print(f"[完成] {out.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

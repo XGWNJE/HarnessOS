@@ -4,8 +4,9 @@
 用法：
     python scripts/dashboard.py     # 重新生成 dashboard.html
 
-数据来源全部是仓库源文件本身（skill frontmatter、笔记标注、CHANGELOG、
-全局规则与发布点的一致性），看板不维护任何自己的状态——改了规则就跑一次本脚本。
+设计原则：单屏全局概览。只展示「需要关注的状态」（同步/漂移、构建/待重建、
+加工进度、最近动态一条），不堆砌历史细节——细节回仓库查 CHANGELOG 和源文件。
+数据来源全部是仓库源文件本身，看板不维护任何自己的状态。
 """
 
 import html
@@ -18,10 +19,10 @@ HOME = Path.home()
 OUT = ROOT / "dashboard.html"
 
 PUBLISH_TARGETS = [
-    ("home · ~/AGENTS.md",            HOME / "AGENTS.md",                    None),
-    ("Codex · ~/.codex/AGENTS.md",    HOME / ".codex" / "AGENTS.md",         None),
-    ("OpenCode · ~/.config/opencode/AGENTS.md", HOME / ".config" / "opencode" / "AGENTS.md", None),
-    ("Claude Code · ~/.claude/CLAUDE.md", HOME / ".claude" / "CLAUDE.md",    "claude"),
+    ("home",            HOME / "AGENTS.md",                    None),
+    ("Codex",           HOME / ".codex" / "AGENTS.md",         None),
+    ("OpenCode",        HOME / ".config" / "opencode" / "AGENTS.md", None),
+    ("Claude Code",     HOME / ".claude" / "CLAUDE.md",        "claude"),
 ]
 
 SKILL_PUBLISH = [
@@ -41,34 +42,6 @@ def dir_same(a, b) -> bool:
     return all(dir_same(a / s, b / s) for s in cmp.common_dirs)
 
 
-def collect_skill_publish() -> dict[str, list[dict]]:
-    """目录发布状态：skill 名 -> [{pool, path, sync}]。"""
-    out: dict[str, list[dict]] = {}
-    for name, target in SKILL_PUBLISH:
-        src = ROOT / "skills" / name
-        pool = "Claude 池 ~/.claude/skills" if ".claude" in str(target) else "共享池 ~/.agents/skills"
-        out.setdefault(name, []).append({
-            "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
-    return out
-
-
-def collect_matrix(skills: list[dict]) -> list[dict]:
-    """构建 × 发布矩阵：每个自有 skill 一行。"""
-    builds = collect_builds()
-    pubs = collect_skill_publish() or {}
-    out = []
-    for s in skills:
-        built = builds.get(s["name"])
-        if built == s["version"]:
-            build = {"state": "ok", "text": f"v{built} 已打包（待手动导入 Kimi Code / Codex / Claude Code）"}
-        elif built:
-            build = {"state": "drift", "text": f"dist 里是旧版 v{built}，源已 v{s['version']}，需重新 pack"}
-        else:
-            build = {"state": "none", "text": "未打包"}
-        out.append({**s, "build": build, "pubs": pubs.get(s["dir"], [])})
-    return out
-
-
 def esc(s: str) -> str:
     return html.escape(s, quote=True)
 
@@ -84,7 +57,7 @@ def parse_frontmatter(text: str) -> dict:
     return meta
 
 
-def collect_skills(base: Path, own: bool) -> list[dict]:
+def collect_skills(base: Path) -> list[dict]:
     out = []
     if not base.is_dir():
         return out
@@ -92,24 +65,13 @@ def collect_skills(base: Path, own: bool) -> list[dict]:
         f = d / "SKILL.md"
         if not d.is_dir() or not f.exists():
             continue
-        text = f.read_text(encoding="utf-8")
-        meta = parse_frontmatter(text)
-        sources = sorted(set(re.findall(r"来源：([\w/.\-一-鿿]+\.md)", text)))
-        rules = len(re.findall(r"^#{2,3} ", text, re.M))
-        out.append({
-            "dir": d.name,
-            "name": meta.get("name", d.name),
-            "version": meta.get("version", "?"),
-            "desc": meta.get("description", ""),
-            "rules": rules,
-            "sources": sources,
-            "own": own,
-        })
+        meta = parse_frontmatter(f.read_text(encoding="utf-8"))
+        out.append({"dir": d.name, "name": meta.get("name", d.name),
+                    "version": meta.get("version", "?")})
     return out
 
 
 def collect_builds() -> dict[str, str]:
-    """dist/ 下已构建的 .skill 包：name -> 最新已构建版本。"""
     out = {}
     dist = ROOT / "dist"
     if dist.is_dir():
@@ -117,6 +79,16 @@ def collect_builds() -> dict[str, str]:
             m = re.match(r"(.+)-([\d.]+)\.skill$", f.name)
             if m:
                 out[m.group(1)] = m.group(2)
+    return out
+
+
+def collect_skill_publish() -> dict[str, list[dict]]:
+    out: dict[str, list[dict]] = {}
+    for name, target in SKILL_PUBLISH:
+        src = ROOT / "skills" / name
+        pool = "Claude 池" if ".claude" in str(target) else "共享池"
+        out.setdefault(name, []).append({
+            "pool": pool, "sync": src.is_dir() and dir_same(src, target)})
     return out
 
 
@@ -130,13 +102,8 @@ def collect_notes() -> list[dict]:
         items = re.findall(r"^- .+", text, re.M)
         distilled = [i for i in items if "已提炼进" in i or "已废止" in i]
         targets = sorted(set(re.findall(r"已提炼进 ([\w\-]+)", text)))
-        out.append({
-            "file": f.name,
-            "title": (re.search(r"^# (.+)$", text, re.M) or [None, f.name])[1],
-            "total": len(items),
-            "distilled": len(distilled),
-            "targets": targets,
-        })
+        out.append({"file": f.name, "total": len(items),
+                    "distilled": len(distilled), "targets": targets})
     return out
 
 
@@ -144,171 +111,153 @@ def collect_global() -> dict:
     f = ROOT / "global" / "AGENTS.md"
     text = f.read_text(encoding="utf-8")
     version = (re.search(r"版本：v?([\d.]+)", text) or [None, "?"])[1]
-    sections = len(re.findall(r"^## ", text, re.M))
-    overlays = sorted(p.stem for p in (ROOT / "global" / "overlays").glob("*.md"))
     targets = []
     for label, target, overlay in PUBLISH_TARGETS:
         want = text.rstrip()
         if overlay:
             want += "\n\n---\n\n" + (ROOT / "global" / "overlays" / f"{overlay}.md").read_text(encoding="utf-8")
         current = target.read_text(encoding="utf-8") if target.exists() else None
-        targets.append({"label": label, "path": str(target),
-                        "sync": current is not None and current.rstrip() == want.rstrip(),
-                        "overlay": overlay or ""})
-    return {"version": version, "sections": sections, "overlays": overlays, "targets": targets}
+        targets.append({"label": label, "overlay": overlay or "",
+                        "sync": current is not None and current.rstrip() == want.rstrip()})
+    return {"version": version, "targets": targets}
 
 
-def collect_changelog(limit: int = 8) -> list[dict]:
+def collect_changelog() -> dict:
     f = ROOT / "CHANGELOG.md"
     if not f.exists():
-        return []
+        return {"latest": "—", "count": 0}
     text = f.read_text(encoding="utf-8")
-    entries = []
-    for m in re.finditer(r"^## (.+?)\n(.*?)(?=^## |\Z)", text, re.S | re.M):
-        title, body = m.group(1), m.group(2)
-        items = re.findall(r"^- (.+)", body, re.M)
-        entries.append({"title": title, "items": items})
-    return entries[:limit]
+    entries = re.findall(r"^## (.+)$", text, re.M)
+    return {"latest": entries[0] if entries else "—", "count": len(entries)}
 
 
 def badge(ok: bool) -> str:
-    return ('<span class="badge ok">同步</span>' if ok
-            else '<span class="badge drift">漂移</span>')
+    return ('<span class="b ok">同步</span>' if ok else '<span class="b bad">漂移</span>')
 
 
 def render() -> str:
-    skills = collect_skills(ROOT / "skills", own=True)
-    vendor = collect_skills(ROOT / "vendor", own=False)
+    skills = collect_skills(ROOT / "skills")
+    vendor = collect_skills(ROOT / "vendor")
     notes = collect_notes()
     g = collect_global()
     log = collect_changelog()
+    builds = collect_builds()
+    pubs = collect_skill_publish()
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    total_rules = sum(s["rules"] for s in skills)
+
+    # ---- 矩阵行 + 待办信号 ----
+    alerts = []
+    matrix_rows = ""
+    for s in skills:
+        built = builds.get(s["name"])
+        if built == s["version"]:
+            build_html = f'<span class="b ok">v{built}</span>'
+        elif built:
+            build_html = f'<span class="b warn">旧 v{built}</span>'
+            alerts.append(f"{s['name']} 需重新打包（源 v{s['version']}）")
+        else:
+            build_html = '<span class="b off">无包</span>'
+        pub_html = " ".join(f'{p["pool"]}{badge(p["sync"])}' for p in pubs.get(s["dir"], []))
+        if not pub_html:
+            pub_html = '<span class="dim">仅 .skill 包</span>'
+        for p in pubs.get(s["dir"], []):
+            if not p["sync"]:
+                alerts.append(f"{s['name']} {p['pool']}漂移，需 publish_skills")
+        matrix_rows += (f'<tr><td class="mono">{esc(s["name"])}</td><td>v{esc(s["version"])}</td>'
+                        f'<td>{build_html}</td><td>{pub_html}</td></tr>')
+
+    g_badges = " ".join(f'{t["label"]}{"*" if t["overlay"] else ""}{badge(t["sync"])}' for t in g["targets"])
+    for t in g["targets"]:
+        if not t["sync"]:
+            alerts.append(f"全局规则 {t['label']} 漂移，需 publish_global")
+
     total_items = sum(n["total"] for n in notes)
     total_distilled = sum(n["distilled"] for n in notes)
+    pending_items = total_items - total_distilled
+    pct = round(total_distilled / total_items * 100) if total_items else 0
 
-    skill_cards = "".join(f"""
-      <div class="card">
-        <div class="card-head"><span class="name">{esc(s['name'])}</span>
-          <span class="ver">v{esc(s['version'])}</span></div>
-        <div class="meta">{s['rules']} 个章节 · 来源：{esc('、'.join(s['sources'])) or '—'}</div>
-        <p>{esc(s['desc'])}</p>
-      </div>""" for s in skills)
-
-    vendor_rows = "".join(
-        f"<tr><td>{esc(s['name'])}</td><td>v{esc(s['version'])}</td><td>引入 · 原样不改</td></tr>"
-        for s in vendor)
-
-    note_rows = "".join(f"""
-      <tr><td class="mono">{esc(n['file'])}</td>
-        <td><div class="bar"><div class="fill" style="width:{(n['distilled']/n['total']*100 if n['total'] else 0):.0f}%"></div></div>
-            {n['distilled']}/{n['total']} 条已加工</td>
-        <td>{esc('、'.join(n['targets'])) or '<span class="dim">待提炼</span>'}</td></tr>"""
+    note_rows = "".join(
+        f'<tr><td class="mono">{esc(n["file"])}</td>'
+        f'<td><span class="bar"><span style="width:{(n["distilled"]/n["total"]*100 if n["total"] else 0):.0f}%"></span></span>'
+        f'{n["distilled"]}/{n["total"]}</td>'
+        f'<td class="dim">{esc("、".join(n["targets"])) or "待提炼"}</td></tr>'
         for n in notes)
 
-    target_rows = "".join(f"""
-      <tr><td>{esc(t['label'])}{' <span class="tag">+overlay</span>' if t['overlay'] else ''}</td>
-          <td>{badge(t['sync'])}</td></tr>""" for t in g["targets"])
+    n_sync = sum(t["sync"] for t in g["targets"]) + sum(p["sync"] for ps in pubs.values() for p in ps)
+    n_total = len(g["targets"]) + sum(len(ps) for ps in pubs.values())
 
-    matrix = collect_matrix(skills)
+    alerts_html = "".join(f"<li>{esc(a)}</li>" for a in alerts)
+    alerts_block = (f'<div class="alerts"><b>待处理（{len(alerts)}）</b><ul>{alerts_html}</ul></div>'
+                    if alerts else '<div class="allok">✓ 所有发布点与源文件一致，无待处理事项</div>')
 
-    def build_cell(b: dict) -> str:
-        if b["state"] == "ok":
-            return f'<span class="badge ok">已构建</span> <span class="dim">{esc(b["text"])}</span>'
-        if b["state"] == "drift":
-            return f'<span class="badge drift">待重建</span> <span class="dim">{esc(b["text"])}</span>'
-        return f'<span class="badge none">未构建</span>'
+    vendor_txt = "、".join(f'{v["name"]} v{v["version"]}' for v in vendor)
 
-    matrix_rows = "".join(
-        "<tr><td class=\"mono\">{name}</td><td>v{ver}</td><td>{build}</td><td>{pubs}</td></tr>".format(
-            name=esc(m["name"]), ver=esc(m["version"]), build=build_cell(m["build"]),
-            pubs="<br>".join(
-                f'{esc(p["pool"])} {badge(p["sync"])}' for p in m["pubs"]
-            ) or '<span class="dim">无目录发布（仅 .skill 包）</span>')
-        for m in matrix)
-
-    log_html = "".join(f"""
-      <div class="log-entry"><div class="log-title">{esc(e['title'])}</div>
-        <ul>{''.join(f'<li>{esc(i)}</li>' for i in e['items'])}</ul></div>""" for e in log)
-
-    pct = f"{total_distilled/total_items*100:.0f}%" if total_items else "—"
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HarnessOS 看板</title>
 <style>
-  :root {{ --ink:#1a1d21; --dim:#6b7280; --line:#e5e7eb; --accent:#b3541e; --ok:#1a7f4b; --drift:#b91c1c; --bg:#fafaf7; }}
+  :root {{ --ink:#20242a; --dim:#828a94; --line:#e6e4de; --accent:#b3541e; --ok:#1a7f4b; --bad:#b91c1c; --warn:#a16207; --bg:#fafaf7; }}
   * {{ margin:0; box-sizing:border-box; }}
-  body {{ font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }}
-  .wrap {{ max-width:960px; margin:0 auto; padding:48px 24px 80px; }}
-  header h1 {{ font-size:28px; letter-spacing:.02em; }}
-  header .sub {{ color:var(--dim); font-size:13px; margin-top:4px; }}
-  .stats {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:28px 0 40px; }}
-  .stat {{ border:1px solid var(--line); border-radius:10px; padding:16px; background:#fff; }}
-  .stat .num {{ font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; }}
-  .stat .lbl {{ font-size:12px; color:var(--dim); margin-top:2px; }}
-  h2 {{ font-size:16px; margin:36px 0 14px; padding-left:10px; border-left:3px solid var(--accent); }}
-  .card {{ border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:#fff; margin-bottom:10px; }}
-  .card-head {{ display:flex; justify-content:space-between; align-items:baseline; }}
-  .name {{ font-weight:700; font-family:ui-monospace,Consolas,monospace; }}
-  .ver {{ color:var(--accent); font-size:13px; font-weight:600; }}
-  .meta {{ font-size:12px; color:var(--dim); margin:2px 0 8px; }}
-  .card p {{ font-size:13px; color:#3f454d; }}
-  table {{ width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; font-size:13px; }}
-  td,th {{ padding:10px 14px; border-bottom:1px solid var(--line); text-align:left; vertical-align:middle; }}
+  body {{ font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); font-size:13px; line-height:1.55; }}
+  .wrap {{ max-width:880px; margin:0 auto; padding:28px 20px 40px; }}
+  header {{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px; }}
+  h1 {{ font-size:20px; }}
+  header .sub {{ color:var(--dim); font-size:11px; }}
+  .kpis {{ display:flex; gap:10px; margin:16px 0 18px; flex-wrap:wrap; }}
+  .kpi {{ flex:1; min-width:120px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }}
+  .kpi .n {{ font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }}
+  .kpi .l {{ font-size:11px; color:var(--dim); }}
+  h2 {{ font-size:12px; color:var(--dim); font-weight:600; letter-spacing:.08em; margin:18px 0 6px; text-transform:uppercase; }}
+  table {{ width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden; }}
+  td,th {{ padding:6px 10px; border-bottom:1px solid var(--line); text-align:left; font-size:12px; }}
+  th {{ color:var(--dim); font-weight:600; background:#f5f4f0; }}
   tr:last-child td {{ border-bottom:none; }}
-  .mono {{ font-family:ui-monospace,Consolas,monospace; font-size:12px; }}
+  .mono {{ font-family:ui-monospace,Consolas,monospace; font-size:11.5px; }}
   .dim {{ color:var(--dim); }}
-  .bar {{ display:inline-block; width:90px; height:6px; background:#eceae4; border-radius:3px; margin-right:8px; vertical-align:middle; overflow:hidden; }}
-  .fill {{ height:100%; background:var(--accent); }}
-  .badge {{ font-size:11px; padding:2px 8px; border-radius:99px; font-weight:600; }}
-  .badge.ok {{ background:#e4f4ec; color:var(--ok); }}
-  .badge.drift {{ background:#fbe7e7; color:var(--drift); }}
-  .badge.none {{ background:#f0eee9; color:var(--dim); }}
-  .tag {{ font-size:11px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:1px 7px; }}
-  .log-entry {{ border-left:2px solid var(--line); padding:2px 0 14px 16px; position:relative; }}
-  .log-entry::before {{ content:""; position:absolute; left:-5px; top:8px; width:8px; height:8px; border-radius:50%; background:var(--accent); }}
-  .log-title {{ font-weight:600; font-size:14px; }}
-  .log-entry ul {{ margin:4px 0 0 18px; font-size:13px; color:#3f454d; }}
-  footer {{ margin-top:48px; font-size:12px; color:var(--dim); }}
-  code {{ background:#f0eee9; padding:1px 5px; border-radius:4px; font-size:12px; }}
+  .b {{ font-size:10.5px; padding:1px 7px; border-radius:99px; font-weight:600; margin-left:4px; white-space:nowrap; }}
+  .b.ok {{ background:#e4f4ec; color:var(--ok); }}
+  .b.bad {{ background:#fbe7e7; color:var(--bad); }}
+  .b.warn {{ background:#fdf3e0; color:var(--warn); }}
+  .b.off {{ background:#f0eee9; color:var(--dim); }}
+  .bar {{ display:inline-block; width:64px; height:5px; background:#eceae4; border-radius:3px; margin-right:6px; vertical-align:middle; overflow:hidden; }}
+  .bar span {{ display:block; height:100%; background:var(--accent); }}
+  .alerts {{ border:1px solid #f0d9b5; background:#fffaf2; border-radius:8px; padding:8px 12px; margin-top:18px; }}
+  .alerts b {{ color:var(--warn); font-size:12px; }}
+  .alerts ul {{ margin:4px 0 0 18px; font-size:12px; }}
+  .allok {{ border:1px solid #cde8da; background:#f2faf6; color:var(--ok); border-radius:8px; padding:8px 12px; margin-top:18px; font-size:12px; }}
+  .row {{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; }}
+  footer {{ margin-top:20px; font-size:11px; color:var(--dim); }}
+  code {{ background:#f0eee9; padding:0 4px; border-radius:3px; font-size:11px; }}
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">个人 AI 编程 Harness 规则资产总览 · 由 <code>scripts/dashboard.py</code> 扫描仓库自动生成 · {now}</div>
+  <div class="sub">scripts/dashboard.py 生成 · {now} · 细节查仓库 CHANGELOG 与源文件</div>
 </header>
-<div class="stats">
-  <div class="stat"><div class="num">{len(skills)}</div><div class="lbl">自有 Skill</div></div>
-  <div class="stat"><div class="num">{total_rules}</div><div class="lbl">规则章节</div></div>
-  <div class="stat"><div class="num">v{esc(g['version'])}</div><div class="lbl">全局规则版本</div></div>
-  <div class="stat"><div class="num">{pct}</div><div class="lbl">原料加工率</div></div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">{len(skills)}</div><div class="l">自有 Skill</div></div>
+  <div class="kpi"><div class="n">{n_sync}/{n_total}</div><div class="l">发布点同步</div></div>
+  <div class="kpi"><div class="n">v{esc(g['version'])}</div><div class="l">全局规则版本</div></div>
+  <div class="kpi"><div class="n">{pct}%</div><div class="l">原料加工率（{total_distilled}/{total_items}）</div></div>
+  <div class="kpi"><div class="n">{len(alerts)}</div><div class="l">待处理</div></div>
 </div>
 
-<h2>生产线 · 经验 → Skill</h2>
-{skill_cards or '<p class="dim">暂无</p>'}
+<h2>Skill 构建 × 发布</h2>
+<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th></tr>{matrix_rows}</table>
 
-<h2>构建 × 发布矩阵（每个 skill 构建了什么、发到了哪些 Agent）</h2>
-<table><tr><th>Skill</th><th>版本</th><th>.skill 构建（dist/）</th><th>目录发布（同步状态）</th></tr>{matrix_rows}</table>
-<p class="dim" style="font-size:12px;margin-top:6px">目录发布以仓库源为准：~/.agents/skills 为共享池（Codex / OpenCode 等读取），~/.claude/skills 为 Claude 池。.skill 包需手动导入 Kimi Code / Codex / Claude Code。Kimi Code 另有托管技能体系，不在此矩阵。</p>
+<h2>全局规则（* = 含 Claude 专属 overlay）</h2>
+<div class="row">v{esc(g['version'])} · {g_badges} <span class="dim">· Kimi Code 无全局注入，不发布</span></div>
 
-<h2>全局规则 · 经验 → 用户规则</h2>
-<div class="card">
-  <div class="card-head"><span class="name">global/AGENTS.md</span><span class="ver">v{esc(g['version'])}</span></div>
-  <div class="meta">{g['sections']} 个章节 · 发布到 4 个 Agent 读取位置 · Kimi Code 无全局注入机制，不发布</div>
-  <table><tr><th>发布目标</th><th>状态</th></tr>{target_rows}</table>
-</div>
+<h2>原料加工</h2>
+<table><tr><th>笔记</th><th>进度</th><th>去向</th></tr>{note_rows or '<tr><td class="dim">暂无</td></tr>'}</table>
 
-<h2>原料区 · 笔记加工进度</h2>
-<table><tr><th>笔记</th><th>加工进度</th><th>去向</th></tr>{note_rows or '<tr><td class="dim">暂无笔记</td></tr>'}</table>
+<h2>其他</h2>
+<div class="row dim">引入（vendor）：{esc(vendor_txt)}；另有 skill-creator（Anthropic 官方，仅登记）· 最近动态：{esc(log['latest'])}（共 {log['count']} 条，见 CHANGELOG.md）</div>
 
-<h2>引入区 · vendor（原样不改）</h2>
-<table><tr><th>Skill</th><th>版本</th><th>来源</th></tr>{vendor_rows}</table>
+{alerts_block}
 
-<h2>加工历史</h2>
-{log_html}
-
-<footer>本文件为生成产物，不手改。数据变化后运行 <code>python scripts/dashboard.py</code> 重新生成。
-漂移状态的修复：运行 <code>python scripts/publish_global.py</code>。</footer>
+<footer>生成产物，不手改。数据变化后运行 <code>python scripts/sync.py</code>（或单独 <code>dashboard.py</code>）重新生成；修复漂移运行对应 publish 脚本。</footer>
 </div></body></html>"""
 
 

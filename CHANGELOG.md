@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-23 — 总入口 + 看板单屏化
+
+- [框架] 新增 `scripts/sync.py`：一条命令完成 打包 → 发布全局规则 → 发布 skill 目录 → 刷新看板；`--check` 只体检不写入
+- [修订] `pack.py`：同版本已存在改为跳过（不再中断后续 skill）；vendor 引入 skill frontmatter 不规范时跳过而非报错
+- [框架] 看板重构为单屏概览：KPI 条（同步率/加工率/待处理数）+ Skill 构建×发布矩阵 + 全局规则内联徽章 + 原料进度 + 「待处理」清单；砍掉会无限增长的加工历史时间线，细节回 CHANGELOG 查
+- 4 个共享 skill 首次打包入 dist/
+
 ## 2026-07-23 — 纳管 ~/.agents/skills 共享 skill 池
 
 - [新增] 4 个自有 skill 入库（以 ~/.agents/skills 版本为准，补齐 version 1.0.0）：`grsai-image-gen`（Grsai 付费图像 API）、`init-project`（项目 AGENTS.md 初始化）、`scope-guard`（语义失败捕获，流水线运行时采集器）、`vps-server-info`（VPS 连接信息）
