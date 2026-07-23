@@ -2,3 +2,4 @@ dist/
 *.skill
 .DS_Store
 Thumbs.db
+backups/
