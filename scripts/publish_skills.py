@@ -25,10 +25,13 @@ ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 BACKUPS = ROOT / "backups"
 
-OWN_SKILLS = ["ai-stack-harness", "ai-coding-workflow",
-              "grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
+def own_skills() -> list[str]:
+    """自有 skill = skills/ 下含 SKILL.md 的目录，自动扫描，不硬编码。"""
+    return sorted(p.name for p in (ROOT / "skills").iterdir()
+                  if p.is_dir() and (p / "SKILL.md").is_file())
+
+
 POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
-TARGETS = [(name, pool / name) for name in OWN_SKILLS for pool in POOLS]
 
 
 def dir_same(a: Path, b: Path) -> bool:
@@ -51,22 +54,24 @@ def mirror(src: Path, dst: Path) -> None:
 def main() -> None:
     check_only = "--check" in sys.argv
     drift = False
-    for name, target in TARGETS:
-        src = ROOT / "skills" / name
-        if dir_same(src, target):
-            print(f"[同步] {name:18s} {target}")
-            continue
-        drift = True
-        if check_only:
-            print(f"[漂移] {name:18s} {target}")
-            continue
-        if target.exists():
-            BACKUPS.mkdir(exist_ok=True)
-            ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-            pool = target.parent.parent.name  # .agents / .claude
-            shutil.copytree(target, BACKUPS / f"skill-{pool}-{name}-{ts}")
-        mirror(src, target)
-        print(f"[发布] {name:18s} {target}")
+    for name in own_skills():
+        for pool in POOLS:
+            target = pool / name
+            src = ROOT / "skills" / name
+            if dir_same(src, target):
+                print(f"[同步] {name:18s} {target}")
+                continue
+            drift = True
+            if check_only:
+                print(f"[漂移] {name:18s} {target}")
+                continue
+            if target.exists():
+                BACKUPS.mkdir(exist_ok=True)
+                ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                pool_name = target.parent.parent.name  # .agents / .claude
+                shutil.copytree(target, BACKUPS / f"skill-{pool_name}-{name}-{ts}")
+            mirror(src, target)
+            print(f"[发布] {name:18s} {target}")
     if check_only and drift:
         sys.exit(1)
 
