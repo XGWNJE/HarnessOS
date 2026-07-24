@@ -2,6 +2,7 @@
 
 > 日期：2026-07-24
 > 场景：kimi 环境、工具验收、WebBridge 浏览器控制
+> 类型：混合（验收六步法为明说规则，坑 1-3 为经验型）
 
 ## 验收规则（实测通过版）
 
@@ -26,6 +27,5 @@
 
 ## 提炼候选
 
-- 「Windows 下 WebBridge 请求一律文件体 + curl.exe」——候选入 ai-coding-workflow 或独立 webbridge skill。
-- 「工具验收六步法 + 截图目检 + 临时文件即删」——候选通用验收 checklist。
-- 需满足三门槛（重复 2 次、陈化 14 天、实战验证）后再提炼。
+- 「工具验收六步法 + 截图目检 + 临时文件即删」——**明说规则（owner 2026-07-24 直接声明纳入管理）**，来源标 owner-declared，走短通道：陈化 ≥ 2 天（2026-07-26 期满）+ 冲突检查，候选通用验收 checklist。
+- 「Windows 下 WebBridge 请求一律文件体 + curl.exe」——经验型，走三门槛（陈化 14 天，2026-08-07 期满），候选入 ai-coding-workflow 或独立 webbridge skill。
