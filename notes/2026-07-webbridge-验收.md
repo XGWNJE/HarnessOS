@@ -27,5 +27,8 @@
 
 ## 提炼候选
 
-- 「工具验收六步法 + 截图目检 + 临时文件即删」——**声明式规则（owner 2026-07-24 直接声明纳入管理）**，来源标 owner-declared，走短通道：陈化 ≥ 2 天（2026-07-26 期满）+ 冲突检查，候选通用验收 checklist。
+按「失效测试」分界拆开（声明式规则，owner 2026-07-24 声明，来源 owner-declared，短通道：陈化 ≥ 2 天，2026-07-26 期满 + 冲突检查）：
+
+- **技能**：「WebBridge 验收六步法」（流程 + checklist，去掉它 Agent 不会验收）——候选独立 webbridge skill 或通用验收 skill。
+- **约束规则**：「截图必须目检，返回成功 ≠ 内容正确」「验收临时文件用完即删」（去掉它 Agent 会做错事）——候选合入相关 skill 的约束段或 global。
 - 「Windows 下 WebBridge 请求一律文件体 + curl.exe」——归纳式，走三门槛（陈化 14 天，2026-08-07 期满），候选入 ai-coding-workflow 或独立 webbridge skill。
