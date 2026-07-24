@@ -4,6 +4,14 @@
 
 ## 2026-07-24 — 声明式规则入口（短通道）
 
+- [复审改造] 按新理念复审全部资产并改造：
+  - [废止] `scope-guard`：职责与 harness-observer 重叠（同为静默观察记录），按 owner 决定统一整合进 harness-observer，源目录移入 archive/skills/，已撤出三个读取池；归档可复活
+  - [新增] `harness-observer` v1.0.0 → v1.1.0：整合原 scope-guard 信号——Agent 自身语义失败（假设被违反/目标错误/路径错误/范围错误）记为归纳式原料，重复计数累计根因
+  - [修订] `ai-stack-harness` v1.1.0 → v1.2.0：补齐全部来源标注（notes/2026-07-vibe-coding-观察.md 与 owner-declared）
+  - [修订] `ai-coding-workflow` v1.0.0 → v1.1.0：description 标明「规则集合」性质（按失效测试分界，约束规则可驻留 skill 约束段）
+  - [修订] 全局规则 v1.4.0 → v1.5.0：文件头声明规则性质为声明式（owner-declared），废止标准是 owner 改主意
+  - [修订] `vps-server-info` v1.0.0 → v1.1.0：只读核验发现 VPS 已换新机（C20260629016451，1C/1G/20G），服务分工全面刷新：webhome→xgwnje-home、新增 api/m/mail/sub 站点、Uptime Kuma 与 Docker 已退役、VisionGuard 工作目录迁至 /opt/visionguard-server
+
 - [新增] `harness-observer` v1.0.0：常驻静默观察 skill——在任何项目/任务中观察 owner 重复纠正（→提议）、明确偏好（→声明式）、可复用踩坑（→归纳式原料），静默追加到 notes/inbox/ 按日归档；静默纪律：不提及、不确认、不跑 git/sync；查重累加重复计数服务归纳式门槛；全局规则 v1.3.0 → v1.4.0 加常驻生效指引
 - [修订] `publish_skills.py`：自有 skill 列表由硬编码改为自动扫描 skills/ 目录（本次新增 skill 漏发布即硬编码所致，属流程缺陷修复）
 
