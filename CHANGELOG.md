@@ -5,7 +5,7 @@
 ## 2026-07-24 — 声明式规则入口（短通道）
 
 - [复审改造] 按新理念复审全部资产并改造：
-  - [废止] `scope-guard`：职责与 harness-observer 重叠（同为静默观察记录），按 owner 决定统一整合进 harness-observer，源目录移入 archive/skills/，已撤出三个读取池；归档可复活
+  - [废止] `scope-guard`：职责与 harness-observer 重叠（同为静默观察记录），按 owner 决定统一整合进 harness-observer，源目录移入 archive/skills/，已撤出三个读取池；运行时钩子目录 `~/.codex/scope-guard/` 及 hooks.json 中 4 处注册（PostToolUse/SessionStart/SubagentStart/SubagentStop）已一并清除；归档可复活
   - [新增] `harness-observer` v1.0.0 → v1.1.0：整合原 scope-guard 信号——Agent 自身语义失败（假设被违反/目标错误/路径错误/范围错误）记为归纳式原料，重复计数累计根因
   - [修订] `ai-stack-harness` v1.1.0 → v1.2.0：补齐全部来源标注（notes/2026-07-vibe-coding-观察.md 与 owner-declared）
   - [修订] `ai-coding-workflow` v1.0.0 → v1.1.0：description 标明「规则集合」性质（按失效测试分界，约束规则可驻留 skill 约束段）
