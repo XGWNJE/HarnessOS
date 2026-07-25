@@ -1,45 +1,41 @@
 ---
-version: 1.0.0
+version: 1.1.0
 name: grsai-image-gen
-description: Grsai API 图片/视频生成。Use only when the user explicitly asks to use Grsai, `$grsai-image-gen`, Grsai API, an external paid image API, Grsai-specific models such as nano-banana or gpt-image-2, Grsai price/cost routing, or OpenAI-compatible Grsai image endpoints. Do not trigger for generic image creation requests; let Codex native image generation handle ordinary "draw/generate an image" tasks unless Grsai is named or API/price/model control is required. Supports aspect ratio, resolution, async polling, reference-image handling, and Codex preview compatibility.
+description: Grsai API 图片/视频生成。Use only when the user explicitly asks to use Grsai, `$grsai-image-gen`, Grsai API, an external paid image API, Grsai-specific models such as nano-banana or gpt-image-2, Grsai price/cost routing, or OpenAI-compatible Grsai image endpoints. Do not trigger for generic image creation requests; let Codex native image generation handle ordinary "draw/generate an image" tasks unless Grsai is named or API/price/model control is required. Goal: a verified, previewable result at cost/quality matching user intent, with zero key exposure. Supports aspect ratio, resolution, async polling, reference-image handling, and Codex preview compatibility.
 ---
 
 # Grsai 图片生成
 
-## Safety First
+> 写法：目标模式——只描述想要的目标与验收标准，不规定具体做法；做法由模型按情境自决。
+> 标注「机制」的段落是无可替代的调用机制（离开它任务做不成），原样保留，不是规定。
 
-- Never hard-code API keys in this skill, commands, logs, or final answers.
-- Read the API key from environment variable `GRSAI_API_KEY`. If it is missing, ask the user to set it before making a paid/API call.
-- Do not print the full `Authorization` header or raw request headers. If an error includes secrets, redact them before reporting.
-- Treat each generation as a potentially paid external API call. If the request is ambiguous, high-resolution, repeated, or uses `-vip`/4K models, confirm intent before calling.
-- Do not upload local/reference images unless the user provided them for this task or explicitly confirmed they should be used.
-- If the user says price/cost is important, choose the lowest-cost model/parameters that satisfy the request and state the tradeoff before calling.
+## 目标
 
-PowerShell key check:
+- **密钥零暴露**。验收：skill 文件、命令、日志、最终回答中不存在明文 API key；密钥只从环境变量 `GRSAI_API_KEY` 读取；完整的 `Authorization` 头与原始请求头不被打印；报错信息含密钥时先脱敏再报告；`GRSAI_API_KEY` 缺失时不发起付费/API 调用，先请用户设置。
+- **付费调用有意图确认**。验收：每次生成都按潜在付费的外部 API 调用对待；请求含糊、高分辨率、重复生成、或使用 `-vip`/4K 模型时，调用前用户已确认意图；用户说价格/成本重要时，选中的是满足需求的最低成本模型与参数，且调用前已说明取舍。
+- **参考图不越权**。验收：本地/参考图只在用户为本次任务提供或明确确认使用时才上传。
+- **歧义先澄清，其余直接推进**。验收：以下五种情况在发起调用前用户已被简短澄清——(1) 未提供具体视觉内容；(2) 提到多个输出场景且比例冲突；(3) 请求的比例/分辨率不受支持；(4) 要求"最好/最高/4K/`-vip`/大量图片"且成本可能敏感；(5) 提供了参考图但用途不明。其余情况按默认值直接推进，不反问。
+- **内容合规**。验收：用户视觉意图被保留；过短提示词被扩写为 2-3 句含风格、光照、构图、主体细节的简洁英文描述；未主动加入版权角色、真人肖像、logo 或敏感内容（用户明确要求且合规的除外）；服务返回 `violation` 时请用户修改提示词，不尝试绕过审核。
+- **成本路由不浪费**。验收：`-vip`、`-pro-cl`、4K、重复生成只在用户确认质量优先于成本时使用；普通 `16:9`/`9:16`/`1:1` 输出不选极端比例 `-cl` 模型；模型标价在 1K/2K/4K 相同时仍选满足用户的最小尺寸（可用性、延迟、下载/预览成本可能不同）。
+- **调用结果可用、可见**。验收：响应中至少一个 URL 被校验存在（`results[].url` 或 `data[].url`）；远程结果用 Markdown 图片展示；图片同时下载到当前工作区或用户相关输出目录，并以绝对路径（正斜杠或完整 Windows 路径）展示，最终预览不用相对路径；结果是视频时以绝对路径 Markdown 链接展示，不假装成图片。
+- **错误报告脱敏且可行动**。验收：错误报告只含脱敏后的 `id`、`status`、`error` 字段；各类错误的期望结果见下文「错误语义与期望结果」表。
 
-```powershell
-if (-not $env:GRSAI_API_KEY) {
-  throw 'Missing GRSAI_API_KEY. Set it before calling Grsai.'
-}
-```
+## 事实
 
-## API Basics
+### API Basics
 
 - Global endpoint: `https://grsaiapi.com`
 - China endpoint: `https://grsai.dakka.com.cn`
 - Auth header: `Authorization: Bearer $env:GRSAI_API_KEY`
 - Detailed API reference: `references/grsai-api-docs.md`
+- 常规用法走 `POST /v1/api/generate`；`/v1/images/generations` 仅在调用方明确需要 OpenAI 兼容格式时使用。
 
-Prefer `POST /v1/api/generate` for normal skill usage. Use `/v1/images/generations` only when the caller explicitly needs the OpenAI-compatible format.
-
-## API Calibration Source
+### API 校准源
 
 - **Authoritative API reference**: [https://qmy27nhsd9.apifox.cn/](https://qmy27nhsd9.apifox.cn/)
-- When this skill's recorded models, parameters, ratios, or response format conflict with the Apifox document, **the document wins**.
-- On any detected drift, update this skill to match the document before making further calls.
-- The Apifox document may be newer than this skill; treat it as the live source of truth for endpoint paths, field names, supported models, and allowed values.
+- 本 skill 记录的模型、参数、比例、响应格式与 Apifox 文档冲突时，**以文档为准**；发现漂移时先把本 skill 更新到与文档一致，再继续调用。Apifox 文档可能比本 skill 新，它是端点路径、字段名、支持模型、合法取值的实时真相源。
 
-## Model And Size Selection
+### 模型与价格
 
 Pricing changes over time. The rough order below is based on Grsai's public model list and should be treated as routing guidance, not a guaranteed quote. If exact cost matters, check the Grsai dashboard/model list before calling.
 
@@ -60,13 +56,10 @@ Approximate image model pricing:
 
 Models confirmed by the Apifox document but not yet priced here: `nano-banana-2-2k-cl`, `nano-banana-pro-vt`. Treat them as available; check Grsai dashboard for current pricing before routing.
 
-Price-sensitive routing:
+Price-sensitive routing facts:
 
-- For drafts, quick previews, or "便宜点/省钱/低成本", prefer `nano-banana-fast` at `1K`.
-- If the user needs better instruction following but remains cost-sensitive, use `gpt-image-2` at `1024x1024` or a supported 1K size.
-- Avoid `-vip`, `-pro-cl`, 4K, and repeated generations unless the user confirms quality matters more than cost.
-- Do not choose extreme-ratio `-cl` models just for normal `16:9`, `9:16`, or `1:1` outputs.
-- When the model's listed price is the same across 1K/2K/4K, still prefer the smallest size that satisfies the user because availability, latency, and downstream download/preview cost can differ.
+- Drafts, quick previews, or "便宜点/省钱/低成本" → `nano-banana-fast` at `1K`.
+- Better instruction following while cost-sensitive → `gpt-image-2` at `1024x1024` or a supported 1K size.
 
 Default choices:
 
@@ -91,48 +84,47 @@ Aspect ratio defaults:
 | Poster | `2:3` or `3:4` | `2K` |
 | Unspecified | `1:1` | `1K` |
 
-Compatibility rules:
+Compatibility facts:
 
 - `nano-banana` models use `aspectRatio` plus optional `imageSize`.
 - Supported `aspectRatio` values per the Apifox document: `auto`, `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `3:2`, `2:3`, `5:4`, `4:5`, `21:9`.
 - `nano-banana-2` series additionally supports extreme ratios: `1:4`, `4:1`, `1:8`, `8:1`.
 - `gpt-image-2` accepts a ratio such as `16:9` or a 1K pixel value such as `1024x1024`.
-- `gpt-image-2-vip` requires pixel dimensions such as `2048x2048`; do not send ratios like `16:9`.
-- For `gpt-image-2-vip`, ensure width/height are both multiples of 16, max side <= 3840, long/short ratio <= 3:1, and total pixels between 655360 and 8294400.
+- `gpt-image-2-vip` requires pixel dimensions such as `2048x2048`; ratios like `16:9` are not accepted.
+- For `gpt-image-2-vip`, width/height must both be multiples of 16, max side <= 3840, long/short ratio <= 3:1, and total pixels between 655360 and 8294400.
 - For `/v1/images/generations`, reference images use field `image`; for `/v1/api/generate`, reference images use field `images`.
 
-## Ask Before Calling
+### 错误语义与期望结果
 
-Ask a short clarifying question when:
+| Case | 期望结果 |
+|---|---|
+| Missing `GRSAI_API_KEY` | 未发起 API 调用，用户被告知需要先设置密钥 |
+| 400 / parameter error | 报告含所用模型、比例/尺寸与脱敏后的错误信息 |
+| `violation` status | 用户被要求修改提示词 |
+| 401 | 用户被告知密钥无效/过期；密钥本身不泄露 |
+| 429 | 退避后重试一次，或请用户稍后重试 |
+| Timeout | 改用下方标准异步机制；不盲目重试同步调用 |
+| 5xx | 报告为临时性服务故障；有 task ID 时保留 |
 
-1. The user has not provided concrete visual content.
-2. The user mentions multiple output scenarios with conflicting ratios.
-3. The requested ratio/resolution is unsupported.
-4. The user asks for "best", "highest", 4K, `-vip`, or many images and cost may matter.
-5. The user provides reference images and it is unclear whether to use them as source material.
+## 机制
 
-Otherwise infer defaults and proceed.
+以下段落是无可替代的调用机制，原样保留，不是规定。
 
-## Prompt Handling
+### 机制：PowerShell 执行环境
 
-- Preserve the user's visual intent.
-- If the prompt is very short, expand it to 2-3 concise English sentences with style, lighting, composition, and subject details.
-- Do not add copyrighted characters, real-person likeness, logos, or sensitive content unless the user clearly requested something permitted and appropriate.
-- If the service returns `violation`, ask the user to revise the prompt instead of trying to bypass the policy.
+运行时 Bash 工具是 Git Bash，**不是** PowerShell，PowerShell 片段不能直接粘进 Bash。可行机制：脚本写入临时 `.ps1` 文件，用 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File <path>` 执行，用后删除临时 `.ps1` 文件。
 
-## Execution Environment
+PowerShell key check:
 
-- The runtime Bash tool is Git Bash, **not** PowerShell. Do not paste PowerShell snippets directly into Bash.
-- Write the script to a temporary `.ps1` file, then execute with `powershell.exe -NoProfile -ExecutionPolicy Bypass -File <path>`.
-- Always delete the temporary `.ps1` file after use.
+```powershell
+if (-not $env:GRSAI_API_KEY) {
+  throw 'Missing GRSAI_API_KEY. Set it before calling Grsai.'
+}
+```
 
-## Call Pattern
+### 机制：标准异步调用
 
-Use structured JSON through PowerShell hashtables; do not concatenate JSON strings.
-
-**Default to `replyType: 'async'`** — synchronous calls often time out on 1K+ images. Use `replyType: 'json'` only for very fast drafts or when the caller explicitly wants a blocking call.
-
-### Standard async template
+同步调用在 1K+ 图片上经常超时，因此默认 `replyType: 'async'`；`replyType: 'json'` 只用于极快草稿或调用方明确要阻塞调用。请求体用 PowerShell hashtable 结构化构造（`ConvertTo-Json`），不拼接 JSON 字符串。
 
 Write to a temp file, e.g. `grsai-call.ps1`:
 
@@ -185,38 +177,16 @@ Run from Bash:
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:/path/to/grsai-call.ps1"
 ```
 
-Then display the result in Markdown using the returned `localPath` with forward slashes or an absolute Windows path.
+### 机制：结果预览格式
 
-## Codex Preview Compatibility
-
-For generated image URLs:
-
-1. Validate that the response contains at least one URL in `results[].url` or `data[].url`.
-2. Show the remote result with Markdown:
+远程结果用 Markdown 展示：
 
 ```markdown
 ![生成结果](https://example.com/result.png)
 ```
 
-3. For more reliable Codex desktop preview, also download the image to the current workspace or a user-relevant output folder and display it with an absolute path (the standard async template already does this):
+本地下载结果用绝对路径展示（标准异步机制已返回 `localPath`）：
 
 ```markdown
 ![生成结果](D:/ObjectCode/grsai-api/grsai-output.png)
 ```
-
-4. Use forward slashes or a full absolute Windows path in Markdown image tags. Do not use relative paths for final preview images.
-5. If the result is a video URL, return the URL and, when downloaded locally, display it with an absolute path Markdown link instead of pretending it is an image.
-
-## Error Handling
-
-| Case | Action |
-|---|---|
-| Missing `GRSAI_API_KEY` | Ask user to set it; do not call API |
-| 400 / parameter error | Show the model, ratio/size, and sanitized error |
-| `violation` status | Ask user to revise the prompt |
-| 401 | Tell user the key is invalid/expired; do not reveal the key |
-| 429 | Wait and retry once with backoff, or ask user to retry later |
-| Timeout | Switch to the standard async template above; do not retry synchronous blindly |
-| 5xx | Report transient service failure and keep the task ID if available |
-
-When reporting errors, include only sanitized `id`, `status`, and `error` fields.

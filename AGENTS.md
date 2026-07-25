@@ -43,6 +43,7 @@
 
 ## 工作规则
 
+- 生成物写法（2026-07-26 起，owner-declared，来源 notes/inbox/2026-07-26.md）：自有生成物（global 规则、skill）一律**目标模式**——只写目标与验收标准，不规定做法；红线转成可检验的验收标准；hook 是硬控制，豁免；vendor/ 原样不改不在范围。
 - inbox 只追加不整理；归并、提炼、发布全部留给 owner 主动发起的评审流程（无定时评审，评审时机 = owner 要求自检时）。
 - 提炼按失效测试拆分：去掉它 Agent 会做错事 → 约束规则（global 或 skill 约束段）；不会做某事 → 技能（skills/ 独立目录）。约束规则判归属：换个项目还有意义 → global / skill 约束段；只对特定项目成立 → 写入该项目的 AGENTS.md（标注来源与日期），不进 global。
 - 退役 skill：撤出全部发布点 + 源目录归档 `archive/skills/` + CHANGELOG 记废止；归档可复活。
