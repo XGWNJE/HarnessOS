@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# HarnessOS pre-commit 硬卡点（hook 流水线试点，2026-07-26）
+#
+# 用途：commit 前强制两件事——
+#   1. 提醒文档偏移清零（声明式规则试点，陈化中：notes/inbox/2026-07-25.md）
+#   2. 跑 sync.py --check 体检，发现发布漂移则拦截提交
+#
+# 安装（本仓库内执行一次）：git config core.hooksPath hooks
+# 绕过（仅限紧急情况）：    git commit --no-verify
+
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# hook 环境不继承终端的 UTF-8 设置，Windows 下 Python 输出会按 GBK 乱码，显式修正
+export PYTHONUTF8=1 PYTHONIOENCODING=utf-8
+
+echo "[pre-commit] 硬卡点提醒：commit 前必须清零本次改动涉及的文档偏移（README / AGENTS.md / CHANGELOG / 注释 / skill 源）"
+
+python scripts/sync.py --check
+status=$?
+if [ "$status" -ne 0 ]; then
+    echo "[pre-commit] 体检发现漂移，已拦截提交。请先运行 python scripts/sync.py 重新发布，再提交。"
+    exit 1
+fi
+exit 0

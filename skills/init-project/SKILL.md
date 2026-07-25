@@ -1,7 +1,7 @@
 ---
-version: 1.1.0
+version: 1.2.0
 name: init-project
-description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。以全局规则 ~/AGENTS.md 为通用规则基准（其源文件由 HarnessOS 仓库维护），项目级文件只补充项目特有约束。
+description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。以全局规则 ~/AGENTS.md 为通用规则基准（其源文件由 HarnessOS 仓库维护），项目级文件只补充项目特有约束，并按 Agent 运行时差异注入全局规则指针（Kimi Code 无全局注入，必须靠项目级文件引导）。
 ---
 
 # 项目规则初始化
@@ -13,6 +13,24 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 - **通用规则的内容本身**：由 HarnessOS 仓库（`D:/ObjectCode/HarnessOS`）维护，源文件是 `global/AGENTS.md`，`~/AGENTS.md` 及各 Agent 配置目录里的都是发布产物。**要新增/修改通用规则，改 HarnessOS 源文件并运行 `python scripts/sync.py`，不直接改任何发布产物。**
 - **全局 / 项目的归属判断**：以全局文件开头的「全局 / 项目的边界」一节为准，本 skill 不重复定义。发现第二条项目需要同一条通用规则时（上浮），同样改 HarnessOS 源文件而不是只改某个项目。
 - **本 skill 的职责**：只做项目侧——调查项目事实、起草项目级 AGENTS.md、清理项目里的规则副本漂移。
+
+## 运行时适配：全局规则的注入差异
+
+各 Agent 对全局规则的加载能力不同，起草项目文件时必须区分：
+
+- **有全局注入**：Claude Code（`~/.claude/CLAUDE.md`）、Codex（`~/.codex/AGENTS.md`）、OpenCode（`~/.config/opencode/AGENTS.md`）——全局规则自动进入系统提示，项目文件不得重复其内容。
+- **无全局注入**：Kimi Code——`~/AGENTS.md` 不会被加载，全局规则（含 harness-observer 常驻观察指引）对它的会话完全不可见，只能靠项目级文件引导它去读。
+
+因此项目级 AGENTS.md 必须在开头包含如下固定块（原文照写，不改写、不展开）：
+
+```markdown
+## 运行时适配（先读我）
+
+- 若你的系统提示中已注入全局协作规则（Claude Code / Codex / OpenCode 会自动注入），跳过本节。
+- 否则（如 Kimi Code，无全局注入机制）：开始工作前先读 `C:/Users/Administrator/AGENTS.md`（全局通用规则，含 harness-observer 静默观察职责），其中规则在本项目同样生效。
+```
+
+这个块是指针不是副本：全局规则仍只在 HarnessOS 源文件维护一处，项目文件不含其内容，不违反"一处事实只在一处维护"。
 
 ## 原则
 
@@ -29,6 +47,7 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
    - 已有项目级 skill（`.agents/skills/`）和脚本入口（脚本启动文件）要登记。
 3. **识别项目铁律**：从历史文档、`docs/decisions/`、用户口述中提炼"不可违反"约束（保留能力不得删除、数据不随发布替换、禁止提交的内容等），逐条编号。
 4. **起草项目 AGENTS.md**，推荐结构：
+   - 顶部固定「运行时适配」块（见上节，原文照写）；
    - 一句话项目定位；
    - `## 铁律（不可违反）`：编号列表；
    - `## 关键路径与命令`；
@@ -41,6 +60,7 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 
 ## 验收
 
+- 项目 AGENTS.md 开头含「运行时适配」块（原文照写）；
 - 项目 AGENTS.md 中不出现全局规则已覆盖的通用条目；
 - 每条规则可被验证或指向可验证的事实（命令、路径、文档）；
 - 铁律不超过 10 条，超出部分降级（降低级别）为普通工作规则。

@@ -83,10 +83,12 @@ notes/（原料区）  →  本仓库（加工厂）  →  发布产物
 ├── global/              # 全局规则：AGENTS.md 源文件 + 各工具 overlay
 ├── vendor/              # 引入区：第三方 Skill（原样不改）
 │   ├── keel/                # 架构治理协议（来源 lencx/skills）
-│   └── coding-protocol/     # 风险分级编码执行协议（来源 lencx/skills）
+│   ├── coding-protocol/     # 风险分级编码执行协议（来源 lencx/skills）
+│   └── vibehub/             # Vibe Coding 术语学习助手（来源 oil-oil/vibe-hub-skill）
 ├── scripts/             # 工具：sync 总入口 / pack 打包 / publish 发布 / dashboard 看板
+├── hooks/               # git hooks 源：pre-commit 体检硬卡点（安装：git config core.hooksPath hooks）
 ├── dist/                # 打包输出（.skill 产物，不入库）
-├── reviews/             # 每周评审摘要（定时任务生成）
+├── reviews/             # 评审摘要（owner 主动质检时生成）
 ├── dashboard.html       # 规则资产看板（脚本生成，不手改）
 └── CHANGELOG.md         # 规则加工历史（新增 / 修订 / 废止 / 框架）
 ```
@@ -104,12 +106,13 @@ notes/（原料区）  →  本仓库（加工厂）  →  发布产物
 
 **2. 直接声明规则**。跟任意 Agent 说「把 X 纳入规则管理」，或在笔记里标 `> 类型：声明式规则`。走短通道：陈化 ≥ 2 天 + 冲突检查后合入，来源标 `owner-declared`。
 
-**3. 什么都不做**。harness-observer 已在各 Agent 池常驻，观察到的有价值信息会静默进入 `notes/inbox/`，复述只发生在你主动要求自检时和每周评审时。
+**3. 什么都不做**。harness-observer 已发布到各 Agent 池：在 Claude Code / Codex / OpenCode 中经全局规则指引常驻生效；Kimi Code 无全局注入，靠项目级 AGENTS.md 的「运行时适配」块引导（init-project v1.2.0 起）。观察到的有价值信息静默进入 `notes/inbox/`，复述只发生在你主动要求自检时。
 
-## 每周：评审与提炼
+## 评审与提炼（按需，owner 主动发起）
 
-1. **每周日 21:12（定时任务）**自动评审：体检漂移、刷新使用热度与看板、列出满陈化期的可提炼笔记和 >90 天零使用的退役候选，摘要写入 `reviews/` 并提交 git。
-2. **提炼（手动，跟随评审）**：按评审摘要，把过门槛的原料按失效测试拆开——约束规则合入 global 或对应 skill 约束段，技能新建/更新 skill 目录；标注来源（踩坑笔记或 owner-declared），版本号 +1，记入 CHANGELOG。
+1. **质检 / 评审（手动，随时）**：你主动要求时执行——体检漂移（`sync.py --check`）、读 `notes/inbox/` 识别提议与陈化期满的条目、列出可提炼项和 >90 天零使用的退役候选；规模较大时摘要写入 `reviews/`。
+2. **提炼（手动，跟随评审）**：把过门槛的原料按失效测试拆开——约束规则合入 global 或对应 skill 约束段，技能新建/更新 skill 目录；标注来源（踩坑笔记或 owner-declared），版本号 +1，记入 CHANGELOG。
+   - 约束规则判归属：换个项目它还有意义吗？有 → global 或 skill 约束段；只对特定项目成立 → 写入该项目的 AGENTS.md（标注来源与日期），不进 global。
 3. **冲突检查**：声明式规则合入前对照现有 skill 与 global 规则，冲突由 owner 裁决谁覆盖谁。
 
 ## 改完发布：一条命令
@@ -120,6 +123,8 @@ python scripts/sync.py --check  # 只体检不写入（漂移退出码 1）
 ```
 
 也可单独运行：`pack.py`（打包）、`publish_global.py`（全局规则）、`publish_skills.py`（skill 目录，自动扫描 skills/）。
+
+**commit 硬卡点（hook 试点）**：`hooks/pre-commit` 在每次 commit 前提醒文档偏移清零并跑 `sync.py --check`，发现漂移直接拦截提交。一次性安装：`git config core.hooksPath hooks`；紧急情况可 `git commit --no-verify` 绕过（慎用）。这是「hook 流水线」的第一个试点产物，验证通过后再决定是否升格为规则/skill 之外的第三类产物。
 
 **发布映射**：
 
@@ -150,3 +155,4 @@ python scripts/sync.py --check  # 只体检不写入（漂移退出码 1）
 ## 引入 Skill 来源
 
 - vendor/keel、vendor/coding-protocol 来自 https://github.com/lencx/skills ，原样引入未做修改，感谢作者 lencx。
+- vendor/vibehub 来自 https://github.com/oil-oil/vibe-hub-skill （MIT），原样引入未做修改，感谢作者 oil-oil。

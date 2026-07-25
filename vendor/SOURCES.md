@@ -9,6 +9,7 @@
 | keel | https://github.com/lencx/skills | 2026-07-23 | 架构治理协议 |
 | coding-protocol | https://github.com/lencx/skills | 2026-07-23 | 风险分级编码执行协议（v1.1.0） |
 | security-review | ECC（frontmatter 标注 origin: ECC），拷贝自 ~/.agents/skills | 2026-07-23 | 安全审查清单 |
+| vibehub | https://github.com/oil-oil/vibe-hub-skill （skills/vibehub 目录 + LICENSE） | 2026-07-24 | Vibe Coding 术语学习助手（面向普通人的教学流程，依赖 VibeHub 网站知识源） |
 
 ## 仅登记来源（不拷贝实体）
 

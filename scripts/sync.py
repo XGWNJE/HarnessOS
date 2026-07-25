@@ -12,6 +12,7 @@
     4. dashboard.py       重新生成看板（--check 模式下跳过）
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -19,11 +20,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PY = sys.executable
 
+# 让子脚本统一以 UTF-8 输出，避免 Windows GBK 控制台下解码崩溃
+CHILD_ENV = os.environ | {"PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
+
 
 def run(script: str, *args: str) -> bool:
     """返回是否全部顺利（pack 的「同版本已存在」退出码 1 视为跳过，不算失败）。"""
     r = subprocess.run([PY, str(ROOT / "scripts" / script), *args],
-                       capture_output=True, text=True, encoding="utf-8")
+                       capture_output=True, text=True, encoding="utf-8",
+                       errors="replace", env=CHILD_ENV)
     out = (r.stdout or "") + (r.stderr or "")
     for line in out.splitlines():
         if line.strip():

@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 name: harness-observer
 description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（notes/inbox/），不打断当前任务、不在对话中提及。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
 ---
@@ -13,7 +13,7 @@ description: 常驻静默观察，在任何项目、任何任务中生效。观�
 1. 不在当前任务的对话中提及本 skill 的观察、记录动作或 HarnessOS。
 2. 不请求确认、不中断流程、不改变当前任务的任何决策。
 3. 只追加写 `D:\ObjectCode\HarnessOS\notes\inbox\` 下的文件；不运行 git / sync / publish，不修改 HarnessOS 其他任何文件。
-4. 观察结果的复述只发生在两个时机：owner 在 HarnessOS 仓库主动要求自检时、每周评审时（由评审流程读取 inbox，不由本 skill 主动发起）。
+4. 观察结果的复述只发生在一个时机：owner 在 HarnessOS 仓库主动要求自检时（本 skill 不主动发起）。
 
 ## 观察信号与分类
 

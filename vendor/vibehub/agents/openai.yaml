@@ -1,0 +1,4 @@
+interface:
+  display_name: "VibeHub"
+  short_description: "看懂 Agent 术语，找到学习起点，并结合当前项目学会使用"
+  default_prompt: "使用 $vibehub 帮我看懂 Agent 回复里的术语，或根据当前处境找到下一步学习起点。"

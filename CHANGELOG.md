@@ -2,6 +2,34 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-26 — hook 流水线试点：pre-commit 体检硬卡点
+
+- [框架] 「文档偏移纠正时机分层」声明式规则登记并进入机制试点（原料 notes/inbox/2026-07-25.md，owner 2026-07-25 声明，2026-07-27 陈化期满 + 冲突检查已预先通过，候选去向 global/AGENTS.md）：硬卡点 = commit/push 前全量清零文档偏移；软时机 = 手边顺手改、不在手边先落字记录
+- [框架] hook 流水线首个试点落地：新增 `hooks/pre-commit`——commit 前提醒文档偏移清零并跑 `sync.py --check`，漂移退出码 1 拦截提交；安装方式 `git config core.hooksPath hooks`（单点安装、源目录即生效点，免登记多处）。试点目的：验证「机制强制层」形态，跑过实战后再决定是否升格为规则/skill 之外的第三类产物
+- 试点首问题（已修复）：hook 环境不继承终端 UTF-8 设置，Windows 下 sync 输出按 GBK 乱码——hook 内显式 `export PYTHONUTF8=1 PYTHONIOENCODING=utf-8`
+- 验证闭环：干净状态 exit=0 → 临时制造 skill 源漂移 exit=1 拦截 → 恢复后 exit=0（已还原临时改动）；README 与项目 AGENTS.md 同步登记 hooks/ 目录约定
+
+## 2026-07-26 — webbridge 声明式条目提炼 + 两篇笔记销毁
+
+- [框架] 提炼流程补「归属判断」：约束规则提炼时区分全局与项目特有——换个项目还有意义 → global 或 skill 约束段；只对特定项目成立 → 写入该项目 AGENTS.md（标注来源与日期），不进 global。写入 README「评审与提炼」与项目 AGENTS.md 工作规则（owner 2026-07-26 确认）
+
+- [框架] 新声明式规则登记：`notes/2026-07-26-自动化验证预览窗口.md`——自动化验证（ADB / 虚拟机调试安卓项目）默认打开预览窗口、调试结束关闭（owner 2026-07-26 声明，2026-07-28 陈化期满 + 冲突检查后合入，候选去向 global/AGENTS.md 约束规则）
+
+- [新增] `webbridge-acceptance` v1.0.0：WebBridge 验收六步法（技能）+ 约束段（截图必须目检、临时文件用完即删、Windows 用 curl.exe），来源 owner-declared（原料 notes/2026-07-webbridge-验收.md，2026-07-26 陈化期满，冲突检查通过——skills 与 global 无同类条目）。该笔记的归纳式条目「Windows 下一律文件体 + curl.exe」未到期（08-07，缺重复次数），留在原笔记继续陈化
+- [框架] owner 指示销毁两篇笔记：`notes/2026-07-kimi-code-skill加载验证.md`（事实记录，全量实测欠账一并作废）、`notes/2026-07-vibe-coding-观察.md`（已全部提炼完毕）。注意：ai-coding-workflow 与 ai-stack-harness 中「来源：notes/2026-07-vibe-coding-观察.md」标注此后指向已销毁文件，溯源链断——换代清理时按「无来源标注」规则优先检查这些条目
+
+## 2026-07-25 — 取消定时评审 + 清除退役 VPS 记录
+
+- [框架] 取消每周日 21:12 定时评审：owner 几乎每天主动质检，定时评审属冗余；评审改为按需（owner 主动发起），observer 复述时机从「主动自检 + 每周评审」收窄为「仅 owner 主动自检」。README、项目 AGENTS.md 同步更新
+- [修订] `harness-observer` v1.1.0 → v1.1.1：复述时机收窄（见上）
+- [修订] `vps-server-info` v1.1.0 → v1.1.1：删除旧数据中心 VPS（66.154.112.91）记录——该机已停用，owner 指示清除全部相关记录；reviews/2026-07-24 归档中对应遗留事项一并移除。Server-infra/CURRENT.md 无该机记录，无需处理
+- 排查确认：Windows 任务计划程序与本会话 cron 中均未找到该定时任务的实体；如曾在其他工具/会话中创建，需 owner 在该处取消
+
+## 2026-07-25 — observer 断点修复：项目级运行时适配
+
+- [修订] `init-project` v1.1.0 → v1.2.0：新增「运行时适配」固定块——按 Agent 全局规则注入能力区分：Claude Code / Codex / OpenCode 自动注入全局规则，跳过；Kimi Code 无全局注入机制（~/AGENTS.md 不被加载），由项目级 AGENTS.md 开头固定块引导其先读全局规则文件，harness-observer 常驻指引随之生效。块为指针非副本，不违反「一处事实只在一处维护」
+- 原料：notes/inbox/2026-07-25.md（observer 上线一天零产出 → 排查出 Kimi 无全局注入 + skill 正文懒加载两个断点，owner 质检发现）
+
 ## 2026-07-24 — 声明式规则入口（短通道）
 
 - [复审改造] 按新理念复审全部资产并改造：

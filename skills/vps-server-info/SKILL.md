@@ -1,5 +1,5 @@
 ---
-version: 1.1.0
+version: 1.1.1
 name: vps-server-info
 description: VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用。
 ---
@@ -108,12 +108,6 @@ ssh xgwnje "ss -tlnp | grep -E ':(3000|8787|80|443|9443) ' || true"
 | VisionGuard API Key | 使用环境变量 / server `.env`，不要写进仓库、PR、公开文档或聊天总结 |
 
 涉及密钥、Reality 参数、代理节点、证书私钥时，只能读取必要状态，不要把明文复制进输出或提交。
-
-## 其他历史记录
-
-| 用途 | IP | 状态 |
-|---|---|---|
-| 数据中心 VPS（非 AI 流量） | `66.154.112.91` | 旧记录，2026-07-24 未核验；不要作为默认目标 |
 
 ## 核验参考命令
 
