@@ -11,10 +11,11 @@
   h1 { font-size:20px; }
   header .sub { color:var(--dim); font-size:11px; }
   .kpis { display:flex; gap:10px; margin:16px 0 18px; flex-wrap:wrap; }
-  .kpi { flex:1; min-width:120px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }
+  .kpi { flex:1; min-width:110px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }
   .kpi .n { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }
   .kpi .l { font-size:11px; color:var(--dim); }
   h2 { font-size:12px; color:var(--dim); font-weight:600; letter-spacing:.08em; margin:18px 0 6px; text-transform:uppercase; }
+  h2 .tag { color:var(--accent); }
   table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
   td,th { padding:6px 10px; border-bottom:1px solid var(--line); text-align:left; font-size:12px; }
   th { color:var(--dim); font-weight:600; background:#f5f4f0; }
@@ -32,34 +33,42 @@
   .alerts b { color:var(--warn); font-size:12px; }
   .alerts ul { margin:4px 0 0 18px; font-size:12px; }
   .allok { border:1px solid #cde8da; background:#f2faf6; color:var(--ok); border-radius:8px; padding:8px 12px; margin-top:18px; font-size:12px; }
-  .row { background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; }
+  .row { background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:6px; }
+  .row .chan { font-weight:600; }
   footer { margin-top:20px; font-size:11px; color:var(--dim); }
   code { background:#f0eee9; padding:0 4px; border-radius:3px; font-size:11px; }
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">scripts/dashboard.py 生成 · 2026-07-26 11:20 · 细节查仓库 CHANGELOG 与源文件</div>
+  <div class="sub">scripts/dashboard.py 生成 · 2026-07-26 21:12 · 框架冷冻期至 2026-08-09（剩 14 天） · 细节查仓库 CHANGELOG 与源文件</div>
 </header>
 
 <div class="kpis">
+  <div class="kpi"><div class="n">25/25</div><div class="l">发布点同步</div></div>
+  <div class="kpi"><div class="n">v1.9.0</div><div class="l">全局规则</div></div>
   <div class="kpi"><div class="n">7</div><div class="l">自有 Skill</div></div>
-  <div class="kpi"><div class="n">19/22</div><div class="l">发布点同步</div></div>
-  <div class="kpi"><div class="n">v1.9.0</div><div class="l">全局规则版本</div></div>
-  <div class="kpi"><div class="n">11%</div><div class="l">原料加工率（2/18）</div></div>
+  <div class="kpi"><div class="n">12/12</div><div class="l">hook 注册同步</div></div>
+  <div class="kpi"><div class="n">6</div><div class="l">inbox 原料（0 待确认）</div></div>
   <div class="kpi"><div class="n">0</div><div class="l">待处理</div></div>
 </div>
 
-<h2>Skill 构建 × 发布 × 使用</h2>
-<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th><th>使用热度（会话日志近似）</th></tr><tr><td class="mono">ai-coding-workflow</td><td>v1.2.0</td><td><span class="b ok">v1.2.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim"><span class="dim">0 次</span></td></tr><tr><td class="mono">ai-stack-harness</td><td>v1.3.0</td><td><span class="b ok">v1.3.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim"><span class="dim">0 次</span></td></tr><tr><td class="mono">grsai-image-gen</td><td>v1.1.0</td><td><span class="b ok">v1.1.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">54 次 · 8 天前</td></tr><tr><td class="mono">harness-observer</td><td>v1.3.0</td><td><span class="b ok">v1.3.0</span></td><td><span class="dim">仅 .skill 包</span></td><td class="dim"><span class="dim">0 次</span></td></tr><tr><td class="mono">init-project</td><td>v1.4.0</td><td><span class="b ok">v1.4.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim"><span class="dim">0 次</span></td></tr><tr><td class="mono">vps-server-info</td><td>v1.2.0</td><td><span class="b ok">v1.2.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">744 次 · 7 天前</td></tr><tr><td class="mono">webbridge-acceptance</td><td>v1.1.0</td><td><span class="b ok">v1.1.0</span></td><td><span class="dim">仅 .skill 包</span></td><td class="dim"><span class="dim">0 次</span></td></tr></table>
+<h2>① 输入 · 三通道</h2>
+<div class="row"><span class="chan">抓 · observer → inbox</span> <span class="dim">2 个文件 / 6 条原料（归纳式原料 1 · 声明式原料（owner-declared） 2 · 声明式规则（owner-declared） 3） · 最新 2026-07-26 · 归并提炼由 owner 主动发起评审</span></div>
+<table><tr><th>喂 · 笔记（notes/）</th><th>加工进度</th><th>去向</th></tr><tr><td class="mono">2026-07-26-自动化验证预览窗口.md</td><td><span class="bar"><span style="width:0%"></span></span>0/3</td><td class="dim">待提炼</td></tr><tr><td class="mono">2026-07-scope-guard跨agent机制.md</td><td><span class="bar"><span style="width:0%"></span></span>0/9</td><td class="dim">待提炼</td></tr><tr><td class="mono">2026-07-webbridge-验收.md</td><td><span class="bar"><span style="width:33%"></span></span>2/6</td><td class="dim">webbridge-acceptance</td></tr></table>
+<div class="row" style="margin-top:6px"><span class="chan">拿 · vendor 引入</span> <span class="dim">coding-protocol v1.1.0、keel v1.0.0、security-review v?、vibehub v?；另有 skill-creator（Anthropic 官方，仅登记）</span></div>
 
-<h2>全局规则（* = 含 Claude 专属 overlay）</h2>
-<div class="row">v1.9.0 · home<span class="b ok">同步</span> Codex<span class="b ok">同步</span> OpenCode<span class="b ok">同步</span> Claude Code*<span class="b ok">同步</span> <span class="dim">· Kimi Code 无全局注入，不发布</span></div>
+<h2>② 产物 · 约束规则（global）</h2>
+<div class="row">v1.9.0 · home<span class="b ok">同步</span> Codex<span class="b ok">同步</span> OpenCode<span class="b ok">同步</span> Claude Code*<span class="b ok">同步</span> <span class="dim">· * = 含 Claude overlay · Kimi Code 无全局注入，不发布</span></div>
 
-<h2>原料加工</h2>
-<table><tr><th>笔记</th><th>进度</th><th>去向</th></tr><tr><td class="mono">2026-07-26-自动化验证预览窗口.md</td><td><span class="bar"><span style="width:0%"></span></span>0/3</td><td class="dim">待提炼</td></tr><tr><td class="mono">2026-07-scope-guard跨agent机制.md</td><td><span class="bar"><span style="width:0%"></span></span>0/9</td><td class="dim">待提炼</td></tr><tr><td class="mono">2026-07-webbridge-验收.md</td><td><span class="bar"><span style="width:33%"></span></span>2/6</td><td class="dim">webbridge-acceptance</td></tr></table>
+<h2>② 产物 · 技能（skills）</h2>
+<table><tr><th>Skill</th><th>源版本</th><th>.skill 包</th><th>目录发布</th><th>使用热度（近似）</th></tr><tr><td class="mono">ai-coding-workflow</td><td>v1.2.0</td><td><span class="b ok">v1.2.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">377 次 · 今天</td></tr><tr><td class="mono">ai-stack-harness</td><td>v1.3.0</td><td><span class="b ok">v1.3.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">396 次 · 今天</td></tr><tr><td class="mono">grsai-image-gen</td><td>v1.1.0</td><td><span class="b ok">v1.1.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">512 次 · 今天</td></tr><tr><td class="mono">harness-observer</td><td>v1.3.0</td><td><span class="b ok">v1.3.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">708 次 · 今天</td></tr><tr><td class="mono">init-project</td><td>v1.4.0</td><td><span class="b ok">v1.4.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">837 次 · 今天</td></tr><tr><td class="mono">vps-server-info</td><td>v1.2.0</td><td><span class="b ok">v1.2.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">1138 次 · 今天</td></tr><tr><td class="mono">webbridge-acceptance</td><td>v1.1.0</td><td><span class="b ok">v1.1.0</span></td><td>共享池<span class="b ok">同步</span> Codex 池<span class="b ok">同步</span> Claude 池<span class="b ok">同步</span></td><td class="dim">295 次 · 今天</td></tr></table>
 
-<h2>其他</h2>
-<div class="row dim">引入（vendor）：coding-protocol v1.1.0、keel v1.0.0、security-review v?、vibehub v?；另有 skill-creator（Anthropic 官方，仅登记）· 最近动态：2026-07-26 — 框架评定落地：全局规则减半、闲机器拆除、冷冻期与行为验证环（共 21 条，见 CHANGELOG.md）</div>
+<h2>② 产物 · hook（机制强制）</h2>
+<table><tr><th>运行时</th><th>事件</th><th>源</th><th>属主</th><th>matcher</th><th>状态</th></tr><tr><td class="mono">kimi-code</td><td>UserPromptSubmit</td><td class="mono">server-infra-hook.ps1</td><td class="dim">Server-infra</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>UserPromptSubmit</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>PostToolUse</td><td class="mono">server-infra-hook.ps1</td><td class="dim">Server-infra</td><td class="dim mono">Bash|Edit|Write|mcp__.*</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>PostToolUse</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>PostToolUseFailure</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>Stop</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">kimi-code</td><td>UserPromptSubmit</td><td class="mono">observer_reminder.py</td><td class="dim">HarnessOS</td><td class="dim mono">收口|可以 ?[Pp]ush|提交吧|差不多了</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">codex</td><td>UserPromptSubmit</td><td class="mono">server-infra-hook.ps1</td><td class="dim">Server-infra</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">codex</td><td>UserPromptSubmit</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">codex</td><td>PostToolUse</td><td class="mono">server-infra-hook.ps1</td><td class="dim">Server-infra</td><td class="dim mono">Bash|Shell|shell_command</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">codex</td><td>PostToolUse</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr><tr><td class="mono">codex</td><td>Stop</td><td class="mono">codex-journal-observer.ps1</td><td class="dim">Codex-Journal</td><td class="dim mono">—</td><td><span class="b ok">同步</span></td></tr></table>
+<div class="row dim" style="margin-top:6px">本仓库 git hook：pre-commit 体检硬卡点 <span class="b ok">已安装</span> <span class="dim">· 登记事实源 global/hooks/registry.json，体检 scripts/check_hooks.py（已并入 sync.py）</span></div>
+
+<h2>最近动态</h2>
+<div class="row dim">2026-07-26 — 看板布局重构：对齐流水线框架（三通道 → 三类产物 → 生命周期）（共 23 条，见 CHANGELOG.md）</div>
 
 <div class="allok">✓ 所有发布点与源文件一致，无待处理事项</div>
 

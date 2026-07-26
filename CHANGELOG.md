@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-26 — 看板布局重构：对齐流水线框架（三通道 → 三类产物 → 生命周期）
+
+- [修订] `scripts/dashboard.py`：布局从「双门槛时代」重构为当前框架——KPI（发布点/全局规则/skill/hook 同步/inbox 原料/待处理）→ ① 输入三通道（抓 inbox 统计含类型分布、喂 notes 加工进度、拿 vendor）→ ② 产物三类（约束规则 global 发布徽章、技能构建×发布×使用矩阵、hook 登记表 12 条逐条体检 + 本仓库 pre-commit 安装状态）→ 最近动态 → 待处理清单
+- [新增] 看板展示框架冷冻期（解析项目 AGENTS.md「至 YYYY-MM-DD」，头部显示剩余天数）；hook 体检复用 check_hooks.py 的注册点读取，漂移进待处理清单
+- [修订] 使用热度扫描路径修复：`~/.kimi/sessions` → `~/.kimi-code/sessions`（kimi 会话日志实际位置，此前从未扫到）
+
+## 2026-07-26 — 看板统计口径修复：SKILL_PUBLISH 硬编码改自动扫描
+
+- [修订] `scripts/dashboard.py`：SKILL_PUBLISH 由硬编码 6 个旧名单（含已退役 scope-guard，缺 harness-observer / webbridge-acceptance）改为自动扫描 skills/ 目录，与 publish_skills.py 同一口径——实际发布一直是全的，是看板统计漏了两个 skill 显示「仅 .skill 包」。同类缺陷第二次出现（首次为 07-24 publish_skills 硬编码漏发布），教训：任何按 skill 名单运作的脚本一律自动扫描，禁止硬编码清单。修复后发布点口径 19/22 → 25/25 全绿
+
 ## 2026-07-26 — 框架评定落地：全局规则减半、闲机器拆除、冷冻期与行为验证环
 
 - [框架] 背景：owner 发起最终框架评定（原料 5 篇 171 行 vs 机器 914 行脚本+hook，框架/原料比失衡；建仓 4 天 6 次框架决策、3 次 48 小时内反转），五项改动由 owner 一句「执行」验收通过。本批次为冷冻期前最后一批框架变更

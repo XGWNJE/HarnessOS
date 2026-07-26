@@ -4,16 +4,22 @@
 用法：
     python scripts/dashboard.py     # 重新生成 dashboard.html
 
-设计原则：单屏全局概览。只展示「需要关注的状态」（同步/漂移、构建/待重建、
-加工进度、最近动态一条），不堆砌历史细节——细节回仓库查 CHANGELOG 和源文件。
-数据来源全部是仓库源文件本身，看板不维护任何自己的状态。
+设计原则：单屏全局概览，布局对齐流水线框架——
+    输入三通道（抓 observer→inbox / 喂 notes / 拿 vendor）
+    → 产物三类（约束规则 global / 技能 skills / hook 机制强制）
+    → 生命周期（待处理清单）。
+只展示「需要关注的状态」，不堆砌历史细节——细节回仓库查 CHANGELOG 和源文件。
+数据来源全部是仓库源文件与登记表本身，看板不维护任何自己的状态。
 """
 
 import html
+import json
 import os
 import re
+import subprocess
+import sys
 import time
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -27,19 +33,29 @@ PUBLISH_TARGETS = [
     ("Claude Code",     HOME / ".claude" / "CLAUDE.md",        "claude"),
 ]
 
+
+def own_skills() -> list[str]:
+    """自有 skill = skills/ 下含 SKILL.md 的目录，自动扫描（与 publish_skills.py 同一口径）。"""
+    return sorted(p.name for p in (ROOT / "skills").iterdir()
+                  if p.is_dir() and (p / "SKILL.md").is_file())
+
+
+SKILL_POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
+
 SKILL_PUBLISH = [
     (name, pool / name)
-    for name in ["ai-stack-harness", "ai-coding-workflow",
-                 "grsai-image-gen", "init-project", "scope-guard", "vps-server-info"]
-    for pool in [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
+    for name in own_skills()
+    for pool in SKILL_POOLS
 ]
 
 
 SESSION_LOGS = [
     HOME / ".claude" / "projects",
     HOME / ".codex" / "sessions",
-    HOME / ".kimi" / "sessions",
+    HOME / ".kimi-code" / "sessions",
 ]
+
+REGISTRY = ROOT / "global" / "hooks" / "registry.json"
 
 
 def dir_same(a, b) -> bool:
@@ -79,7 +95,7 @@ def collect_usage(names: list[str]) -> dict[str, dict]:
 
 
 def esc(s: str) -> str:
-    return html.escape(s, quote=True)
+    return html.escape(str(s), quote=True)
 
 
 def parse_frontmatter(text: str) -> dict:
@@ -144,6 +160,21 @@ def collect_notes() -> list[dict]:
     return out
 
 
+def collect_inbox() -> dict:
+    """① 抓：observer 静默写入的原料区（notes/inbox/）统计。"""
+    inbox = ROOT / "notes" / "inbox"
+    files = sorted(inbox.glob("*.md")) if inbox.is_dir() else []
+    entries = 0
+    types: dict[str, int] = {}
+    for f in files:
+        text = f.read_text(encoding="utf-8")
+        entries += len(re.findall(r"^## .+", text, re.M))
+        for t in re.findall(r"> 类型：(\S+)", text):
+            types[t] = types.get(t, 0) + 1
+    return {"files": len(files), "entries": entries, "types": types,
+            "latest": files[-1].stem if files else "—"}
+
+
 def collect_global() -> dict:
     f = ROOT / "global" / "AGENTS.md"
     text = f.read_text(encoding="utf-8")
@@ -157,6 +188,56 @@ def collect_global() -> dict:
         targets.append({"label": label, "overlay": overlay or "",
                         "sync": current is not None and current.rstrip() == want.rstrip()})
     return {"version": version, "targets": targets}
+
+
+def collect_hooks() -> dict:
+    """hook 产物：对照 registry.json 逐条体检（复用 check_hooks 的注册点读取）。"""
+    reg = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    entries: dict[str, list[dict]] = {}
+    try:
+        sys.path.insert(0, str(Path(__file__).parent))
+        import check_hooks
+        entries = {"kimi-code": check_hooks.kimi_entries(),
+                   "codex": check_hooks.codex_entries()}
+    except Exception:
+        pass  # 注册点不可读时只体检源文件存在性
+    rows = []
+    n_ok = 0
+    for r in reg["registrations"]:
+        src = Path(r["source"])
+        ok = src.exists()
+        if ok and r["runtime"] in entries:
+            base = src.name
+            hit = next((e for e in entries[r["runtime"]]
+                        if e.get("event") == r["event"] and base in e.get("command", "")), None)
+            ok = hit is not None and (r.get("matcher") is None or hit.get("matcher") == r["matcher"])
+        n_ok += ok
+        rows.append({"runtime": r["runtime"], "event": r["event"],
+                     "matcher": r.get("matcher") or "—", "source": src.name,
+                     "owner": r.get("owner", "?"), "sync": ok})
+    return {"rows": rows, "ok": n_ok, "total": len(rows)}
+
+
+def collect_githook() -> bool:
+    """本仓库 pre-commit 体检钩子是否已安装（core.hooksPath = hooks）。"""
+    try:
+        out = subprocess.run(["git", "config", "--get", "core.hooksPath"],
+                             cwd=ROOT, capture_output=True, text=True, timeout=10)
+        return out.stdout.strip() == "hooks"
+    except Exception:
+        return False
+
+
+def collect_freeze() -> dict | None:
+    """框架冷冻期（项目 AGENTS.md 工作规则）：解析「至 YYYY-MM-DD」。"""
+    f = ROOT / "AGENTS.md"
+    if not f.exists():
+        return None
+    m = re.search(r"冷冻期[^\n]*?至 (\d{4}-\d{2}-\d{2})", f.read_text(encoding="utf-8"))
+    if not m:
+        return None
+    end = date.fromisoformat(m.group(1))
+    return {"end": m.group(1), "days": (end - date.today()).days}
 
 
 def collect_changelog() -> dict:
@@ -176,7 +257,11 @@ def render() -> str:
     skills = collect_skills(ROOT / "skills")
     vendor = collect_skills(ROOT / "vendor")
     notes = collect_notes()
+    inbox = collect_inbox()
     g = collect_global()
+    hooks = collect_hooks()
+    githook = collect_githook()
+    freeze = collect_freeze()
     log = collect_changelog()
     builds = collect_builds()
     pubs = collect_skill_publish()
@@ -184,8 +269,25 @@ def render() -> str:
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     now_ts = time.time()
 
-    # ---- 矩阵行 + 待办信号 ----
     alerts = []
+
+    # ---- ① 输入：inbox（抓） ----
+    types_txt = " · ".join(f"{esc(k)} {v}" for k, v in inbox["types"].items()) or "无类型标注"
+    inbox_html = (f'{inbox["files"]} 个文件 / {inbox["entries"]} 条原料（{types_txt}）'
+                  f' · 最新 {esc(inbox["latest"])} · 归并提炼由 owner 主动发起评审')
+
+    # ---- ① 输入：notes（喂） ----
+    note_rows = "".join(
+        f'<tr><td class="mono">{esc(n["file"])}</td>'
+        f'<td><span class="bar"><span style="width:{(n["distilled"]/n["total"]*100 if n["total"] else 0):.0f}%"></span></span>'
+        f'{n["distilled"]}/{n["total"]}</td>'
+        f'<td class="dim">{esc("、".join(n["targets"])) or "待提炼"}</td></tr>'
+        for n in notes)
+
+    # ---- ① 输入：vendor（拿） ----
+    vendor_txt = "、".join(f'{v["name"]} v{v["version"]}' for v in vendor)
+
+    # ---- ② 产物：技能矩阵 ----
     matrix_rows = ""
     for s in skills:
         built = builds.get(s["name"])
@@ -214,23 +316,26 @@ def render() -> str:
         matrix_rows += (f'<tr><td class="mono">{esc(s["name"])}</td><td>v{esc(s["version"])}</td>'
                         f'<td>{build_html}</td><td>{pub_html}</td><td class="dim">{usage_html}</td></tr>')
 
+    # ---- ② 产物：全局规则 ----
     g_badges = " ".join(f'{t["label"]}{"*" if t["overlay"] else ""}{badge(t["sync"])}' for t in g["targets"])
     for t in g["targets"]:
         if not t["sync"]:
             alerts.append(f"全局规则 {t['label']} 漂移，需 publish_global")
 
-    total_items = sum(n["total"] for n in notes)
-    total_distilled = sum(n["distilled"] for n in notes)
-    pending_items = total_items - total_distilled
-    pct = round(total_distilled / total_items * 100) if total_items else 0
+    # ---- ② 产物：hook ----
+    hook_rows = "".join(
+        f'<tr><td class="mono">{esc(r["runtime"])}</td><td>{esc(r["event"])}</td>'
+        f'<td class="mono">{esc(r["source"])}</td><td class="dim">{esc(r["owner"])}</td>'
+        f'<td class="dim mono">{esc(r["matcher"][:24])}</td><td>{badge(r["sync"])}</td></tr>'
+        for r in hooks["rows"])
+    for r in hooks["rows"]:
+        if not r["sync"]:
+            alerts.append(f"hook {r['runtime']} {r['event']} {r['source']} 漂移，按 registry.json 修复")
+    if not githook:
+        alerts.append("本仓库 pre-commit 体检钩子未安装：git config core.hooksPath hooks")
+    githook_html = ('<span class="b ok">已安装</span>' if githook else '<span class="b bad">未安装</span>')
 
-    note_rows = "".join(
-        f'<tr><td class="mono">{esc(n["file"])}</td>'
-        f'<td><span class="bar"><span style="width:{(n["distilled"]/n["total"]*100 if n["total"] else 0):.0f}%"></span></span>'
-        f'{n["distilled"]}/{n["total"]}</td>'
-        f'<td class="dim">{esc("、".join(n["targets"])) or "待提炼"}</td></tr>'
-        for n in notes)
-
+    # ---- KPI ----
     n_sync = sum(t["sync"] for t in g["targets"]) + sum(p["sync"] for ps in pubs.values() for p in ps)
     n_total = len(g["targets"]) + sum(len(ps) for ps in pubs.values())
 
@@ -238,7 +343,10 @@ def render() -> str:
     alerts_block = (f'<div class="alerts"><b>待处理（{len(alerts)}）</b><ul>{alerts_html}</ul></div>'
                     if alerts else '<div class="allok">✓ 所有发布点与源文件一致，无待处理事项</div>')
 
-    vendor_txt = "、".join(f'{v["name"]} v{v["version"]}' for v in vendor)
+    freeze_txt = ""
+    if freeze:
+        freeze_txt = (f' · 框架冷冻期至 {freeze["end"]}（剩 {freeze["days"]} 天）' if freeze["days"] > 0
+                      else f' · 框架冷冻期已于 {freeze["end"]} 期满')
 
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8">
@@ -253,10 +361,11 @@ def render() -> str:
   h1 {{ font-size:20px; }}
   header .sub {{ color:var(--dim); font-size:11px; }}
   .kpis {{ display:flex; gap:10px; margin:16px 0 18px; flex-wrap:wrap; }}
-  .kpi {{ flex:1; min-width:120px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }}
+  .kpi {{ flex:1; min-width:110px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff; }}
   .kpi .n {{ font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }}
   .kpi .l {{ font-size:11px; color:var(--dim); }}
   h2 {{ font-size:12px; color:var(--dim); font-weight:600; letter-spacing:.08em; margin:18px 0 6px; text-transform:uppercase; }}
+  h2 .tag {{ color:var(--accent); }}
   table {{ width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden; }}
   td,th {{ padding:6px 10px; border-bottom:1px solid var(--line); text-align:left; font-size:12px; }}
   th {{ color:var(--dim); font-weight:600; background:#f5f4f0; }}
@@ -274,34 +383,42 @@ def render() -> str:
   .alerts b {{ color:var(--warn); font-size:12px; }}
   .alerts ul {{ margin:4px 0 0 18px; font-size:12px; }}
   .allok {{ border:1px solid #cde8da; background:#f2faf6; color:var(--ok); border-radius:8px; padding:8px 12px; margin-top:18px; font-size:12px; }}
-  .row {{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; }}
+  .row {{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:6px; }}
+  .row .chan {{ font-weight:600; }}
   footer {{ margin-top:20px; font-size:11px; color:var(--dim); }}
   code {{ background:#f0eee9; padding:0 4px; border-radius:3px; font-size:11px; }}
 </style></head><body><div class="wrap">
 <header>
   <h1>HarnessOS 看板</h1>
-  <div class="sub">scripts/dashboard.py 生成 · {now} · 细节查仓库 CHANGELOG 与源文件</div>
+  <div class="sub">scripts/dashboard.py 生成 · {now}{freeze_txt} · 细节查仓库 CHANGELOG 与源文件</div>
 </header>
 
 <div class="kpis">
-  <div class="kpi"><div class="n">{len(skills)}</div><div class="l">自有 Skill</div></div>
   <div class="kpi"><div class="n">{n_sync}/{n_total}</div><div class="l">发布点同步</div></div>
-  <div class="kpi"><div class="n">v{esc(g['version'])}</div><div class="l">全局规则版本</div></div>
-  <div class="kpi"><div class="n">{pct}%</div><div class="l">原料加工率（{total_distilled}/{total_items}）</div></div>
+  <div class="kpi"><div class="n">v{esc(g['version'])}</div><div class="l">全局规则</div></div>
+  <div class="kpi"><div class="n">{len(skills)}</div><div class="l">自有 Skill</div></div>
+  <div class="kpi"><div class="n">{hooks['ok']}/{hooks['total']}</div><div class="l">hook 注册同步</div></div>
+  <div class="kpi"><div class="n">{inbox['entries']}</div><div class="l">inbox 原料（{inbox['types'].get('待确认', 0)} 待确认）</div></div>
   <div class="kpi"><div class="n">{len(alerts)}</div><div class="l">待处理</div></div>
 </div>
 
-<h2>Skill 构建 × 发布 × 使用</h2>
-<table><tr><th>Skill</th><th>源版本</th><th>.skill 包（dist/，手动导入各工具）</th><th>目录发布</th><th>使用热度（会话日志近似）</th></tr>{matrix_rows}</table>
+<h2>① 输入 · 三通道</h2>
+<div class="row"><span class="chan">抓 · observer → inbox</span> <span class="dim">{inbox_html}</span></div>
+<table><tr><th>喂 · 笔记（notes/）</th><th>加工进度</th><th>去向</th></tr>{note_rows or '<tr><td class="dim">暂无</td></tr>'}</table>
+<div class="row" style="margin-top:6px"><span class="chan">拿 · vendor 引入</span> <span class="dim">{esc(vendor_txt)}；另有 skill-creator（Anthropic 官方，仅登记）</span></div>
 
-<h2>全局规则（* = 含 Claude 专属 overlay）</h2>
-<div class="row">v{esc(g['version'])} · {g_badges} <span class="dim">· Kimi Code 无全局注入，不发布</span></div>
+<h2>② 产物 · 约束规则（global）</h2>
+<div class="row">v{esc(g['version'])} · {g_badges} <span class="dim">· * = 含 Claude overlay · Kimi Code 无全局注入，不发布</span></div>
 
-<h2>原料加工</h2>
-<table><tr><th>笔记</th><th>进度</th><th>去向</th></tr>{note_rows or '<tr><td class="dim">暂无</td></tr>'}</table>
+<h2>② 产物 · 技能（skills）</h2>
+<table><tr><th>Skill</th><th>源版本</th><th>.skill 包</th><th>目录发布</th><th>使用热度（近似）</th></tr>{matrix_rows}</table>
 
-<h2>其他</h2>
-<div class="row dim">引入（vendor）：{esc(vendor_txt)}；另有 skill-creator（Anthropic 官方，仅登记）· 最近动态：{esc(log['latest'])}（共 {log['count']} 条，见 CHANGELOG.md）</div>
+<h2>② 产物 · hook（机制强制）</h2>
+<table><tr><th>运行时</th><th>事件</th><th>源</th><th>属主</th><th>matcher</th><th>状态</th></tr>{hook_rows}</table>
+<div class="row dim" style="margin-top:6px">本仓库 git hook：pre-commit 体检硬卡点 {githook_html} <span class="dim">· 登记事实源 global/hooks/registry.json，体检 scripts/check_hooks.py（已并入 sync.py）</span></div>
+
+<h2>最近动态</h2>
+<div class="row dim">{esc(log['latest'])}（共 {log['count']} 条，见 CHANGELOG.md）</div>
 
 {alerts_block}
 
