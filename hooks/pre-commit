@@ -2,7 +2,7 @@
 # HarnessOS pre-commit 硬卡点（hook 流水线试点，2026-07-26）
 #
 # 用途：commit 前强制两件事——
-#   1. 提醒文档偏移清零（声明式规则试点，陈化中：notes/inbox/2026-07-25.md）
+#   1. 提醒文档偏移清零（声明式规则试点，待 owner 验收：notes/inbox/2026-07-25.md）
 #   2. 跑 sync.py --check 体检，发现发布漂移则拦截提交
 #
 # 安装（本仓库内执行一次）：git config core.hooksPath hooks
