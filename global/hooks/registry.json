@@ -1,0 +1,22 @@
+{
+  "说明": "全机 Agent hook 登记单一事实源。check_hooks.py 据此体检：注册点真实存在该条目（event + command 引用源文件 + matcher 一致）且源文件存在。新增/修改/删除 hook 时先改本表，再改注册点，最后跑 sync.py --check。",
+  "注册点": {
+    "kimi-code": "C:/Users/Administrator/.kimi-code/config.toml 的 [[hooks]]（kimi 无默认 hook 目录、无项目级配置，注册是唯一加载通道）",
+    "codex": "C:/Users/Administrator/.codex/hooks.json 的 hooks.<event> 数组",
+    "claude": "无 hook 注册（~/.claude/settings.json 无 hooks 段）"
+  },
+  "registrations": [
+    { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "PostToolUse", "matcher": "Bash|Edit|Write|mcp__.*", "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "PostToolUse", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "PostToolUseFailure", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "Stop", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
+    { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": "收口|可以 ?[Pp]ush|提交吧|差不多了", "source": "D:/ObjectCode/HarnessOS/global/hooks/observer_reminder.py", "owner": "HarnessOS", "via_adapter": false },
+    { "runtime": "codex", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": false },
+    { "runtime": "codex", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false },
+    { "runtime": "codex", "event": "PostToolUse", "matcher": "Bash|Shell|shell_command|apply_patch|mcp__.*|functions.*", "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": false },
+    { "runtime": "codex", "event": "PostToolUse", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false },
+    { "runtime": "codex", "event": "Stop", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false }
+  ]
+}

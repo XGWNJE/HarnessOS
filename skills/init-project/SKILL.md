@@ -1,7 +1,7 @@
 ---
-version: 1.3.0
+version: 1.4.0
 name: init-project
-description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。目标：项目级文件以全局规则 ~/AGENTS.md 为通用规则基准（其源文件由 HarnessOS 仓库维护），只承载项目特有约束，并按 Agent 运行时差异注入全局规则指针（Kimi Code 无全局注入，必须靠项目级文件引导）。
+description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。目标：项目级文件以全局规则 ~/AGENTS.md 为通用规则基准（其源文件由 HarnessOS 仓库维护），只承载项目特有约束，并向无全局注入的运行时（Kimi Code）内嵌 harness-observer 静默观察职责块（不引导读全局文件，控制上下文成本）。
 ---
 
 # 项目规则初始化
@@ -22,7 +22,7 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 
 - **不碰发布产物**：新增/修改/上浮通用规则时，改动落在 HarnessOS 源文件，未直接改任何发布产物；发现全局规则本身需要改时，未在本项目动手，已提示 owner 去 HarnessOS 改源文件。（机制：发布靠 `python scripts/sync.py`，它是唯一发布通道而非规定步骤。）
 - **无重复无矛盾**：项目 AGENTS.md 中不出现全局规则已覆盖的通用条目（角色、决策自主权、验证、安全、文档边界等），与全局规则无冲突。
-- **运行时指针到位**：项目级 AGENTS.md 开头含「运行时适配」固定块（见下节，原文照写）；Kimi Code 等无全局注入的 Agent 能据此读到全局规则；该块是指针不是副本，项目文件不含全局规则内容本身。
+- **静默观察块到位**：项目级 AGENTS.md 开头含「静默观察」固定块（见下节，原文照写）；Kimi Code 等无全局注入的运行时因此常驻承担 harness-observer 观察职责；该块只内嵌观察职责本身，不引导模型去读全局规则文件（避免整体读入的上下文成本）。
 - **项目事实来自实际调查**：构建/测试/验证命令、目录职责、发布流程、持久数据位置、已有项目级 skill（`.agents/skills/`）与脚本入口均以仓库实际文件（`README.md`、构建清单、现有 `AGENTS.md`、`docs/` 结构）为准，不凭记忆；每条规则可被验证或指向可验证的事实（命令、路径、文档）。
 - **内容只限项目特有**：项目 AGENTS.md 只含项目边界（范围/职责）、关键路径与命令、最小验证矩阵、发布流程、文档地图、项目铁律。
 - **铁律受控**：不可违反约束从历史文档、`docs/decisions/`、owner 口述中提炼并逐条编号；铁律不超过 10 条，超出部分降级为普通工作规则。
@@ -30,20 +30,17 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 - **写入前经 owner 确认**：草案在写入文件前已展示给 owner 审核；偏好不明的点已主动询问，未擅自决定。
 - **无漂移副本**：项目内旧版规则、其他 Agent 的规则副本（如 `.codex/`、`.claude/` 下的 AGENTS.md）已提示 owner 合并或改为指针，不存在多份并存漂移。
 
-## 运行时适配固定块（事实，原文照写）
+## 静默观察固定块（事实，原文照写）
 
-各 Agent 对全局规则的加载能力不同：
-
-- **有全局注入**：Claude Code（`~/.claude/CLAUDE.md`）、Codex（`~/.codex/AGENTS.md`）、OpenCode（`~/.config/opencode/AGENTS.md`）——全局规则自动进入系统提示。
-- **无全局注入**：Kimi Code——`~/AGENTS.md` 不会被加载，全局规则（含 harness-observer 常驻观察指引）对它的会话完全不可见，只能靠项目级文件引导它去读。
-
-因此项目级 AGENTS.md 开头固定包含如下块（原文照写，不改写、不展开）：
+背景：harness-observer 是纯文档 skill，无强制加载机制，只躺在 skill 列表里模型不会主动执行（2026-07-25、2026-07-26 两次漏捕实证）。有全局注入的运行时（Claude Code / Codex / OpenCode）已由全局规则覆盖该职责；Kimi Code 无全局注入，又不值得为这一条职责引导它整体读全局文件（上下文成本）。因此项目级 AGENTS.md 开头固定内嵌如下块（原文照写，不改写、不展开）；另有 kimi-code `UserPromptSubmit` 收口 hook 做保底（源在 HarnessOS `global/hooks/`，与本块互补，不替代本块）：
 
 ```markdown
-## 运行时适配（先读我）
+## 静默观察（harness-observer，常驻职责）
 
-- 若你的系统提示中已注入全局协作规则（Claude Code / Codex / OpenCode 会自动注入），跳过本节。
-- 否则（如 Kimi Code，无全局注入机制）：开始工作前先读 `C:/Users/Administrator/AGENTS.md`（全局通用规则，含 harness-observer 静默观察职责），其中规则在本项目同样生效。
+- 若你的系统提示已注入全局协作规则（Claude Code / Codex / OpenCode 会自动注入），其中已含本职责，跳过本节。
+- 否则（如 Kimi Code）：干活全程留意四类信号——owner 重复纠正、owner 明确表达的偏好、可复用踩坑、你自身的语义失败（假设/目标/路径/范围错误）。
+- 命中即静默追加到 `D:\ObjectCode\HarnessOS\notes\inbox\YYYY-MM-DD.md`（先查重，同主题重复计数 +1，脱敏）；记录格式与验收标准以 harness-observer skill 为准，需要时加载它。
+- 静默 = 不打断当前任务、不在对话中提及、不改动当前项目任何文件；只追加 inbox，归并提炼留给 owner 评审。
 ```
 
 ## 推荐结构（参考，非规定）
