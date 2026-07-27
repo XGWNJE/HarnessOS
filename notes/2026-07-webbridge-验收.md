@@ -32,3 +32,11 @@
 - **技能**：「WebBridge 验收六步法」（流程 + checklist，去掉它 Agent 不会验收）——候选独立 webbridge skill 或通用验收 skill。→ 已提炼进 webbridge-acceptance v1.0.0（2026-07-26）。
 - **约束规则**：「截图必须目检，返回成功 ≠ 内容正确」「验收临时文件用完即删」（去掉它 Agent 会做错事）——候选合入相关 skill 的约束段或 global。→ 已提炼进 webbridge-acceptance 约束段（2026-07-26）。
 - 「Windows 下 WebBridge 请求一律文件体 + curl.exe」——归纳式，走三门槛（陈化 14 天，2026-08-07 期满，重复计数 1，仍缺重复次数），候选入 webbridge-acceptance 或 ai-coding-workflow。
+
+---
+
+## 状态更新（2026-07-27 评审标注）
+
+- 「验收六步法」与「截图目检 / 临时文件即删」：已提炼进 webbridge-acceptance（当前 v1.1.0），加工完毕。
+- 「Windows 下 WebBridge 请求一律文件体 + curl.exe」：陈化期制度已废止（2026-07-26），原期限约束失效；2026-07-26 owner 验收时挂起为**待定**，至今仍待 owner 一句话处置。
+- 处置（owner 2026-07-27）：**弃留，不固化**——该实践已被 webbridge-acceptance v1.1.0「机制」段覆盖（curl.exe 环境事实 + 文件体请求法），WebBridge 已在日常使用中按此运作，无需单独立规则。

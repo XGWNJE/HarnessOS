@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-27 — 按需评审验收：2 条固化 global v1.10.0、目标模式边界确认、3 条弃留
+
+- [修订] `global/AGENTS.md` v1.9.0 → v1.10.0：新增协作目标「工具碰壁快速止损」（owner 验收通过，原料 notes/inbox/2026-07-26.md CRLF/Edit 条目）；恢复并扩展「自动化验证可视」（v1.9.0 框架评定裁撤后 owner 一句话恢复，并入「UI 改动投屏常开 + 分检查点人工验收」，原料 notes/inbox/2026-07-26.md UI 工作方式条目）。协作目标 8 → 10 条
+- [修订] 目标模式边界确认（owner-declared 2026-07-27）：目标模式仅针对规则类生成物；skill 与 hook 不参与，已目标化的 skill 不回改。项目 AGENTS.md「生成物写法」条目同步修正
+- 弃留 3 条原料（owner 2026-07-27 拍板）：「文件体 + curl.exe」（无需固化——已被 webbridge-acceptance v1.1.0「机制」段覆盖）、「48dp 触控区」「Compose M3 tonalElevation」（Vigil UI 场景，owner 判丢弃）
+
 ## 2026-07-26 — 看板布局重构：对齐流水线框架（三通道 → 三类产物 → 生命周期）
 
 - [修订] `scripts/dashboard.py`：布局从「双门槛时代」重构为当前框架——KPI（发布点/全局规则/skill/hook 同步/inbox 原料/待处理）→ ① 输入三通道（抓 inbox 统计含类型分布、喂 notes 加工进度、拿 vendor）→ ② 产物三类（约束规则 global 发布徽章、技能构建×发布×使用矩阵、hook 登记表 12 条逐条体检 + 本仓库 pre-commit 安装状态）→ 最近动态 → 待处理清单

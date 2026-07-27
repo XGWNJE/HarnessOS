@@ -23,3 +23,12 @@
   1. **安装登记表**：install.py 每写一处配置就记录到清单（文件路径 + 条目标记），uninstall 按清单逐项回滚，不允许"只管自己知道的运行时"。
   2. **卸载自检**：卸载后扫描各 runtime 配置中是否还残留指向已删路径的命令（grep `scope_guard_hook` / `scope-guard\app`），有残留则报错而非静默成功。
   3. **验证闭环**：卸载后必须模拟一次真实 hook 调用（构造 hook event JSON 走一遍 adapter），确认 exit=0，而不是只看配置文件干净了。
+
+---
+
+## 提炼去向（2026-07-27 评审标注）
+
+- scope-guard 已于 2026-07-26 彻底退役：撤出全部发布点，源目录归档 `archive/skills/scope-guard`，CHANGELOG 记废止。
+- 「纯文档 skill ≠ 机制类 skill」教训：已并入 harness-observer（v1.1.0 起整合原 scope-guard 职责），并直接促成 init-project 运行时适配块 + kimi 收口 hook 的断点修复（见 inbox 2026-07-25）。
+- 「安装登记表 / 卸载自检 / 验证闭环」三条沉淀规则：已机制化承载——`global/hooks/registry.json` 全机 hook 登记表 + `scripts/check_hooks.py` 体检（含模拟调用验证），按「hook 承载不转规则」原则不再文字化。
+- **状态：加工完毕。**
