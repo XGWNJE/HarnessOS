@@ -1,7 +1,7 @@
 ---
-version: 1.1.0
+version: 1.2.0
 name: grsai-image-gen
-description: Grsai API 图片/视频生成。Use only when the user explicitly asks to use Grsai, `$grsai-image-gen`, Grsai API, an external paid image API, Grsai-specific models such as nano-banana or gpt-image-2, Grsai price/cost routing, or OpenAI-compatible Grsai image endpoints. Do not trigger for generic image creation requests; let Codex native image generation handle ordinary "draw/generate an image" tasks unless Grsai is named or API/price/model control is required. Goal: a verified, previewable result at cost/quality matching user intent, with zero key exposure. Supports aspect ratio, resolution, async polling, reference-image handling, and Codex preview compatibility.
+description: HarnessOS 默认绘图/图片生成能力。当默认模型或 Agent 不具备原生绘图能力时，用此技能生成图片、插图、素材、封面、海报等视觉内容。托管在 Grsai API（付费 API，需 GRSAI_API_KEY），支持异步轮询、参考图、多种比例/分辨率、视频。目标：在成本与质量间合理取舍，密钥零暴露，结果可预览可下载。注意：若当前模型/Agent 自身能画（如 Codex 原生出图），优先用原生能力；Grsai 为兜底/付费托管方案。
 ---
 
 # Grsai 图片生成

@@ -1,5 +1,5 @@
 ---
-version: 1.2.0
+version: 1.3.0
 name: vps-server-info
 description: VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用，目标是安全、准确地完成 VPS 相关操作。
 ---
@@ -20,24 +20,14 @@ description: VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项�
 ## 最近核验（事实）
 
 - 核验时间：2026-07-24（Asia/Shanghai）
-- 核验方式：读取本机 `C:\Users\Administrator\.ssh\config`，并通过 SSH 在 VPS 上执行只读检查
+- 核验方式：读取本机 SSH config（`~/.ssh/config`），并通过 SSH 在 VPS 上执行只读检查
 - 当前默认 SSH 别名：`xgwnje`
 - 兼容旧别名：`visionguard`
-- **重要变更**：2026-06-29 前后 VPS 更换过新机器（主机名 `C202604291716769` → `C20260629016451`），2026-05-25 之前的记录（webhome 路径、Uptime Kuma、Basic Auth 状态页、Docker）全部作废
+- **重要变更**：2026-06-29 前后 VPS 更换过新机器，2026-05-25 之前的记录（webhome 路径、Uptime Kuma、Basic Auth 状态页、Docker）全部作废
 
 ## SSH 连接（事实）
 
-本机 SSH config 当前配置：
-
-```sshconfig
-Host xgwnje visionguard
-  HostName 216.36.111.208
-  Port 53111
-  User root
-  IdentityFile ~/.ssh/id_ed25519
-```
-
-常用命令：
+真实 IP / 端口 / 用户**不写进本文件**（本仓库为公开仓库）。以本机 `~/.ssh/config` 中的 `Host xgwnje` 条目为唯一事实源，用前现读：
 
 ```bash
 ssh xgwnje                             # 登录默认 VPS
@@ -45,23 +35,18 @@ ssh xgwnje "uptime"                    # 远程执行只读命令
 scp file.txt xgwnje:/var/www/          # 上传文件示例
 ```
 
-在 Codex sandbox 中如果 `ssh xgwnje` 报 “Could not resolve hostname xgwnje”，通常是 sandbox 没读到用户 SSH config。可显式指定配置文件：
-
-```powershell
-ssh -F C:\Users\Administrator\.ssh\config xgwnje "uptime"
-```
+在 Codex sandbox 中如果 `ssh xgwnje` 报 “Could not resolve hostname xgwnje”，通常是 sandbox 没读到用户 SSH config。可显式指定配置文件（路径以本机实际为准）。
 
 ## 服务器基本信息（2026-07-24 核验）
 
 | 项目 | 当前值 |
 |---|---|
-| 主机名 | `C20260629016451` |
 | 系统 | Debian GNU/Linux 12 (bookworm) |
 | Kernel | `6.8.0-48-generic` |
 | CPU | 1 vCPU |
 | 内存 | 961 MiB，无 swap |
 | 根分区 | `/dev/vda1`，20G，已用 11G（54%） |
-| 公网 IP / SSH | `216.36.111.208:53111` |
+| 公网 IP / SSH | 见本机 `~/.ssh/config`（公开仓库不落明文） |
 
 规格比旧机（2 vCPU / 1.9G / 40G）缩水。
 
@@ -118,8 +103,8 @@ ssh xgwnje "ss -tlnp | grep -E ':(3000|8787|80|443|9443) ' || true"
 
 ## 核验参考命令
 
-```powershell
-ssh -F C:\Users\Administrator\.ssh\config xgwnje "hostname; uptime; free -h; df -h /"
-ssh -F C:\Users\Administrator\.ssh\config xgwnje "systemctl is-active nginx visionguard"
-ssh -F C:\Users\Administrator\.ssh\config xgwnje "curl -ksS -o /dev/null -w 'root %{http_code}\n' https://xgwnje.cn/; curl -ksS -o /dev/null -w 'vg %{http_code}\n' https://visionguard.xgwnje.cn/health; curl -ksS -o /dev/null -w 'status %{http_code}\n' https://status.xgwnje.cn/"
+```bash
+ssh xgwnje "hostname; uptime; free -h; df -h /"
+ssh xgwnje "systemctl is-active nginx visionguard"
+ssh xgwnje "curl -ksS -o /dev/null -w 'root %{http_code}\n' https://xgwnje.cn/; curl -ksS -o /dev/null -w 'vg %{http_code}\n' https://visionguard.xgwnje.cn/health; curl -ksS -o /dev/null -w 'status %{http_code}\n' https://status.xgwnje.cn/"
 ```

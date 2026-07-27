@@ -2,7 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-27 — 仓库公开化脱敏：vps-server-info v1.3.0
+
+- [修订] `skills/vps-server-info/SKILL.md` v1.2.0 → v1.3.0：远端仓库转公开，脱敏 SSH 连接信息——真实公网 IP、SSH 端口、用户名、主机名不再落明文，改为指向本机 `~/.ssh/config` 的 `Host xgwnje` 条目（用前现读，本就是实时核验的事实源）；核验参考命令去掉 `-F` 显式本机路径。域名与服务器侧架构信息保留（域名本身公开可解析）。注意：git 历史中仍有旧明文（owner 拍板选脱敏保留、不重写历史），风险以 SSH key 认证与 VPS 加固兜底。来源：owner 验收（仓库公开化检查）
+- 遗留（owner 已知悉）：CHANGELOG 与 reviews/ 历史条目按铁律 7 不回改，仍含旧主机名与已停用旧机 IP；提交邮箱留在 git 历史
+
 ## 2026-07-27 — 按需评审验收：2 条固化 global v1.10.0、目标模式边界确认、3 条弃留
+
+## 2026-07-27 — grsai-image-gen 重新定位为 HarnessOS 默认绘图技能
+
+- [修订] `skills/grsai-image-gen/SKILL.md` v1.1.0 → v1.2.0：重新定位为 HarnessOS 默认绘图/图片生成能力——当默认模型或 Agent 不具备原生绘图能力时优先使用；原描述写反了（"Do not trigger for generic image creation requests"），修正为正确的定位（兜底/付费托管方案，原生能画时优先用原生）。来源：owner 口头澄清
 
 - [修订] `global/AGENTS.md` v1.9.0 → v1.10.0：新增协作目标「工具碰壁快速止损」（owner 验收通过，原料 notes/inbox/2026-07-26.md CRLF/Edit 条目）；恢复并扩展「自动化验证可视」（v1.9.0 框架评定裁撤后 owner 一句话恢复，并入「UI 改动投屏常开 + 分检查点人工验收」，原料 notes/inbox/2026-07-26.md UI 工作方式条目）。协作目标 8 → 10 条
 - [修订] 目标模式边界确认（owner-declared 2026-07-27）：目标模式仅针对规则类生成物；skill 与 hook 不参与，已目标化的 skill 不回改。项目 AGENTS.md「生成物写法」条目同步修正
