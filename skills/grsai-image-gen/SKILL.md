@@ -1,5 +1,5 @@
 ---
-version: 1.2.0
+version: 1.3.0
 name: grsai-image-gen
 description: HarnessOS 默认绘图/图片生成能力。当默认模型或 Agent 不具备原生绘图能力时，用此技能生成图片、插图、素材、封面、海报等视觉内容。托管在 Grsai API（付费 API，需 GRSAI_API_KEY），支持异步轮询、参考图、多种比例/分辨率、视频。目标：在成本与质量间合理取舍，密钥零暴露，结果可预览可下载。注意：若当前模型/Agent 自身能画（如 Codex 原生出图），优先用原生能力；Grsai 为兜底/付费托管方案。
 ---
@@ -8,6 +8,15 @@ description: HarnessOS 默认绘图/图片生成能力。当默认模型或 Agen
 
 > 写法：目标模式——只描述想要的目标与验收标准，不规定具体做法；做法由模型按情境自决。
 > 标注「机制」的段落是无可替代的调用机制（离开它任务做不成），原样保留，不是规定。
+
+## 环境前提
+
+此段仅声明事实，不规定 Agent 行为。
+
+- **运行时**：本 skill 的 API 调用模板需要 **PowerShell**（Windows）或 **Bash + curl + jq**（Linux/macOS/Git Bash）。两种模板并列提供，模型按当前运行时自选。
+- **密钥**：环境变量 `GRSAI_API_KEY` 必须已设置且有效。缺失时本 skill 不可用。
+- **网络**：需可达 `https://grsaiapi.com`（全球）或 `https://grsai.dakka.com.cn`（国内）。网络不可达时生成不可执行。
+- **付费**：Grsai 是付费 API，每次调用消耗余额。余额不足时请求被拒（非本 skill 可修复）。
 
 ## 目标
 
@@ -177,6 +186,60 @@ Run from Bash:
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:/path/to/grsai-call.ps1"
 ```
 
+### 机制：Bash 异步调用模板（curl + jq）
+
+用于非 Windows 或 Bash-only 环境。与 PowerShell 模板并列——Agent 按当前运行时自选。
+
+写入临时文件（如 `grsai-call.sh`）后 `bash grsai-call.sh` 执行：
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+API_KEY="${GRSAI_API_KEY:?GRSAI_API_KEY not set}"
+ENDPOINT="${GRSAI_ENDPOINT:-https://grsaiapi.com}"
+
+# 1. Submit
+RESP=$(curl -sS --max-time 120 -X POST "${ENDPOINT}/v1/api/generate" \
+  -H "Authorization: Bearer ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-image-2","prompt":"<prompt>","images":[],"aspectRatio":"1024x1024","replyType":"async"}')
+
+TASK_ID=$(echo "$RESP" | jq -r '.id // empty')
+if [ -z "$TASK_ID" ]; then
+  echo "[失败] 提交未返回 task id: $RESP" >&2
+  exit 1
+fi
+echo "[提交] $TASK_ID"
+
+# 2. Poll (max 30 attempts × 10s = 5 min)
+for i in $(seq 1 30); do
+  sleep 10
+  RESULT=$(curl -sS --max-time 60 "${ENDPOINT}/v1/api/result?id=${TASK_ID}" \
+    -H "Authorization: Bearer ${API_KEY}")
+  STATUS=$(echo "$RESULT" | jq -r '.status // "pending"')
+  echo "[轮询 $i/30] $STATUS"
+  case "$STATUS" in
+    succeeded|failed|violation) break ;;
+  esac
+done
+
+if [ "$STATUS" != "succeeded" ]; then
+  echo "[失败] task $TASK_ID status=$STATUS" >&2
+  exit 1
+fi
+
+# 3. Download
+URL=$(echo "$RESULT" | jq -r '.results[0].url // .data[0].url // empty')
+if [ -z "$URL" ]; then
+  echo "[失败] 无结果 URL" >&2
+  exit 1
+fi
+OUT="grsai-output.png"
+curl -sS -o "$OUT" "$URL"
+echo "[完成] $OUT  (task: $TASK_ID)"
+```
+
 ### 机制：结果预览格式
 
 远程结果用 Markdown 展示：
@@ -190,3 +253,27 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:/path/to/grsai-call.p
 ```markdown
 ![生成结果](D:/ObjectCode/grsai-api/grsai-output.png)
 ```
+
+## 环境自检
+
+本 skill 被触发后，在发起第一次付费 API 调用前，先无声确认以下前提（不向用户展示自检细节，仅在条件不满足时报告）：
+
+1. **密钥检查**：`$env:GRSAI_API_KEY`（PowerShell）或 `$GRSAI_API_KEY`（Bash）非空
+2. **端点可达**：选一个端点发出轻量请求（如 HEAD `/`），确认不是网络不可达
+3. **运行时可用**：至少存在 PowerShell 或 Bash+curl+jq 之一的调用路径
+
+自检通过 → 直接进入生成流程，不向用户报告自检结果。
+任一前提不满足 → 见下方「失效模式」对应的降级行为。
+
+## 失效模式
+
+以下为环境前提不满足时的降级行为——不是流程建议，是必须遵守的失效契约：
+
+| 前提失败 | 降级行为 |
+|---|---|
+| `GRSAI_API_KEY` 缺失或为空 | **不发起任何 API 调用**。向用户报告："请在环境变量中设置 GRSAI_API_KEY（Grsai API 密钥）。获取方式见 https://grsai.com 。"不猜测密钥、不尝试其他 API。 |
+| 端点网络不可达（连接超时/DNS 失败） | 尝试另一个端点（全球↔国内切换）一次。两次均失败则报告："Grsai API 当前不可达（已尝试全球/国内端点）。请检查网络或稍后重试。"不无限重试。 |
+| 当前运行时既无 PowerShell 也无 Bash+curl+jq | 报告："当前环境缺少 Grsai API 调用所需的运行时（PowerShell 或 Bash+curl+jq）。"不尝试用非标准工具构造 HTTP 请求。 |
+| API 返回 401（密钥无效） | 报告密钥无效，请用户更新 `GRSAI_API_KEY`。**密钥值本身不出现在任何输出中。** |
+| API 返回 402/余额不足 | 报告余额不足，请用户充值。不尝试切换模型——低余额时不同模型可能同样被拒。 |
+| 提交成功但轮询超时（30 次×10s 后仍未完成） | 报告 task ID，请用户稍后手动查询。不盲目重试——超时通常意味着服务排队，重试只会重复排队。 |

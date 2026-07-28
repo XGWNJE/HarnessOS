@@ -1,12 +1,32 @@
 ---
-version: 1.4.0
+version: 1.5.0
 name: init-project
-description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。目标：项目级文件以全局规则 ~/AGENTS.md 为通用规则基准（其源文件由 HarnessOS 仓库维护），只承载项目特有约束，并向无全局注入的运行时（Kimi Code）内嵌 harness-observer 静默观察职责块（不引导读全局文件，控制上下文成本）。
+description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。目标：项目级文件以全局规则为通用规则基准（其源文件由 HarnessOS 仓库维护），只承载项目特有约束，并向无全局注入的运行时（Kimi Code）内嵌 harness-observer 静默观察职责块（不引导读全局文件，控制上下文成本）。
 ---
 
 # 项目规则初始化
 
 写法：目标模式——只描述想要的目标与验收标准，不规定具体做法；做法由模型按情境自决。
+
+## 环境前提
+
+此段仅声明事实，不规定 Agent 行为。
+
+- **全局规则可读**：`~/AGENTS.md`（home 根目录）或 `~/.codex/AGENTS.md` 或 `~/.claude/CLAUDE.md` 至少一处存在。全局规则的源由 HarnessOS 仓库维护，不在本 skill 范围。
+- **HarnessOS 仓库**：本地路径按 `harness-observer` skill 的环境前提寻址（三层优先级）。本 skill 需其中的 `global/AGENTS.md` 作为全局规则的事实参照。
+- **当前项目可写**：目标项目根目录存在且有写入权限。
+
+### 运行时识别（事实，不是规定）
+
+Agent 启动后，通过以下环境特征识别当前运行时——仅用于决定静默观察块的触发策略，不做其他路由：
+
+| 特征 | 运行时 | 静默观察块策略 |
+|---|---|---|
+| 系统提示含 `~/.claude/CLAUDE.md` 路径、存在 `Claude Code` CLI 特征 | Claude Code | **跳过**内嵌块——全局规则已注入 observer 职责 |
+| 系统提示含 `~/.codex/` 路径、Codex 技能池特征 | Codex | **跳过**内嵌块——同上 |
+| 系统提示含 `opencode` / `~/.config/opencode/` 路径 | OpenCode | **跳过**内嵌块——同上 |
+| 无上述特征，且 skill 列表来自 `~/.kimi-code/` | Kimi Code | **必须内嵌**静默观察块——Kimi 无全局注入机制 |
+| 无法确定 | 未知 | **内嵌**静默观察块——保守策略，宁可多一个块不缺漏 |
 
 ## 目标
 
@@ -14,7 +34,7 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 
 ## 职责边界
 
-- 通用规则的内容由 HarnessOS 仓库（`D:/ObjectCode/HarnessOS`）维护，源文件是 `global/AGENTS.md`；`~/AGENTS.md` 及各 Agent 配置目录里的都是发布产物。
+- 通用规则的内容由 HarnessOS 仓库维护（路径按 `harness-observer` skill 的环境前提寻址），源文件是 `global/AGENTS.md`；`~/AGENTS.md` 及各 Agent 配置目录里的都是发布产物。
 - 全局 / 项目的归属判断以全局文件开头的「全局 / 项目的边界」一节为准，本 skill 不重复定义。
 - 本 skill 只做项目侧：项目特有事实、项目级 AGENTS.md、项目里的规则副本漂移。
 
@@ -39,10 +59,30 @@ description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合�
 
 - 若你的系统提示已注入全局协作规则（Claude Code / Codex / OpenCode 会自动注入），其中已含本职责，跳过本节。
 - 否则（如 Kimi Code）：干活全程留意四类信号——owner 重复纠正、owner 明确表达的偏好、可复用踩坑、你自身的语义失败（假设/目标/路径/范围错误）。
-- 命中即静默追加到 `D:\ObjectCode\HarnessOS\notes\inbox\YYYY-MM-DD.md`（先查重，同主题重复计数 +1，脱敏）；记录格式与验收标准以 harness-observer skill 为准，需要时加载它。
+- 命中即静默追加到 HarnessOS 仓库路径下的 `notes/inbox/YYYY-MM-DD.md`（HarnessOS 路径按 harness-observer skill 的环境前提寻址；先查重，同主题重复计数 +1，脱敏）；记录格式与验收标准以 harness-observer skill 为准，需要时加载它。
 - 静默 = 不打断当前任务、不在对话中提及、不改动当前项目任何文件；只追加 inbox，归并提炼留给 owner 评审。
 ```
 
 ## 推荐结构（参考，非规定）
 
 项目 AGENTS.md 的常见结构，可按项目实际取舍：一句话项目定位 → `## 铁律（不可违反）` → `## 关键路径与命令` → `## 最小验证矩阵`（变更类型 → 最小验证，表格）→ `## 工作规则` → `## 发布`（如有发布流程）→ `## 文档地图`（每份文档负责什么事实，注明"事实变化时只更新负责该事实的文档"）。
+
+## 环境自检
+
+本 skill 被触发后，在生成项目 AGENTS.md 草案前无声确认：
+
+1. 全局规则文件（`~/AGENTS.md` 或等效位置）存在且可读——提取"全局/项目的边界"一节确认归属规则
+2. 当前运行时已识别（见环境前提中的运行时识别表）
+3. 目标项目的依赖文件（`README.md`、构建清单、现有 `AGENTS.md`、`docs/`）存在——至少一个可读
+
+自检通过 → 直接进入分析阶段。
+任一前提不满足 → 见下方「失效模式」。
+
+## 失效模式
+
+| 前提失败 | 降级行为 |
+|---|---|
+| 全局规则文件全部不可读（`~/AGENTS.md` 不存在且 `~/.codex/AGENTS.md` 不存在且 `~/.claude/CLAUDE.md` 不存在） | 向 owner 报告："全局规则文件未找到。请先在 HarnessOS 仓库运行 `python scripts/sync.py` 发布全局规则，或手动指定全局规则文件位置。"不继续生成项目规则——没有全局参照可能会产生与全局规则冲突的内容。 |
+| 运行时无法识别 | 保守策略：内嵌静默观察块（宁可多不缺漏）。除此以外本 skill 其余行为不变。 |
+| 目标项目无 README.md 且无任何可调查文件 | 向 owner 确认关键信息（项目语言、构建工具、测试命令）后继续。不凭记忆猜测。 |
+| 项目已有冲突的 AGENTS.md（来自不同规则体系） | 向 owner 展示冲突点与合并/替换选项，由 owner 选择。不擅自覆盖。 |

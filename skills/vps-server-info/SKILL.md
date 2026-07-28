@@ -1,5 +1,5 @@
 ---
-version: 1.3.0
+version: 1.4.0
 name: vps-server-info
 description: VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用，目标是安全、准确地完成 VPS 相关操作。
 ---
@@ -8,6 +8,15 @@ description: VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项�
 
 > 全局技能（事实档案 + 使用目标）。写法：目标模式——只描述想要的目标与验收标准，不规定具体做法；做法由模型按情境自决。
 > 下文信息为 2026-07-24 核验快照，易变；本文档提供事实基线，不代替实时状态。
+
+## 环境前提
+
+此段仅声明事实，不规定 Agent 行为。
+
+- **SSH 客户端**可用：`ssh` 命令在当前 shell 中可执行。Windows Git Bash 自带 OpenSSH 客户端，通常位于 `C:\Program Files\Git\usr\bin\ssh.exe`。
+- **SSH 配置完整**：`~/.ssh/config` 中含 `Host xgwnje` 条目（主机名/IP/端口/用户均在该条目中，不落本文件）。SSH 私钥 `~/.ssh/id_ed25519` 存在且权限正确。
+- **网络**：可达 VPS（Host xgwnje 的实际 IP 不在此文件——见 SSH config）。VPS SSH 端口（也在 config 中）未被防火墙拦截。
+- **规格变化前提**：当前 VPS 为 2026-06-29 前后更换的新机器（1 vCPU / 961 MiB / 20G），低于旧机规格。2026-05-25 之前的旧文档（webhome 路径、Uptime Kuma、Docker）已全部作废。
 
 ## 使用目标
 
@@ -108,3 +117,24 @@ ssh xgwnje "hostname; uptime; free -h; df -h /"
 ssh xgwnje "systemctl is-active nginx visionguard"
 ssh xgwnje "curl -ksS -o /dev/null -w 'root %{http_code}\n' https://xgwnje.cn/; curl -ksS -o /dev/null -w 'vg %{http_code}\n' https://visionguard.xgwnje.cn/health; curl -ksS -o /dev/null -w 'status %{http_code}\n' https://status.xgwnje.cn/"
 ```
+
+## 环境自检
+
+本 skill 被触发后，在向 VPS 发起任何写操作前，无声确认：
+
+1. SSH config 含 `Host xgwnje` 条目：`ssh -G xgwnje` 能输出配置（不实际连接）
+2. SSH 连接可用：`ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new xgwnje echo ok` 能返回 `ok`
+3. 本文件快照年龄：对比核验时间（2026-07-24）与当前日期，向用户提示"VPS 快照已有 N 天未更新——请确认是否需先做一次实时核验"
+
+自检通过 → 直接进入用户请求的操作。
+任一前提不满足 → 见下方「失效模式」。
+
+## 失效模式
+
+| 前提失败 | 降级行为 |
+|---|---|
+| `Host xgwnje` 条目在 `~/.ssh/config` 中不存在 | 向 owner 报告："未找到 SSH Host xgwnje 配置。请在 `~/.ssh/config` 中添加该 Host 条目（IP/端口/用户），或告知当前 VPS 的 SSH 别名。"不尝试猜测或从本文件的其他位置构造连接参数。 |
+| SSH 连接超时或认证失败 | 报告具体原因（超时=网络不可达或 VPS 已关机；认证失败=密钥过期或未注册）。**不重复尝试**（工具碰壁快速止损——同方式重试不超过两次）。提供诊断命令供 owner 自检。 |
+| `~/.ssh/id_ed25519` 不存在 | 向 owner 确认密钥位置——可能用了不同的密钥类型或路径。不遍历文件系统搜索私钥文件。 |
+| VPS 快照超过 30 天未更新 | 向 owner 强提示："VPS 信息快照已超过 30 天未核验。当前记录可能已过时。建议先运行核验命令刷新状态。"对本文件中的任何事实性断言，在报告中标注"基于 {核验日期} 快照，当前实际状态可能不同"。 |
+| SSH 连接成功但远程命令返回异常（systemctl 报服务不存在、curl 返回意外状态码等） | 如实报告远程输出（脱敏处理）。不猜测原因——VPS 可能在 owner 不知道的情况下被改动。提供对比：本文档记录的状态 vs. 实测状态。 |

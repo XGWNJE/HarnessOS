@@ -2,6 +2,23 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-29 — 加工即销毁规则、清理残留
+
+- [新增] 工作规则「加工即销毁」：原料笔记去向明确后立即销毁源文件，不留待下次评审再决策的残留条目。写入项目 AGENTS.md 工作规则与 README 提炼流程。来源：owner 2026-07-29 指示
+- [清理] 销毁已加工笔记 3 篇：`notes/2026-07-26-自动化验证预览窗口.md`、`notes/2026-07-scope-guard跨agent机制.md`、`notes/2026-07-webbridge-验收.md`
+- [清理] dist/ 旧版本包 19 个（每个 skill 仅保留最新版）
+- [清理] 删除根目录 IDEA.md（裸想法草稿）
+
+## 2026-07-29 — 技能健壮性全面优化：环境前提 + 自检 + 失效模式
+
+- [修订] `skills/grsai-image-gen/SKILL.md` v1.2.0 → v1.3.0：新增环境前提段（PowerShell/Bash+curl+jq、GRSAI_API_KEY、网络可达）；机制段补充 Bash 异步调用模板（curl + jq 轮询），与 PowerShell 模板并列，Agent 按运行时自选；新增环境自检段（密钥检查→端点可达→运行时可用）；新增失效模式段（密钥缺失/网络不通/无运行时/401/402/轮询超时逐条降级行为）
+- [修订] `skills/harness-observer/SKILL.md` v1.3.0 → v1.4.0：新增环境前提段（HarnessOS 路径三层优先级寻址、文件写入工具、无网络依赖）；落盘路径从硬编码改为按优先级推导；新增环境自检段（路径可达→目录可写）；新增失效模式段（路径不可达→会话结束时数量提醒 + 记住主题备复述、文件锁→侧通道文件、查重失败→不阻塞写入）
+- [修订] `skills/init-project/SKILL.md` v1.4.0 → v1.5.0：新增环境前提段（全局规则可读、HarnessOS 路径、当前项目可写）；新增运行时识别表（Claude Code/Codex/OpenCode/Kimi Code/未知——按特征自动判断静默观察块策略）；硬编码路径替换为动态推导；新增环境自检段与失效模式段（全局规则缺失/运行时无法识别/项目无调查文件/冲突AGENTS.md逐条降级）
+- [修订] `skills/vps-server-info/SKILL.md` v1.3.0 → v1.4.0：新增环境前提段（SSH 客户端、SSH config Host xgwnje、网络可达、规格变化前提）；新增环境自检段（SSH config 检查→连接测试→快照年龄提示）；新增失效模式段（Host 缺失/连接失败/密钥丢失/快照超30天/远程命令异常逐条降级——含工具碰壁快速止损规则）
+- [修订] `skills/webbridge-acceptance/SKILL.md` v1.1.0 → v1.2.0：新增环境前提段（守护进程、端口10086、curl.exe 环境事实、ReadMediaFile）；新增环境自检段（端口 listen→进程启动→curl 路径）；新增失效模式段（进程启动失败/端口冲突/curl 缺失/ReadMediaFile 不可用/单项检查失败不中断其余逐条降级）
+- [修订] `skills/ai-coding-workflow/SKILL.md` v1.2.0 → v1.3.0：修复已销毁来源文件引用（`notes/2026-07-vibe-coding-观察.md` → `已销毁笔记`标注）
+- [修订] `skills/ai-stack-harness/SKILL.md` v1.3.0 → v1.4.0：同上修复
+
 ## 2026-07-27 — 仓库公开化脱敏：vps-server-info v1.3.0
 
 - [修订] `skills/vps-server-info/SKILL.md` v1.2.0 → v1.3.0：远端仓库转公开，脱敏 SSH 连接信息——真实公网 IP、SSH 端口、用户名、主机名不再落明文，改为指向本机 `~/.ssh/config` 的 `Host xgwnje` 条目（用前现读，本就是实时核验的事实源）；核验参考命令去掉 `-F` 显式本机路径。域名与服务器侧架构信息保留（域名本身公开可解析）。注意：git 历史中仍有旧明文（owner 拍板选脱敏保留、不重写历史），风险以 SSH key 认证与 VPS 加固兜底。来源：owner 验收（仓库公开化检查）
