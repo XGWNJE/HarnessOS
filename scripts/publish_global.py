@@ -5,11 +5,11 @@
     python scripts/publish_global.py            # 发布全部目标
     python scripts/publish_global.py --check    # 只检查同步状态，不写入
 
-发布映射（核心 = global/AGENTS.md，overlay = global/overlays/<name>.md）：
-    ~/AGENTS.md                        核心（home 根，供读取该位置的 Agent）
-    ~/.codex/AGENTS.md                 核心（Codex）
-    ~/.config/opencode/AGENTS.md       核心（OpenCode）
-    ~/.claude/CLAUDE.md                核心 + overlays/claude.md（Claude Code）
+发布映射（源 = global/AGENTS.md）：
+    ~/AGENTS.md                         home 根
+    ~/.codex/AGENTS.md                  Codex
+    ~/.config/opencode/AGENTS.md        OpenCode
+    ~/.claude/CLAUDE.md                 Claude Code
 Kimi Code 无全局规则注入机制，不发布（规则走项目级 AGENTS.md / skills）。
 
 目标文件被视为发布产物：写入前若已有不同内容，先备份到 backups/ 再覆盖。
@@ -23,30 +23,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 CORE = ROOT / "global" / "AGENTS.md"
-OVERLAYS = ROOT / "global" / "overlays"
 BACKUPS = ROOT / "backups"
 
 TARGETS = [
-    ("home",     HOME / "AGENTS.md",                    None),
-    ("codex",    HOME / ".codex" / "AGENTS.md",         None),
-    ("opencode", HOME / ".config" / "opencode" / "AGENTS.md", None),
-    ("claude",   HOME / ".claude" / "CLAUDE.md",        "claude"),
+    ("home",     HOME / "AGENTS.md"),
+    ("codex",    HOME / ".codex" / "AGENTS.md"),
+    ("opencode", HOME / ".config" / "opencode" / "AGENTS.md"),
+    ("claude",   HOME / ".claude" / "CLAUDE.md"),
 ]
 
 
-def build(overlay: str | None) -> str:
-    text = CORE.read_text(encoding="utf-8")
-    if overlay:
-        f = OVERLAYS / f"{overlay}.md"
-        text = text.rstrip() + "\n\n---\n\n" + f.read_text(encoding="utf-8")
-    return text
+def build() -> str:
+    return CORE.read_text(encoding="utf-8")
 
 
 def main() -> None:
     check_only = "--check" in sys.argv
     drift = False
-    for name, target, overlay in TARGETS:
-        want = build(overlay)
+    for name, target in TARGETS:
+        want = build()
         current = target.read_text(encoding="utf-8") if target.exists() else None
         if current == want:
             print(f"[同步] {name:9s} {target}")

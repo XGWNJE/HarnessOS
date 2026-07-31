@@ -33,7 +33,7 @@
 - `global/hooks/` 是全机 Agent hook 的公共源目录与登记中心：observer_reminder.py（kimi 收口保底）、kimi-codex-hook-adapter.py（kimi→codex 负载适配器，被 Server-infra / Codex-Journal 的 hook 共用）。注册点（kimi config.toml / codex hooks.json）一律直引源路径、无发布拷贝，改源即生效；kimi 无默认 hook 目录与项目级配置，注册是唯一加载通道。`registry.json` 是全部注册（含项目私有 hook）的单一事实源，`scripts/check_hooks.py` 据此体检（只读不写，漂移手工修复），已并入 `sync.py` 两种模式。
 
 - skill 源：`skills/<name>/SKILL.md`（frontmatter 含 name/version/description）
-- 全局规则源：`global/AGENTS.md`（版本号在文件头）；Claude 专属追加在 `global/overlays/claude.md`
+- 全局规则源：`global/AGENTS.md`（版本号在文件头）
 - observer 静默写入处：`notes/inbox/YYYY-MM-DD.md`（只追加，先查重）
 
 ## 最小验证矩阵

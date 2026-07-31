@@ -85,7 +85,7 @@ notes/（原料区）  →  本仓库（加工厂）  →  发布产物
 ├── notes/               # 原料区：踩坑笔记、观察记录
 │   └── inbox/               # harness-observer 静默写入处（按日归档）
 ├── skills/              # 生产线：自有 Skill 源文件
-├── global/              # 全局规则：AGENTS.md 源文件 + 各工具 overlay
+├── global/              # 全局规则：AGENTS.md 源文件
 │   └── hooks/               # 全机 Agent hook 公共源 + registry.json 登记表（注册点直引，check_hooks.py 体检）
 ├── vendor/              # 引入区：第三方 Skill（原样不改）
 │   ├── keel/                # 架构治理协议（来源 lencx/skills）
@@ -140,7 +140,7 @@ python scripts/sync.py --check  # 只体检不写入（漂移退出码 1）
 | home（通用） | `~/AGENTS.md` | 核心规则 |
 | Codex | `~/.codex/AGENTS.md` | 核心规则 |
 | OpenCode | `~/.config/opencode/AGENTS.md` | 核心规则 |
-| Claude Code | `~/.claude/CLAUDE.md` | 核心规则 + `global/overlays/claude.md`（子智能体、Git 纪律等专属规则） |
+| Claude Code | `~/.claude/CLAUDE.md` | 核心规则 |
 | Kimi Code | — | 无全局注入机制，不发布；规则走项目级 AGENTS.md / skills |
 
 覆盖前自动备份到 `backups/`（不入库）。
