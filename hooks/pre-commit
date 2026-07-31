@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# HarnessOS pre-commit 硬卡点（hook 流水线试点，2026-07-26）
+# HarnessOS pre-commit 硬卡点（hook 流水线试点，2026-07-26；2026-08-01 追加文档体检）
 #
-# 用途：commit 前强制两件事——
+# 用途：commit 前强制三件事——
 #   1. 提醒文档偏移清零（声明式规则试点，待 owner 验收：notes/inbox/2026-07-25.md）
 #   2. 跑 sync.py --check 体检，发现发布漂移则拦截提交
+#   3. 跑 check_docs.py 文档体检，README 职责越界/堆积则拦截提交
+#      拦截后保底流程：运行 doc-structure skill 按模板修复（见 skills/doc-structure/SKILL.md）
 #
 # 安装（本仓库内执行一次）：git config core.hooksPath hooks
 # 绕过（仅限紧急情况）：    git commit --no-verify
@@ -20,6 +22,13 @@ python scripts/sync.py --check
 status=$?
 if [ "$status" -ne 0 ]; then
     echo "[pre-commit] 体检发现漂移，已拦截提交。请先运行 python scripts/sync.py 重新发布，再提交。"
+    exit 1
+fi
+
+python scripts/check_docs.py
+status=$?
+if [ "$status" -ne 0 ]; then
+    echo "[pre-commit] 文档体检未通过，已拦截提交。保底流程：运行 doc-structure skill 按模板修复 README 后重新体检，再提交。"
     exit 1
 fi
 exit 0

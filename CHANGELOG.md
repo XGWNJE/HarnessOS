@@ -2,6 +2,20 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-01 · doc-structure v1.1.0：README 模板加界面展示要求
+
+- [修订] `skills/doc-structure` v1.0.0 → v1.1.0：README 模板新增「界面展示」段——有明确产品性质（用户可交互界面）的项目必须放真机截图，动画 GIF（关键交互演示）更佳；验收标准拆分为「自动验收（机器可检验）」与「智能验收（模型判断，机器不可自动判定产品性质）」两层，真机截图 = 真实运行画面而非示意图/mockup；参考流程诊断步骤加入产品型判定。owner-declared（2026-08-01）。
+- 说明：产品型判定无法机器强制（机器看不出项目有没有 UI），故只入 skill 智能验收层，不加入 check_docs.py 机械检查，避免误报。
+
+## 2026-08-01 · doc-structure skill v1.0.0 + 文档体检钩子 + README 瘦身
+
+- [新增] `skills/doc-structure` v1.0.0：文档结构优化 skill——文档职责边界表（README 面向人只留门面、AGENTS.md 面向 Agent 装全部操作细节、专题文档只装专题）、README 模板（≤100 行）、自动验收标准、参考流程锚点（诊断→重构→机械验收→多项目复用）。多项目共用同一模板与验收标准 → 风格统一。owner-declared（2026-08-01），全局规则「README 面向人」的落地机制。
+- [新增] `scripts/check_docs.py`：文档结构体检——README 行数 ≤100 防堆积、操作细节禁止词防职责越界、含文档导航段防瘦身过头；支持 `--readme` 参数供其他项目复用。只读不写，违规退出码 1。
+- [修订] `hooks/pre-commit`：追加 `check_docs.py` 步骤，文档体检失败拦截提交，提示运行 doc-structure skill 保底修复。
+- [修订] `README.md`：瘦身（163 → 31 行），操作细节全部移除，只留项目干什么/怎么开始/文档地图，细节一律指向 AGENTS.md——根治 README 堆积问题（owner 2026-08-01 指示，上一轮评审结论为瘦身方案 A）；标题下加 shields.io 社区徽章（Stars / Top Language / Last Commit 动态 + Skills 静态）。
+- [修订] 项目 `AGENTS.md`：关键路径表加 `check_docs.py`、pre-commit 描述更新、最小验证矩阵加「改 README/文档结构」行、文档地图同步（README 职责改为面向人 + 文档结构由 doc-structure skill 维护）。
+- 冷冻期说明：新建 skill + hook 检查项属既有 hook 试点内增量，owner 明确指示实施，视同豁免。
+
 ## 2026-07-31 — global v1.16.0：废弃 overlay 机制，规则全量并入核心
 
 - [修订] `global/AGENTS.md` v1.15.0 → v1.16.0：overlay 中全部规则并入核心——「沟通可懂」合并"代码英文文案中文"与"中文字节级干净"（语言/编码统一管理）；「owner 注意力用于关键决策」合并"关键取舍给选项"（决策交互统一管理）；「该沉淀进文件」合并"文档精炼不重复"（文档规范统一管理）；「提交信息条理清晰」合并"提交由 owner 掌控"扩展为「提交由 owner 掌控，信息条理清晰」（提交全流程统一管理）；新增「并行用得其所」（从 overlay 迁入）。协作目标 12 → 13 条，覆盖原 core(12) + overlay(6) = 18 条的全部语义

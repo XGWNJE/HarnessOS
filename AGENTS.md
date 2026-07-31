@@ -27,9 +27,10 @@
 | 只体检不写入（漂移退出码 1） | `python scripts/sync.py --check` |
 | 单独打包 / 发全局 / 发 skill | `scripts/pack.py` `publish_global.py` `publish_skills.py` |
 | hook 登记体检（漂移退出码 1） | `scripts/check_hooks.py` |
+| 文档结构体检（职责越界/堆积退出码 1） | `scripts/check_docs.py` |
 | 安装 commit 体检钩子（一次性） | `git config core.hooksPath hooks` |
 
-- hooks/ 是 git hooks 源目录（hook 流水线试点）：pre-commit 在提交前提醒文档偏移清零并跑 `sync.py --check`，漂移则拦截。改 hooks 源后无需重装（core.hooksPath 直接指向源目录）。
+- hooks/ 是 git hooks 源目录（hook 流水线试点）：pre-commit 在提交前提醒文档偏移清零、跑 `sync.py --check` 与 `check_docs.py`（文档体检），发现漂移或文档职责越界则拦截，保底流程是运行 doc-structure skill 修复。改 hooks 源后无需重装（core.hooksPath 直接指向源目录）。
 - `global/hooks/` 是全机 Agent hook 的公共源目录与登记中心：observer_reminder.py（kimi 收口保底）、kimi-codex-hook-adapter.py（kimi→codex 负载适配器，被 Server-infra / Codex-Journal 的 hook 共用）。注册点（kimi config.toml / codex hooks.json）一律直引源路径、无发布拷贝，改源即生效；kimi 无默认 hook 目录与项目级配置，注册是唯一加载通道。`registry.json` 是全部注册（含项目私有 hook）的单一事实源，`scripts/check_hooks.py` 据此体检（只读不写，漂移手工修复），已并入 `sync.py` 两种模式。
 
 - skill 源：`skills/<name>/SKILL.md`（frontmatter 含 name/version/description）
@@ -43,6 +44,7 @@
 | 改 skill 源 | 版本 +1 → `sync.py` → `sync.py --check` 全绿 |
 | 改 `global/AGENTS.md` | 文件头版本 +1 → `sync.py` → 4 个全局发布点全同步 |
 | 改 `scripts/` | `sync.py --check` 跑通 |
+| 改 README / 文档结构 | `check_docs.py` 通过（行数/禁止词/导航）→ `sync.py --check` 全绿 |
 | 改流水线结构/目录约定 | 同步更新 README 与本文件 |
 
 ## 工作规则
@@ -59,11 +61,13 @@
 
 ## 文档地图
 
-- `README.md`：项目干什么、怎么用（输入三通道、验收通道、发布映射）
+- `README.md`：面向人——项目干什么、怎么开始、文档导航（其余全部链接，操作细节一律不出现）
 - `CHANGELOG.md`：规则加工历史（只新增条目，不改旧条目）
 - `global/AGENTS.md`：全局通用规则源文件
 - `vendor/SOURCES.md`：第三方 skill 来源登记
 - `notes/`：原料区（粗糙允许，两行元信息必需：日期 + 场景）
 - `reviews/`：评审摘要（owner 主动质检时生成）
+
+文档结构与风格由 doc-structure skill 维护（多项目共用同一套模板与验收标准）：README 职责越界/堆积由 `scripts/check_docs.py` 机械拦截（pre-commit 联动），修复走 doc-structure skill 保底流程。
 
 事实变化时只更新负责该事实的文档。
