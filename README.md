@@ -91,11 +91,10 @@ notes/（原料区）  →  本仓库（加工厂）  →  发布产物
 │   ├── keel/                # 架构治理协议（来源 lencx/skills）
 │   ├── coding-protocol/     # 风险分级编码执行协议（来源 lencx/skills）
 │   └── vibehub/             # Vibe Coding 术语学习助手（来源 oil-oil/vibe-hub-skill）
-├── scripts/             # 工具：sync 总入口 / pack 打包 / publish 发布 / dashboard 看板
+├── scripts/             # 工具：sync 总入口 / pack 打包 / publish 发布
 ├── hooks/               # git hooks 源：pre-commit 体检硬卡点（安装：git config core.hooksPath hooks）
 ├── dist/                # 打包输出（.skill 产物，不入库）
 ├── reviews/             # 评审摘要（owner 主动质检时生成）
-├── dashboard.html       # 规则资产看板（脚本生成，不手改）
 └── CHANGELOG.md         # 规则加工历史（新增 / 修订 / 废止 / 框架）
 ```
 
@@ -126,7 +125,7 @@ notes/（原料区）  →  本仓库（加工厂）  →  发布产物
 ## 改完发布：一条命令
 
 ```bash
-python scripts/sync.py          # 打包改动 skill → 发布全局规则 → 发布 skill 目录 → 刷新看板
+python scripts/sync.py          # 打包改动 skill → 发布全局规则 → 发布 skill 目录
 python scripts/sync.py --check  # 只体检不写入（漂移退出码 1）
 ```
 
@@ -146,11 +145,9 @@ python scripts/sync.py --check  # 只体检不写入（漂移退出码 1）
 
 覆盖前自动备份到 `backups/`（不入库）。
 
-**看板**：浏览器打开 `dashboard.html` 即全局概览（单屏设计：同步率、使用热度、待处理清单），细节回仓库查 CHANGELOG 与源文件。
-
 ## 每月与每次换代
 
-- **月度评审四问**（看板提供数据）：这个 skill 最近被用过吗？能力已被 Agent 原生功能取代吗？与其他 skill 或全局规则冲突吗？抽查会话日志，它实际改变了 Agent 行为吗（对照可观测场景）？认定无存续价值的执行退役。
+- **月度评审四问**：这个 skill 最近被用过吗？能力已被 Agent 原生功能取代吗？与其他 skill 或全局规则冲突吗？抽查会话日志，它实际改变了 Agent 行为吗（对照可观测场景）？认定无存续价值的执行退役。
 - **模型换代**：过一遍所有 skill，失效规则改写为废止块：
 
 ```markdown

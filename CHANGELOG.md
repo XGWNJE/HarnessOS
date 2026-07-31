@@ -2,6 +2,23 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-07-31 — 按需评审验收：2 条通过（global v1.12.0 + Vigil）、6 条丢弃、看板功能取消
+
+- [修订] `global/AGENTS.md` v1.11.0 → v1.12.0：新增协作目标「Windows 本地路径传参不出岔」（owner 验收通过，原料 notes/inbox/2026-07-31.md MSYS_NO_PATHCONV 条目）——给 Windows 原生 CLI（gh、adb、apksigner 等）传本地侧路径用 Windows 形式（`D:\...`），MSYS 风格路径只用于设备侧/远程侧，`MSYS_NO_PATHCONV=1` 时尤其核对；写临时文件后确认落点。协作目标 11 → 12 条
+- [新增] Vigil 项目 AGENTS.md「已知平台坑」：小米 HyperOS 电池白名单与「后台运行」入口同质、任务卡片不锁定仍会被杀、跨 ROM 引导须保留两入口（owner 验收通过，原料 notes/inbox/2026-07-30.md）
+- 丢弃 6 条原料（owner 2026-07-31 拍板）：标准流程固化授权、CI secrets 轮换同步、固定格式模板、个人工具即开即用优先、certbot SERVFAIL 偶发、菜单入口/权限分级偏好——其中前 3 条内容已在 Vigil 项目规则落地（GitHub 发布标准流程 / secrets 重设 / release-notes 模板），其余为项目特有或不愿上浮，均不额外处理
+- [废止] 看板功能：删除 `dashboard.html`、`scripts/dashboard.py`，`sync.py` 移除看板步骤（流程 4 步 → 3 步）、README 与项目 AGENTS.md 移除全部引用（owner 2026-07-31 指示：设计不好用、同步代价高、不直观；属框架冷冻期内拆除流水线环节，owner 明确指示视为豁免）
+- [清理] 销毁已加工原料：`notes/inbox/2026-07-30.md`、`notes/inbox/2026-07-31.md`（本批加工完毕），inbox 清空
+
+## 2026-07-30 — 按需评审验收：1 条上浮 global v1.11.0、skill 标准写法拍板、1 条入 Vigil 项目规则、6 条丢弃
+
+- [修订] `global/AGENTS.md` v1.10.0 → v1.11.0：新增协作目标「密钥入库即泄露，必须轮换」（owner 验收通过，原料 notes/inbox/2026-07-30.md 签名密钥条目）——已推送/公开仓库历史入库即视为泄露，必须轮换而非仅"以后注意"；公开化/上架前用 `git log --all --full-history` 审计敏感路径，当前 .gitignore 干净 ≠ 历史干净。协作目标 10 → 11 条
+- [修订] 项目 AGENTS.md 工作规则：skill 标准写法拍板（owner 2026-07-30）——目标与验收标准为主体 + 参考流程为锚点（离开它任务做不成的机制写死），原「skill 写法自便」作废；新增「验收评审回复固定格式」（owner-declared：已处理条目直接清除不显示，未处理按重要度排序、标注类型与推荐去处）
+- [新增] Vigil 项目 AGENTS.md：launcher icon 安全边距规则（owner 验收通过，原料 notes/inbox/2026-07-27.md——内容约 75% 居中、≥15% 边距、导出前圆角 mask 预演）
+- 丢弃 6 条原料（owner 2026-07-30 拍板）：plan auto 放行仍需验收、真机动效排查方法论、图生图参考图、博客写作偏好、HomePage 草稿预览路由、图标重心左移
+- [新增] HomePage 项目 AGENTS.md：ContentOnly 门禁核对规则（owner 2026-07-30 询问细节后验收通过，原料 notes/inbox/2026-07-27.md——发布前用 `content:release:plan`/`git diff` 核对生产 revision 以来全部路径，非内容文件拆批）；原料已销毁，inbox 清空
+- [清理] 销毁已加工原料：`notes/inbox/2026-07-25.md`、`2026-07-26.md`（07-27 评审已闭环）、`2026-07-30.md`（本批加工完毕）；`2026-07-27.md` 仅留 ContentOnly 待定条目
+
 ## 2026-07-29 — 加工即销毁规则、清理残留
 
 - [新增] 工作规则「加工即销毁」：原料笔记去向明确后立即销毁源文件，不留待下次评审再决策的残留条目。写入项目 AGENTS.md 工作规则与 README 提炼流程。来源：owner 2026-07-29 指示

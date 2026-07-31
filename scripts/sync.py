@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""HarnessOS 总入口：改完规则后跑这一条，完成全部发布与看板刷新。
+"""HarnessOS 总入口：改完规则后跑这一条，完成全部发布。
 
 用法：
-    python scripts/sync.py            # 打包 + 发布 + 看板，全流程
+    python scripts/sync.py            # 打包 + 发布，全流程
     python scripts/sync.py --check    # 只做体检：检查漂移与待重建，不写入
 
 流程：
     1. pack.py            打包有改动的 skill 为 .skill（同版本已存在则跳过，不视为失败）
     2. publish_global.py  发布全局规则到 4 个 Agent 读取位置
     3. publish_skills.py  发布自有 skill 到各 skill 目录
-    4. dashboard.py       重新生成看板（--check 模式下跳过）
 
 hook 登记体检（check_hooks.py）两种模式都跑：对照 global/hooks/registry.json
 校验全机 Agent hook 注册点与源文件，漂移即失败。只读不写，漂移按登记表手工修复。
@@ -51,14 +50,12 @@ def main() -> None:
         print("== hook 登记体检 ==")
         ok &= run("check_hooks.py")
         sys.exit(0 if ok else 1)
-    print("== 1/4 打包 skill ==")
+    print("== 1/3 打包 skill ==")
     ok = run("pack.py")
-    print("== 2/4 发布全局规则 ==")
+    print("== 2/3 发布全局规则 ==")
     ok &= run("publish_global.py")
-    print("== 3/4 发布 skill 目录 ==")
+    print("== 3/3 发布 skill 目录 ==")
     ok &= run("publish_skills.py")
-    print("== 4/4 刷新看板 ==")
-    ok &= run("dashboard.py")
     print("== hook 登记体检 ==")
     ok &= run("check_hooks.py")
     print("\n[完成] 全部同步" if ok else "\n[注意] 部分步骤有警告，见上方输出")

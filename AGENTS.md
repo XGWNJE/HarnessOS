@@ -23,9 +23,9 @@
 
 | 用途 | 命令 |
 |---|---|
-| 改完发布（打包→发全局→发 skill→看板） | `python scripts/sync.py` |
+| 改完发布（打包→发全局→发 skill） | `python scripts/sync.py` |
 | 只体检不写入（漂移退出码 1） | `python scripts/sync.py --check` |
-| 单独打包 / 发全局 / 发 skill / 看板 | `scripts/pack.py` `publish_global.py` `publish_skills.py` `dashboard.py` |
+| 单独打包 / 发全局 / 发 skill | `scripts/pack.py` `publish_global.py` `publish_skills.py` |
 | hook 登记体检（漂移退出码 1） | `scripts/check_hooks.py` |
 | 安装 commit 体检钩子（一次性） | `git config core.hooksPath hooks` |
 
@@ -48,8 +48,9 @@
 ## 工作规则
 
 - 框架冷冻期（2026-07-26 起 14 天，owner-declared，至 2026-08-09）：期间不做框架类变更（新增机制、改流程、立术语、新建/拆除流水线环节），只加原料、修 bug、按既有流程验收规则条目；owner 可一句话豁免。背景：建仓 4 天 6 次框架决策、3 次 48 小时内反转，框架跑在原料前面。
-- 生成物写法（2026-07-26 起，边界 2026-07-27 owner 拍板，来源 notes/inbox/2026-07-26.md）：**目标模式仅针对规则类生成物**（global 规则及规则条目）——只写目标与验收标准，不规定做法；红线转成可检验的验收标准。skill 与 hook 不参与（hook 是硬控制；skill 写法自便，已目标化的不回改）；vendor/ 原样不改不在范围。
+- 生成物写法（2026-07-26 起，边界 2026-07-27 owner 拍板，来源 notes/inbox/2026-07-26.md）：**目标模式仅针对规则类生成物**（global 规则及规则条目）——只写目标与验收标准，不规定做法；红线转成可检验的验收标准。skill 与 hook 不参与（hook 是硬控制）；skill 标准写法（2026-07-30 owner 拍板）：目标与验收标准为主体 + 参考流程为锚点——离开它任务做不成的机制写死为参考标准，做法细节由模型按情境自决。vendor/ 原样不改不在范围。
 - inbox 只追加不整理；归并、提炼、发布全部留给 owner 主动发起的评审流程（无定时评审，评审时机 = owner 要求自检时）。
+- 验收评审回复固定格式（owner-declared 2026-07-30）：已处理完毕的条目直接清除、不再显示，不占上下文；未处理条目按序号、按重要/推荐程度降序排列，每条标注类型与推荐的判断去处。
 - 加工即销毁：原料笔记（notes/、notes/inbox/）中的条目一旦加工完毕（去向明确：提炼进 skill/global/hook，或 owner 明确决定丢弃/继续观察），立即销毁源笔记文件，不留待 owner 下次评审再决策的残留条目。来源：owner 2026-07-29 指示。
 - 提炼按失效测试拆分：去掉它 Agent 会做错事 → 约束规则（global 或 skill 约束段）；不会做某事 → 技能（skills/ 独立目录）。约束规则判归属：换个项目还有意义 → global / skill 约束段；只对特定项目成立 → 写入该项目的 AGENTS.md（标注来源与日期），不进 global。
 - 退役 skill：撤出全部发布点 + 源目录归档 `archive/skills/` + CHANGELOG 记废止；归档可复活。
@@ -63,6 +64,5 @@
 - `vendor/SOURCES.md`：第三方 skill 来源登记
 - `notes/`：原料区（粗糙允许，两行元信息必需：日期 + 场景）
 - `reviews/`：评审摘要（owner 主动质检时生成）
-- `dashboard.html`：看板（脚本生成，不手改）
 
 事实变化时只更新负责该事实的文档。
