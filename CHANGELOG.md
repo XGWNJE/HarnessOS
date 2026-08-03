@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — vendor 纳入发布映射：coding-protocol / keel 首次入池可见
+
+- [框架] `scripts/publish_skills.py`：发布映射从「只扫 skills/ 自有」扩展为「skills/ + vendor/（第三方原样中转）」自动扫描（owner 2026-08-04 指示，冷冻期豁免）。背景：vendor 无发布通道——coding-protocol / keel 引入以来（2026-07-23）只在 vendor/ 与 dist/，从未进任何 Agent 读取池；security-review / vibehub 池内副本系当年手工拷贝，漂移无人对账
+- 修复后首跑：coding-protocol、keel 首次发布到三个读取池（.agents/.codex/.claude）；security-review、vibehub 池副本与 vendor 源恰好一致，无漂移；`sync.py --check` 全绿
+
 ## 2026-08-04 — 投递入口路径上浮 + 三技能划界（冷冻期 owner 一句话豁免）
 
 - [修订] `skills/harness-observer` v1.4.0 → v1.5.0：原料区路径上浮到 description（可见层，`D:\ObjectCode\HarnessOS\notes\inbox\`）——根因：未初始化新项目中 Agent 不知 HarnessOS 存在，寻址成本高（原料 notes/inbox/2026-08-04.md）；新增「显式投递直达」验收——owner 显式要求投递时直接落盘，项目未初始化（无固定块）时提示用 init-project 初始化

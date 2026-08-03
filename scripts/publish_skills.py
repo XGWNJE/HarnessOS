@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""把 skills/ 下的自有 skill 发布到各 Agent 实际读取的 skill 目录。
+"""把 skills/ 与 vendor/ 下的 skill 发布到各 Agent 实际读取的 skill 目录。
 
 用法：
     python scripts/publish_skills.py            # 发布全部映射
     python scripts/publish_skills.py --check    # 只检查同步状态，不写入
 
-发布映射（源 = skills/<name>/，6 个自有 skill × 3 个读取池）：
+发布映射（源 = skills/<name>/ 自有 + vendor/<name>/ 第三方原样中转，× 3 个读取池）：
     ~/.agents/skills/<name>/   跨 Agent 共享池（agentskills.io 标准位置，OpenCode 等）
     ~/.codex/skills/<name>/    Codex 池
     ~/.claude/skills/<name>/   Claude Code 池
@@ -25,10 +25,13 @@ ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 BACKUPS = ROOT / "backups"
 
-def own_skills() -> list[str]:
-    """自有 skill = skills/ 下含 SKILL.md 的目录，自动扫描，不硬编码。"""
-    return sorted(p.name for p in (ROOT / "skills").iterdir()
-                  if p.is_dir() and (p / "SKILL.md").is_file())
+def publishable_skills() -> list[tuple[str, Path]]:
+    """可发布 skill = skills/（自有）与 vendor/（第三方，原样中转）下含 SKILL.md 的目录，自动扫描，不硬编码。"""
+    out = []
+    for base in (ROOT / "skills", ROOT / "vendor"):
+        out += [(p.name, p) for p in base.iterdir()
+                if p.is_dir() and (p / "SKILL.md").is_file()]
+    return sorted(out)
 
 
 POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills"]
@@ -54,10 +57,9 @@ def mirror(src: Path, dst: Path) -> None:
 def main() -> None:
     check_only = "--check" in sys.argv
     drift = False
-    for name in own_skills():
+    for name, src in publishable_skills():
         for pool in POOLS:
             target = pool / name
-            src = ROOT / "skills" / name
             if dir_same(src, target):
                 print(f"[同步] {name:18s} {target}")
                 continue
