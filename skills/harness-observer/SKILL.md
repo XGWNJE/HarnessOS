@@ -1,7 +1,7 @@
 ---
-version: 1.5.0
+version: 1.6.0
 name: harness-observer
-description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（D:\ObjectCode\HarnessOS\notes\inbox\），不打断当前任务、不在对话中提及。owner 显式要求「投递信息到 HarnessOS / 记录到原料区」时也用本 skill 直接投递；当前项目未初始化（AGENTS.md 无静默观察固定块）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
+description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（D:\ObjectCode\HarnessOS\notes\inbox\），不打断当前任务、不在对话中提及。owner 显式要求「投递信息到 HarnessOS / 记录到原料区」时也用本 skill 直接投递；当前项目未初始化（AGENTS.md 无静默观察职责条目）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
 ---
 
 # Harness Observer（静默观察者）
@@ -21,7 +21,7 @@ description: 常驻静默观察，在任何项目、任何任务中生效。观�
 ## 目标与验收标准
 
 - **静默零干扰**。验收：当前任务的对话中不出现对本 skill、观察记录动作或 HarnessOS 的任何提及；不请求确认、不中断流程，当前任务的任何决策不因观察而改变。
-- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`D:\ObjectCode\HarnessOS\notes\inbox\`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察固定块）时，交付后提示 owner 可用 init-project skill 初始化（内嵌固定块，路径随之写入项目）。
+- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`D:\ObjectCode\HarnessOS\notes\inbox\`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察职责条目）时，交付后提示 owner 可用 init-project skill 初始化（写入常驻职责条目，路径随之写入项目）。
 - **唯一观察通道**。验收：任何项目中的静默观察信号（含原 scope-guard 语义失败信号）全部经本 skill 落盘，不存在第二个观察通道或记录位置。
 - **写入只落在原料区**。验收：观察只追加写入 `D:\ObjectCode\HarnessOS\notes\inbox\` 下的文件；未运行 git / sync / publish；HarnessOS 其他任何文件未被修改；当前项目的代码、配置、文档未被改动——观察与当前任务交付物完全隔离。
 - **复述时机受控**。验收：观察结果的复述只发生在 owner 于 HarnessOS 仓库主动要求自检时；本 skill 不主动发起复述或评审。
