@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — cross-validate skill v1.0.0：跨模型交叉验证机制落地
+
+- [新增] `skills/cross-validate` v1.0.0：复杂任务交付前自动跨模型交叉验证（owner 2026-08-04 直接指示，冷冻期豁免）——机制写死：模型自检（Kimi `config.toml` default_model / Claude `settings.json` ANTHROPIC_MODEL）、预设配对表（K3-256K ↔ DeepSeek V4 flash，表外默认 DeepSeek V4 flash 验证）、headless 调对端 CLI（`claude -p` / `kimi -p`，2026-08-04 双方向冒烟实测通过）。ai-coding-workflow「交叉验证兜住复杂任务缺陷」目标条目的落地机制，目标条目仍归原 skill
+- 决策记录（owner 拍板）：全自动调对端 CLI（失败降级手工交接文件）；表外模型默认用 DeepSeek V4 flash 验证；复杂任务交付前自动跑；独立新 skill 不并入 ai-coding-workflow
+
 ## 2026-08-04 — vendor 三技能退役 + vibehub 源头更新机制
 
 - [废止] `vendor/coding-protocol`、`vendor/keel`、`vendor/security-review` 退役（owner 2026-08-04 拍板：引入以来未使用，只保留 vibehub）：源目录归档 `archive/skills/`（可复活），三个 Agent 读取池（.agents/.codex/.claude）副本全部撤出，dist 包删除，`vendor/SOURCES.md` 登记移除。coding-protocol / keel 于今日早些时候首次入池即退役
