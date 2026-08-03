@@ -1,6 +1,6 @@
 # 全局协作规则
 
-> 源：global/AGENTS.md | v1.22.0 | 声明式规则 | 目标模式：只写目标与验收标准，不规定做法
+> 源：global/AGENTS.md | v1.23.0 | 目标模式：只写目标与验收标准，不规定做法
 
 本文件优先于项目级 AGENTS.md；项目级只补项目特有约束，不重复本文件内容。
 
@@ -20,17 +20,15 @@
 - **Windows 路径不出岔**：给 Windows 原生命令行工具传路径用 `D:\...` 形式；`/d/...` 只用于设备侧/远程侧；写临时文件确认落点。Git Bash 里调 PowerShell 等脚本时反斜杠相对路径会被中间层当转义吞掉——用正斜杠加引号（如 `-File "./scripts/x.ps1"`），并注意 Git Bash 的 echo/heredoc/printf 会折叠 `\\` 为 `\`。
 - **范围受控**：不改 owner 已有内容（除非其明确要求）；范围外发现记下来供决策，不顺手改。
 - **密钥：零暴露，泄露即轮换**：任何公开位置无密钥/token/私钥/生产配置；一旦出现（含历史提交）视为泄露——新密钥生成、旧密钥作废并标注；生产操作先确认状态与影响范围。
-- **该沉淀进文件**：owner 说"记住"的信息入持久记忆或规则文件；项目入口/命令/依赖变后项目级 AGENTS.md 与 README 同步；README 面向人，CLAUDE.md 面向 Agent，专题细节在专题文档，其余文档只留链接。
+- **该沉淀进文件**：owner 说"记住"的信息入持久记忆或规则文件；项目入口/命令/依赖变后项目级 AGENTS.md 与 README 同步；文档职责分工以 doc-structure skill 为准。
 - **提交由 owner 掌控，信息条理清晰**：owner 要求才 commit，提交前查 git status 不混无关文件；commit message 中文，结构分明不精简——改了什么、为什么改、影响范围三项缺一不可，多主题按逻辑分段编号，关键决策与取舍原因有交代，不以文件 diff 清单代替说明，提交前对照 git diff 核对无遗漏。
 
 ## 全局与项目边界
 
 - **全局**：跨项目通用的偏好、安全红线。
 - **项目级**：项目特有命令/结构/依赖/约束。
-- **一处一处维护**：拿不准归项目级；第二条项目也需要时上浮到全局（改源 → sync.py 发布）。
+- **一处一处维护**：拿不准归项目级；第二条项目也需要时提示 owner 上浮到全局。
 
-## 术语
+## harness-observer 常驻
 
-声明式规则（declared，owner 显式声明）与归纳式规则（induced，踩坑归纳）。固化：冲突检查 + owner 验收拍板即固化。
-
-harness-observer 常驻：静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区（`D:\ObjectCode\HarnessOS\notes\inbox\`），不打断任务。
+静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区（`D:\ObjectCode\HarnessOS\notes\inbox\`），不打断任务。
