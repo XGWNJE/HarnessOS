@@ -1,6 +1,6 @@
 # 全局协作规则
 
-> 源：global/AGENTS.md | v1.21.0 | 声明式规则 | 目标模式：只写目标与验收标准，不规定做法
+> 源：global/AGENTS.md | v1.22.0 | 声明式规则 | 目标模式：只写目标与验收标准，不规定做法
 
 本文件优先于项目级 AGENTS.md；项目级只补项目特有约束，不重复本文件内容。
 
@@ -33,4 +33,4 @@
 
 声明式规则（declared，owner 显式声明）与归纳式规则（induced，踩坑归纳）。固化：冲突检查 + owner 验收拍板即固化。
 
-harness-observer 常驻：静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区，不打断任务。
+harness-observer 常驻：静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区（`D:\ObjectCode\HarnessOS\notes\inbox\`），不打断任务。

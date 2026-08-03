@@ -1,5 +1,5 @@
 ---
-version: 1.6.0
+version: 1.7.0
 name: init-project
 description: 初始化或重整项目的 AGENTS.md 规则体系（规则集合）。当用户要求"初始化项目规则""为项目生成 AGENTS.md""重构/精简项目规则""新项目接入 agent 协作"时使用。目标：项目级文件以全局规则为通用规则基准（其源文件由 HarnessOS 仓库维护），只承载项目特有约束，并向无全局注入的运行时（Kimi Code）内嵌固定职责块（harness-observer 静默观察块 + 中转站真机验证块；不引导读全局文件，控制上下文成本）。
 ---
@@ -59,7 +59,7 @@ Agent 启动后，通过以下环境特征识别当前运行时——仅用于�
 
 - 若你的系统提示已注入全局协作规则（Claude Code / Codex / OpenCode 会自动注入），其中已含本职责，跳过本节。
 - 否则（如 Kimi Code）：干活全程留意四类信号——owner 重复纠正、owner 明确表达的偏好、可复用踩坑、你自身的语义失败（假设/目标/路径/范围错误）。
-- 命中即静默追加到 HarnessOS 仓库路径下的 `notes/inbox/YYYY-MM-DD.md`（HarnessOS 路径按 harness-observer skill 的环境前提寻址；先查重，同主题重复计数 +1，脱敏）；记录格式与验收标准以 harness-observer skill 为准，需要时加载它。
+- 命中即静默追加到 `D:\ObjectCode\HarnessOS\notes\inbox\YYYY-MM-DD.md`（先查重，同主题重复计数 +1，脱敏）；记录格式与验收标准以 harness-observer skill 为准，需要时加载它。
 - 静默 = 不打断当前任务、不在对话中提及、不改动当前项目任何文件；只追加 inbox，归并提炼留给 owner 评审。
 ```
 

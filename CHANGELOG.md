@@ -2,6 +2,14 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 投递入口路径上浮 + 三技能划界（冷冻期 owner 一句话豁免）
+
+- [修订] `skills/harness-observer` v1.4.0 → v1.5.0：原料区路径上浮到 description（可见层，`D:\ObjectCode\HarnessOS\notes\inbox\`）——根因：未初始化新项目中 Agent 不知 HarnessOS 存在，寻址成本高（原料 notes/inbox/2026-08-04.md）；新增「显式投递直达」验收——owner 显式要求投递时直接落盘，项目未初始化（无固定块）时提示用 init-project 初始化
+- [修订] `global/AGENTS.md` v1.21.0 → v1.22.0：harness-observer 常驻一行补原料区绝对路径
+- [修订] `skills/init-project` v1.6.0 → v1.7.0：静默观察固定块的路径写法从「按 harness-observer 环境前提三层寻址」改为直接内嵌绝对路径（与 HarnessOS 项目自身 AGENTS.md 内嵌块一致）
+- [框架] `skills/doc-structure` v1.2.0 → v1.3.0 划界：AGENTS.md 结构模板的唯一主人归 init-project，本 skill 只管边界表分工；description 与参考流程触发词移除「新项目初始化」（归 init-project）。消除「AGENTS.md 长什么样」两处写的漂移隐患
+- [清理] 销毁 `notes/inbox/2026-08-04.md`（路径上浮已固化 harness-observer v1.5.0 / global v1.22.0）。inbox 清空
+
 ## 2026-08-04 — inbox 2 条验收固化：global v1.21.0 + 加工成果自动提交
 
 - [新增] `global/AGENTS.md` v1.19.0 → v1.20.0：协作目标新增「调试遇锁屏即停」——真机调试中设备锁屏/打盹唤不醒时停止调试并向用户报告，等用户主动解锁后继续；不擅自修改用户设备设置（如息屏超时）强行唤醒（owner-declared 2026-08-03，原料 notes/inbox/2026-08-03.md，来源项目 TouchDeck）。协作目标 15 → 16 条
