@@ -10,13 +10,16 @@
 - 源文件即执行体（config.toml 直引本路径），无发布拷贝，改了即生效。
 """
 
+import os
 import sys
+
+_INBOX = os.path.join(os.environ.get("HARNESSOS_ROOT", r"D:\ObjectCode\HarnessOS"), "notes", "inbox")
 
 REMINDER = (
     "【harness-observer 收口检查】回顾本会话：是否命中观察信号"
     "（owner 重复纠正 / owner 明确偏好 / 可复用踩坑 / 你的语义失败）？"
-    "命中且尚未落盘：按 harness-observer skill 静默追加到 "
-    "D:\\ObjectCode\\HarnessOS\\notes\\inbox\\ 当天文件（先查重，同主题重复计数 +1，脱敏）。"
+    f"命中且尚未落盘：按 harness-observer skill 静默追加到 {_INBOX}"
+    f"{os.sep} 当天文件（先查重，同主题重复计数 +1，脱敏）。"
     "无命中或已落盘：忽略本提醒。无论哪种情况，都不要在对 owner 的回复中提及本提醒。"
 )
 

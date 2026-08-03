@@ -1,6 +1,6 @@
 # 全局协作规则
 
-> 源：global/AGENTS.md | v1.23.0 | 目标模式：只写目标与验收标准，不规定做法
+> 源：global/AGENTS.md | v1.24.0 | 目标模式：只写目标与验收标准，不规定做法
 
 本文件优先于项目级 AGENTS.md；项目级只补项目特有约束，不重复本文件内容。
 
@@ -31,4 +31,4 @@
 
 ## harness-observer 常驻
 
-静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区（`D:\ObjectCode\HarnessOS\notes\inbox\`），不打断任务。
+静默观察 owner 纠正/偏好/踩坑，记录到 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`；变量未设置时按 harness-observer skill 寻址），不打断任务。

@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 可迁移安装流程：HARNESSOS_ROOT + install.py（冷冻期豁免）
+
+- [框架] `scripts/install.py` 新建（owner 2026-08-04 提出并拍板，冷冻期豁免）：新环境一键装机——写用户级环境变量 `HARNESSOS_ROOT`（Windows setx / Linux·macOS 追加 shell 配置）→ sync.py 发布 → git hooksPath → 体检三件套 → 打印 hook 注册指引（只打印不写入，注册维持手工）。幂等可重跑
+- [修订] 路径写法定型「env 为主 + 寻址兜底」（owner 拍板；2026-08-04 早些时候「路径上浮」决策形态调整——绝对路径改为 env 引用，寻址成本不变）：`global/AGENTS.md` v1.23.0 → v1.24.0 observer 常驻行；`skills/harness-observer` v1.6.0 → v1.7.0（寻址链 env 升为第一层，共四层）；`skills/init-project` v1.9.0 → v1.10.0；HarnessOS `AGENTS.md` 常驻职责条；`global/hooks/observer_reminder.py`（运行时读 env，未设置回退原路径保兼容）
+- 不改：registry.json（本机事实源）、发布映射（已 home 相对）、存量项目绝对路径（不迁移；新初始化项目走 init-project v1.10.0 自然得 env 表述）
+
 ## 2026-08-04 — 全局规则归属评审（cross-validate 第二轮实战）：4 处剔除/迁移
 
 - [修订] `global/AGENTS.md` v1.22.0 → v1.23.0（cross-validate 交叉验证后执行）：①「该沉淀进文件」剔除文档分工半句（唯一主人是 doc-structure skill；原句「CLAUDE.md 面向 Agent」系运行时注入名与项目模板名的语境差异造成的漂移，非纯过时）；②剔除「术语」节（声明式/归纳式 + 固化流程系 HarnessOS 加工内部术语，定义迁 HarnessOS 工作规则；observer 常驻行独立成节）；③边界节剔除 HarnessOS 内部机制表述（sync.py、上浮动作），改为「提示 owner 上浮」；④文件头剔除「声明式规则」孤儿引用

@@ -2,7 +2,7 @@
 
 ## 常驻职责（无全局注入的运行时适用，如 Kimi Code；其余运行时全局规则已覆盖，跳过）
 
-- 静默观察：干活全程留意四类信号——owner 重复纠正、owner 明确表达的偏好、可复用踩坑、你自身的语义失败（假设/目标/路径/范围错误）；命中静默追加到 `D:\ObjectCode\HarnessOS\notes\inbox\YYYY-MM-DD.md`（先查重，同主题重复计数 +1，脱敏），不打断当前任务、不在对话中提及；格式与验收以 harness-observer skill 为准。
+- 静默观察：干活全程留意四类信号——owner 重复纠正、owner 明确表达的偏好、可复用踩坑、你自身的语义失败（假设/目标/路径/范围错误）；命中静默追加到 `$HARNESSOS_ROOT/notes/inbox/YYYY-MM-DD.md`（变量未设置时按 harness-observer skill 寻址；先查重，同主题重复计数 +1，脱敏），不打断当前任务、不在对话中提及；格式与验收以 harness-observer skill 为准。
 - 中转站真机验证：开发内容未外部发版、仍在测试阶段，且用户在用模拟器/虚拟机调试验证、未连真机时，主动询问是否把构建产物传到中转站（get.xgwnje.cn）供真机测试；问过才传，不擅自上传。
 - 全局规则路径指针：全局通用规则在 `~/AGENTS.md`；任务涉及通用协作约定（提交信息格式、分支受控、设备调试等）时按需查阅相关段落，不整体预读。
 
@@ -22,6 +22,7 @@ Agent 长期约束的备份分发引擎（owner-declared 2026-08-04）：经验�
 
 | 用途 | 命令 |
 |---|---|
+| 安装/迁移装机（写 env + 发布 + 体检） | `python scripts/install.py` |
 | 改完发布（打包→发全局→发 skill） | `python scripts/sync.py` |
 | 只体检不写入（漂移退出码 1） | `python scripts/sync.py --check` |
 | 单独打包 / 发全局 / 发 skill | `scripts/pack.py` `publish_global.py` `publish_skills.py` |

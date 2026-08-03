@@ -1,7 +1,7 @@
 ---
-version: 1.6.0
+version: 1.7.0
 name: harness-observer
-description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（D:\ObjectCode\HarnessOS\notes\inbox\），不打断当前任务、不在对话中提及。owner 显式要求「投递信息到 HarnessOS / 记录到原料区」时也用本 skill 直接投递；当前项目未初始化（AGENTS.md 无静默观察职责条目）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
+description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，变量未设置时按本 skill 环境前提寻址），不打断当前任务、不在对话中提及。owner 显式要求「投递信息到 HarnessOS / 记录到原料区」时也用本 skill 直接投递；当前项目未初始化（AGENTS.md 无静默观察职责条目）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
 ---
 
 # Harness Observer（静默观察者）
@@ -14,16 +14,16 @@ description: 常驻静默观察，在任何项目、任何任务中生效。观�
 
 此段仅声明事实，不规定 Agent 行为。
 
-- **HarnessOS 仓库**需可写访问。本地默认位置 `D:\ObjectCode\HarnessOS`（Windows）或 `~/ObjectCode/HarnessOS`（Linux/macOS）。Agent 按以下优先级定位：① 当前项目 AGENTS.md 中如有 HarnessOS 路径声明则取之；② 按上述默认位置依次尝试；③ 遍历 `~/` 与 `D:\` 根目录下名为 `HarnessOS` 的目录。路径不可写时本 skill 不可用。
+- **HarnessOS 仓库**需可写访问。Agent 按以下优先级定位：① 环境变量 `HARNESSOS_ROOT`（装机脚本 `scripts/install.py` 写入）；② 当前项目 AGENTS.md 中如有 HarnessOS 路径声明则取之；③ 默认位置 `D:\ObjectCode\HarnessOS`（Windows）或 `~/ObjectCode/HarnessOS`（Linux/macOS）依次尝试；④ 遍历 `~/` 与 `D:\` 根目录下名为 `HarnessOS` 的目录。路径不可写时本 skill 不可用。
 - **文件写入工具**可用（Write / bash echo / PowerShell Out-File 等——任一即可）。
 - **无网络依赖**：本 skill 只写本地文件，不调网络 API。
 
 ## 目标与验收标准
 
 - **静默零干扰**。验收：当前任务的对话中不出现对本 skill、观察记录动作或 HarnessOS 的任何提及；不请求确认、不中断流程，当前任务的任何决策不因观察而改变。
-- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`D:\ObjectCode\HarnessOS\notes\inbox\`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察职责条目）时，交付后提示 owner 可用 init-project skill 初始化（写入常驻职责条目，路径随之写入项目）。
+- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`$HARNESSOS_ROOT/notes/inbox/`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察职责条目）时，交付后提示 owner 可用 init-project skill 初始化（写入常驻职责条目，路径随之写入项目）。
 - **唯一观察通道**。验收：任何项目中的静默观察信号（含原 scope-guard 语义失败信号）全部经本 skill 落盘，不存在第二个观察通道或记录位置。
-- **写入只落在原料区**。验收：观察只追加写入 `D:\ObjectCode\HarnessOS\notes\inbox\` 下的文件；未运行 git / sync / publish；HarnessOS 其他任何文件未被修改；当前项目的代码、配置、文档未被改动——观察与当前任务交付物完全隔离。
+- **写入只落在原料区**。验收：观察只追加写入 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，寻址见环境前提）下的文件；未运行 git / sync / publish；HarnessOS 其他任何文件未被修改；当前项目的代码、配置、文档未被改动——观察与当前任务交付物完全隔离。
 - **复述时机受控**。验收：观察结果的复述只发生在 owner 于 HarnessOS 仓库主动要求自检时；本 skill 不主动发起复述或评审。
 - **信号应记尽记**。验收：命中下表四类信号的观察都被记录；拿不准类型的按 `归纳式原料` 记，留待评审归并。
 - **脱敏**。验收：记录中不含密钥、token、凭据、私密 URL，不含完整提示词和工具输出原文。
