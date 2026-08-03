@@ -6,16 +6,12 @@
     "claude": "无 hook 注册（~/.claude/settings.json 无 hooks 段）"
   },
   "registrations": [
-    { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": true },
     { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
-    { "runtime": "kimi-code", "event": "PostToolUse", "matcher": "Bash|Edit|Write|mcp__.*", "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": true },
     { "runtime": "kimi-code", "event": "PostToolUse", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
     { "runtime": "kimi-code", "event": "PostToolUseFailure", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
     { "runtime": "kimi-code", "event": "Stop", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": true },
     { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": "收口|可以 ?[Pp]ush|提交吧|差不多了", "source": "D:/ObjectCode/HarnessOS/global/hooks/observer_reminder.py", "owner": "HarnessOS", "via_adapter": false },
-    { "runtime": "codex", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": false },
     { "runtime": "codex", "event": "UserPromptSubmit", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false },
-    { "runtime": "codex", "event": "PostToolUse", "matcher": "Bash|Shell|shell_command|apply_patch|mcp__.*|functions.*", "source": "D:/ObjectCode/Server-infra/hooks/server-infra-hook.ps1", "owner": "Server-infra", "via_adapter": false },
     { "runtime": "codex", "event": "PostToolUse", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false },
     { "runtime": "codex", "event": "Stop", "matcher": null, "source": "D:/ObjectCode/Codex-Journal/hooks/codex-journal-observer.ps1", "owner": "Codex-Journal", "via_adapter": false }
   ]

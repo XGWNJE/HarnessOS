@@ -2,6 +2,31 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — inbox 2 条验收固化：global v1.21.0 + 加工成果自动提交
+
+- [新增] `global/AGENTS.md` v1.19.0 → v1.20.0：协作目标新增「调试遇锁屏即停」——真机调试中设备锁屏/打盹唤不醒时停止调试并向用户报告，等用户主动解锁后继续；不擅自修改用户设备设置（如息屏超时）强行唤醒（owner-declared 2026-08-03，原料 notes/inbox/2026-08-03.md，来源项目 TouchDeck）。协作目标 15 → 16 条
+- [修订] `global/AGENTS.md` v1.20.0 → v1.21.0：「中转站真机验证兜底」收紧适用范围（owner 2026-08-04 拍板，原料 notes/inbox/2026-08-04.md）——限定为「仅针对构建产物（APK/安装包等）真机安装测试」，不补反例；背景：owner 咨询识图 API 时 Agent 错误联想到中转站核验
+- [新增] `skills/mini-vault` v1.0.0 入库：中转站上传与下载核验 skill（2026-08-01 随中转站规则创建，本次提交入库并发布）
+- [框架] 项目 `AGENTS.md` 工作规则新增：加工成果最小验证矩阵通过后自动提交一次，无需再请示（owner-declared 2026-08-04）
+- [清理] 销毁 `notes/inbox/2026-08-03.md`（锁屏规则已固化 global v1.20.0）、`notes/inbox/2026-08-04.md`（中转站收紧已固化 global v1.21.0）。inbox 清空
+
+## 2026-08-02 — 分支审批上浮 global v1.19.0 + Server-infra 远程更新边界
+
+- [新增] `global/AGENTS.md` v1.18.0 → v1.19.0：协作目标新增「分支受控」——默认不创建分支；只有需要隔离/回滚且 owner 明确同意时才创建，并说明用途与清理计划；任务结束删除已合入/空分支及多余 worktree。协作目标 14 → 15 条（owner-declared 2026-08-02）
+- [新增] `D:\ObjectCode\Server-infra\AGENTS.md`：远程更新边界（owner-declared 2026-08-02）——本仓库只在 owner 主动要求更新，或其他项目向本仓库投递信息时执行 pull/push/远端覆盖；日常维护不自动 git 更新
+
+## 2026-08-02 — Server-infra hook 机制退役：HarnessOS 侧登记对齐 + Git Bash 路径踩坑固化 global v1.18.0
+
+- [框架] Server-infra Agent hook 事件机制整体冻结（owner-declared 2026-08-02，owner 弃用 Codex 平台；Server-infra 侧已执行完毕：kimi config.toml 注册摘除、改用户自检 + Windows 每日定时任务、事件积压归档）。HarnessOS 侧登记对齐：`global/hooks/registry.json` 移除 4 条 server-infra 登记（kimi/codex × UserPromptSubmit/PostToolUse）；`~/.codex/hooks.json` 移除 2 处 server-infra-hook.ps1 注册（保留 codex-journal-observer.ps1 全部注册）；`global/hooks/kimi-codex-hook-adapter.py` 原样保留（Codex-Journal 仍在用）。登记 12 → 8 条，`check_hooks.py` 退出码 0。Server-infra 冻结文件未碰
+- [修订] `global/AGENTS.md` v1.17.0 → v1.18.0：「Windows 路径不出岔」扩展——Git Bash 里调 PowerShell 等脚本反斜杠相对路径会被中间层转义吞掉，用正斜杠加引号；echo/heredoc/printf 会折叠 `\\` 为 `\`（owner 评审通过，原料 notes/inbox/2026-08-02.md；后半句为同场验证的补充实证）
+- [清理] 销毁 `notes/inbox/2026-08-02.md` 全 3 条：「修 hook PropertyNotFoundException」作废（机制冻结，不再投入）；「弃用 Codex 冻结 hook 机制」Server-infra 侧已执行、本侧登记对齐完毕；「Git Bash 反斜杠路径」固化 global v1.18.0。inbox 清空
+- 备注：今日早前对 server-infra-hook.ps1 的 StrictMode 属性加固修复（缺 cwd 兜底）随机制冻结成为冻结文件的一部分，不再投入但不回滚（owner 指示边界：不碰 Server-infra 任何文件）
+
+## 2026-08-01 — 中转站真机验证：global v1.17.0 + init-project v1.6.0
+
+- [新增] `global/AGENTS.md` v1.16.0 → v1.17.0：协作目标新增「中转站真机验证兜底」（owner-declared 2026-08-01）——开发内容未外部发版、仍在测试阶段，且用户用模拟器/虚拟机调试验证、未连真机时，主动询问是否把构建产物传到中转站（get.xgwnje.cn）供用户自行装真机测试；问过才传，不擅自上传。协作目标 13 → 14 条
+- [修订] `skills/init-project/SKILL.md` v1.5.0 → v1.6.0：新增「中转站真机验证固定块」——与静默观察块同一模式（Kimi Code 无全局注入，项目级 AGENTS.md 原文照写内嵌）；description、运行时识别表、验收标准、失效模式从「静默观察块」同步扩展为「全部固定块」
+
 ## 2026-08-01 · doc-structure v1.1.0：README 模板加界面展示要求
 
 - [修订] `skills/doc-structure` v1.0.0 → v1.1.0：README 模板新增「界面展示」段——有明确产品性质（用户可交互界面）的项目必须放真机截图，动画 GIF（关键交互演示）更佳；验收标准拆分为「自动验收（机器可检验）」与「智能验收（模型判断，机器不可自动判定产品性质）」两层，真机截图 = 真实运行画面而非示意图/mockup；参考流程诊断步骤加入产品型判定。owner-declared（2026-08-01）。

@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
-"""文档结构体检：验证 README 守住职责边界（面向人、只留门面、不堆积）。
+"""文档结构体检：验证 README 守住职责边界（面向人、只留门面、不越界）。
 
 用法：
     python scripts/check_docs.py                     # 体检当前仓库，违规退出码 1
     python scripts/check_docs.py --readme 路径       # 检查其他项目的 README（多项目复用）
-    python scripts/check_docs.py --max-lines 120     # 覆盖行数上限
 
 检查项：
-    1. README 行数 <= 上限（默认 100）——防堆积
-    2. README 不含操作细节禁止词——防职责越界（发布命令/hook 安装/笔记格式等应只在 AGENTS.md）
-    3. README 包含文档导航（"文档地图"或 "AGENTS.md"）——防瘦身过头失去导航
+    1. README 不含操作细节禁止词——防职责越界（发布命令/hook 安装/笔记格式等应只在 AGENTS.md）
+    2. README 包含文档导航（"文档地图"或 "AGENTS.md"）——防瘦身过头失去导航
 
-被 hooks/pre-commit 调用（doc-structure skill 的机械锚点）。
+行数不设硬上限（owner 2026-08-01 决策）：冗余与否按智能判断（结构正确、无明显冗长），
+机器只管结构项。被 hooks/pre-commit 调用（doc-structure skill 的机械锚点）。
 只读不写。违规时提示运行 doc-structure skill 修复。
 """
 
 import argparse
-import re
 import sys
 from pathlib import Path
-
-DEFAULT_MAX_LINES = 100
 
 # 操作细节禁止词：只属于 AGENTS.md（面向 Agent），出现在 README 即视为职责越界。
 # 新增禁止词前先在 doc-structure skill 的验收标准里登记语义，避免误伤。
@@ -49,7 +45,6 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--readme", default="README.md", help="README 路径（默认当前目录 README.md）")
-    ap.add_argument("--max-lines", type=int, default=DEFAULT_MAX_LINES, help="行数上限")
     args = ap.parse_args()
 
     readme = Path(args.readme)
@@ -59,9 +54,6 @@ def main() -> int:
 
     lines = readme.read_text(encoding="utf-8").splitlines()
     problems = []
-
-    if len(lines) > args.max_lines:
-        problems.append(f"README {len(lines)} 行，超过上限 {args.max_lines}——文档堆积，需瘦身")
 
     for word in FORBIDDEN:
         for i, line in enumerate(lines, 1):
@@ -79,7 +71,7 @@ def main() -> int:
         print("[doc-check] 请运行 doc-structure skill 按模板修复后重新体检。")
         return 1
 
-    print(f"[doc-check] 通过：{readme} {len(lines)} 行，职责边界无越界（上限 {args.max_lines}）")
+    print(f"[doc-check] 通过：{readme} 职责边界无越界")
     return 0
 
 
