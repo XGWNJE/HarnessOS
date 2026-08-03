@@ -6,10 +6,15 @@
 
 | Skill | 来源 | 引入时间 | 说明 |
 |---|---|---|---|
-| keel | https://github.com/lencx/skills | 2026-07-23 | 架构治理协议 |
-| coding-protocol | https://github.com/lencx/skills | 2026-07-23 | 风险分级编码执行协议（v1.1.0） |
-| security-review | ECC（frontmatter 标注 origin: ECC），拷贝自 ~/.agents/skills | 2026-07-23 | 安全审查清单 |
 | vibehub | https://github.com/oil-oil/vibe-hub-skill （skills/vibehub 目录 + LICENSE） | 2026-07-24 | Vibe Coding 术语学习助手（面向普通人的教学流程，依赖 VibeHub 网站知识源） |
+
+## 上游更新（owner 问"是否最新"时执行）
+
+vendor 原样不改——不手工修补内容，只整目录替换。以 vibehub 为例：
+
+1. 临时目录 `git clone --depth 1 https://github.com/oil-oil/vibe-hub-skill`
+2. 比对上游 `skills/vibehub/`（含 LICENSE）与本地 `vendor/vibehub/`
+3. 有差异 → 整目录替换，CHANGELOG 记 [修订]（附上游 commit 哈希），跑 `python scripts/sync.py` 重新发布；无差异 → 直接答复已是最新
 
 ## 仅登记来源（不拷贝实体）
 

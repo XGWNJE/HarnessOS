@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — vendor 三技能退役 + vibehub 源头更新机制
+
+- [废止] `vendor/coding-protocol`、`vendor/keel`、`vendor/security-review` 退役（owner 2026-08-04 拍板：引入以来未使用，只保留 vibehub）：源目录归档 `archive/skills/`（可复活），三个 Agent 读取池（.agents/.codex/.claude）副本全部撤出，dist 包删除，`vendor/SOURCES.md` 登记移除。coding-protocol / keel 于今日早些时候首次入池即退役
+- [框架] `vendor/SOURCES.md` 新增「上游更新」节（owner 2026-08-04 指示）：owner 问"是否最新"时按既定步骤检查上游并整目录替换更新（clone 比对 → 替换 → CHANGELOG 记账 → sync.py 重新发布），vendor 原样不改的原则不变
+
 ## 2026-08-04 — vendor 纳入发布映射：coding-protocol / keel 首次入池可见
 
 - [框架] `scripts/publish_skills.py`：发布映射从「只扫 skills/ 自有」扩展为「skills/ + vendor/（第三方原样中转）」自动扫描（owner 2026-08-04 指示，冷冻期豁免）。背景：vendor 无发布通道——coding-protocol / keel 引入以来（2026-07-23）只在 vendor/ 与 dist/，从未进任何 Agent 读取池；security-review / vibehub 池内副本系当年手工拷贝，漂移无人对账
