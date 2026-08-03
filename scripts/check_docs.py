@@ -8,6 +8,7 @@
 检查项：
     1. README 不含操作细节禁止词——防职责越界（发布命令/hook 安装/笔记格式等应只在 AGENTS.md）
     2. README 包含文档导航（"文档地图"或 "AGENTS.md"）——防瘦身过头失去导航
+    3. README 徽章计数与实际一致——易变信息防漂移（仅存在 Skills 徽章且仓库含 skills//vendor/ 时生效）
 
 行数不设硬上限（owner 2026-08-01 决策）：冗余与否按智能判断（结构正确、无明显冗长），
 机器只管结构项。被 hooks/pre-commit 调用（doc-structure skill 的机械锚点）。
@@ -15,6 +16,7 @@
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -63,6 +65,19 @@ def main() -> int:
 
     if not any(marker in "\n".join(lines) for marker in NAV_MARKERS):
         problems.append("README 缺少文档导航（应含「文档地图」段或指向 AGENTS.md）——瘦身过头")
+
+    # 徽章计数校验（owner 2026-08-04 归属 doc-structure：易变信息对齐与漂移纠正）
+    badge = re.search(r"badge/Skills-(\d+)%20active", "\n".join(lines))
+    if badge:
+        root = readme.resolve().parent
+        bases = [b for b in (root / "skills", root / "vendor") if b.is_dir()]
+        if bases:
+            actual = sum(1 for b in bases for p in b.iterdir()
+                         if p.is_dir() and (p / "SKILL.md").is_file())
+            declared = int(badge.group(1))
+            if declared != actual:
+                problems.append(f"README 徽章 Skills-{declared} 与实际可发布 skill 数 {actual} 不一致"
+                                "——易变信息漂移，修正徽章数字")
 
     if problems:
         print("[doc-check] 文档体检未通过：")

@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 定位拍板「备份分发引擎」+ 徽章漂移修复与易变信息归口
+
+- [修订] 仓库职责定位拍板（owner-declared 2026-08-04）：**Agent 长期约束的备份分发引擎**——README 与 AGENTS.md 定位句同步更新；「单一真相源」降为机制描述（指本仓库）。来源：cross-validate 交叉验证评审疑点 A，owner 裁决结案
+- [修订] README 徽章 `Skills-7 active` → `Skills-11 active`：交叉验证实测发现的漂移（10 自有 + 1 vendor），`check_docs.py` 与 `sync.py --check` 均不覆盖的活标本
+- [修订] `skills/doc-structure` v1.3.0 → v1.4.0：承接易变信息对齐职责（owner 2026-08-04 归属拍板）——徽章计数、版本号引用等易变信息的对齐与漂移纠正归本 skill；自动验收标准加徽章计数条目
+- [框架] `scripts/check_docs.py` 新增检查项 3：README Skills 徽章计数 = skills/ + vendor/ 含 SKILL.md 目录数，不一致退出码 1（仅徽章存在且仓库含 skills//vendor/ 时生效；既有文档体检机制内增量，owner 直接指示，冷冻期豁免）
+
 ## 2026-08-04 — cross-validate skill v1.0.0：跨模型交叉验证机制落地
 
 - [新增] `skills/cross-validate` v1.0.0：复杂任务交付前自动跨模型交叉验证（owner 2026-08-04 直接指示，冷冻期豁免）——机制写死：模型自检（Kimi `config.toml` default_model / Claude `settings.json` ANTHROPIC_MODEL）、预设配对表（K3-256K ↔ DeepSeek V4 flash，表外默认 DeepSeek V4 flash 验证）、headless 调对端 CLI（`claude -p` / `kimi -p`，2026-08-04 双方向冒烟实测通过）。ai-coding-workflow「交叉验证兜住复杂任务缺陷」目标条目的落地机制，目标条目仍归原 skill

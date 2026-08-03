@@ -1,7 +1,7 @@
 ---
-version: 1.3.0
+version: 1.4.0
 name: doc-structure
-description: 项目文档结构优化、自动验收与多项目风格统一。当需要新建/重构 README、文档越写越重需要瘦身、pre-commit 文档体检拦截提交后需要修复、或希望多个项目的文档保持同一模板风格时使用（AGENTS.md 规则体系与结构模板归 init-project skill，本 skill 不管）。核心：文档职责按边界表分配、README 面向人只留门面、产品型项目必须有真机截图、结构正确无明显冗长、多项目同风格。
+description: 项目文档结构优化、自动验收与多项目风格统一。当需要新建/重构 README、文档越写越重需要瘦身、pre-commit 文档体检拦截提交后需要修复、或希望多个项目的文档保持同一模板风格时使用（AGENTS.md 规则体系与结构模板归 init-project skill，本 skill 不管）。核心：文档职责按边界表分配、README 面向人只留门面、产品型项目必须有真机截图、结构正确无明显冗长、多项目同风格。徽章计数、版本号引用等易变信息的对齐与漂移纠正归本 skill（owner 2026-08-04 归属）。
 ---
 
 # 文档结构：职责边界、模板与自动验收
@@ -59,6 +59,7 @@ description: 项目文档结构优化、自动验收与多项目风格统一。�
 ## 自动验收标准（全部可机器检验）
 
 - `python scripts/check_docs.py` 退出码 0：无操作细节禁止词、含文档导航段（行数不设硬上限，owner 2026-08-01 决策——冗余按智能判断）
+- **易变信息对齐**（owner 2026-08-04 归属拍板）：徽章计数、版本号引用等易变信息的对齐与漂移纠正是本 skill 职责；README 出现 shields Skills 计数徽章时，数字须等于 skills/ + vendor/ 下含 SKILL.md 的目录数（check_docs.py 机械校验，徽章不存在或无 skills//vendor/ 目录时不生效）
 - README 与 AGENTS.md 无重复段落（同一事实只在一个文档出现）
 - 文档地图中的每个文档存在且有明确职责
 - 改文档后 `sync.py --check` 无漂移（HarnessOS 仓库）
