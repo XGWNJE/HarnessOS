@@ -1,0 +1,115 @@
+{
+  "说明": "全机 MCP 服务器登记单一事实源（owner 2026-08-04 拍板纳入管理，冷冻期豁免）。check_mcp.py 据此体检各工具实际配置（只读不写）：登记过的必须存在、实际存在的必须已登记（工具自带除外）。新增/停用/更换 MCP：先改本表，再改各工具配置，最后跑 sync.py --check。enabled 开关是各工具侧状态，不在本表机械比对（opencode 全部启用、codex 部分禁用属各自现状，2026-08-04 核验）。",
+  "工具配置": {
+    "opencode": {
+      "path": "C:/Users/Administrator/.config/opencode/opencode.json",
+      "格式": "json",
+      "键": "mcp"
+    },
+    "codex": {
+      "path": "C:/Users/Administrator/.codex/config.toml",
+      "格式": "toml",
+      "键": "mcp_servers",
+      "工具自带": [
+        "node_repl"
+      ]
+    },
+    "claude": {
+      "path": "C:/Users/Administrator/.claude.json",
+      "格式": "json",
+      "键": "mcpServers",
+      "工具自带": [
+        "node_repl"
+      ],
+      "注": "只校验顶层全局段；项目级 mcpServers 属各项目自己，不在本表范围"
+    },
+    "kimi": {
+      "path": "C:/Users/Administrator/.kimi-code/config.toml",
+      "格式": "toml",
+      "键": "mcp_servers",
+      "现状": "无 MCP 注册（2026-08-04 核验，无 mcp_servers 段）"
+    }
+  },
+  "servers": [
+    {
+      "name": "chrome-devtools",
+      "用途": "浏览器控制/调试（chrome-devtools-mcp）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "context7",
+      "用途": "库/框架文档查询（Upstash）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "excalidraw",
+      "用途": "画布设计（本地 node 服务 127.0.0.1:3737）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "fetch",
+      "用途": "网页抓取（mcp-server-fetch）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "github",
+      "用途": "GitHub API（官方 MCP）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "memory",
+      "用途": "知识图谱记忆（server-memory）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "sequential-thinking",
+      "用途": "逐步推理（server-sequential-thinking）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "name": "time",
+      "用途": "时间查询（server-time）",
+      "工具": [
+        "opencode",
+        "claude"
+      ]
+    },
+    {
+      "name": "pencil",
+      "用途": ".pen 设计文件编辑（PencilDev 扩展）",
+      "工具": [
+        "opencode",
+        "codex",
+        "claude"
+      ]
+    }
+  ]
+}

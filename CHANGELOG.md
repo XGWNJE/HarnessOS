@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — MCP 纳入管理：global/mcp 登记中心 + check_mcp.py 体检（冷冻期豁免）
+
+- [框架] `global/mcp/registry.json` 新建 + `scripts/check_mcp.py` 新建（owner 2026-08-04 提出并豁免冷冻期拍板）：MCP 服务器纳入 HarnessOS 管理——与 hook 同构的「登记单一事实源 + 只读体检」模式。登记现状（2026-08-04 实时核验）：opencode 9 个全启用（opencode.json mcp 段）、codex 9 个（4 个 disabled，config.toml mcp_servers 段，node_repl 工具自带）、claude 全局 10 个（.claude.json 顶层 mcpServers 段，node_repl 工具自带；项目级 mcpServers 不纳入）、kimi 无 MCP 注册
+- [框架] `scripts/sync.py` 两种模式并入 MCP 登记体检段。`AGENTS.md` 关键路径表加 MCP 体检行、global/ 说明段补 global/mcp/ 条目
+- 决策记录（owner 拍板）：先做登记+体检（低成本试点），enabled 开关属工具侧状态不机械比对；MCP 服务器源码/分发侧管理暂缓
+- 影响范围：四类资产齐了——规则（global/AGENTS.md→4 发布点）、技能（skills/+vendor/→各池）、hook（global/hooks/）、MCP（global/mcp/）；体检全绿（check_mcp 正反验证通过）
+
 ## 2026-08-04 — global v1.25.0：Windows 原生 CLI 传中文内容不走命令行参数
 
 - [修订] `global/AGENTS.md` v1.24.0 → v1.25.0：「Windows 路径不出岔」条目补传参场景——给 Windows 原生 CLI 传中文内容（参数、描述等）不走命令行参数（PowerShell 按 ANSI 编码传参、exe 按 UTF-8 解码必损坏），改走文件或 API；验收：中文经原生 CLI 落地后逐字可核对。来源：notes/inbox/2026-08-04.md（gh repo edit 传中文简介损坏事件，owner 2026-08-04 拍板固化）；冲突检查：与「沟通可懂」编码句（写文件场景）不重叠、无冲突
