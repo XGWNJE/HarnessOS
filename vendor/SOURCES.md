@@ -23,6 +23,6 @@ vendor 原样不改——不手工修补内容，只整目录替换。以 vibehu
 |---|---|---|---|
 | skill-creator | https://github.com/anthropics/skills （Anthropic 官方，git clone） | `~/.agents/skills/skill-creator`（自带 .git） | 原地 `git pull`，不入 HarnessOS 库 |
 
-## 不计入管理
+## ~/.claude/skills 池对账
 
 `~/.claude/skills` 池现有技能已全部纳入管理（2026-08-04 核验：13 个均为 HarnessOS 发布产物或已登记引入）。后续若新出现来源不明的技能，按「物理引入」或「仅登记来源」流程登记后再对账。

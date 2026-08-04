@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 文档对齐复核修复（cross-validate 实战：DeepSeek 验证 1 中 4 低，低项全修）
+
+- [修订] 交叉验证（DeepSeek V4 flash 验证，2026-08-04）：验收 A/B/C/D 全通过。修复 4 个低缺陷：① SOURCES.md 段名「不计入管理」→「~/.claude/skills 池对账」（段名与内容矛盾）；② README Skills 徽章 href 指向 skills/（点进去只见 11 个）→ 改仓库根；③ README 文档地图补 global/AGENTS.md 行；④ 括号术语风格统一（中文在前，与 AGENTS.md 一致）
+- 待 owner 裁决（中）：定位句双份（README 白话版 + AGENTS.md 正式版）——撞「无重复段落」验收与「AGENTS.md 禁止概念性介绍」硬标准，且与「事实只更新负责文档」规则冲突；验证方推荐：README 负责定位，AGENTS.md 只留流水线机制句
+
 ## 2026-08-04 — 全文档对齐重构（doc-structure skill）：五类资产全景 + 登记中心导航
 
 - [修订] `README.md`（doc-structure 中等重构）：「项目干什么」从收料三通道升级为五类资产全景（收料 → 加工 → 管理/体检/验证/重建）；「怎么开始」补发布与体检、迁移重建；「文档地图」加 global/ 登记中心行。无操作细节越界（细节仍全在 AGENTS.md）
