@@ -5,7 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/XGWNJE/HarnessOS?style=flat-square&label=Last%20Commit)](https://github.com/XGWNJE/HarnessOS)
 [![Skills](https://img.shields.io/badge/Skills-13%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS/tree/master/skills)
 
-Agent 长期约束的备份分发引擎。白话版：把 AI 编程助手要守的规矩和会干的活，沉淀成规则与技能文件，统一在本仓库加工，再自动同步到各 AI 工具——让每个 AI 都按你定的标准干活。本仓库是唯一真相源，改动只动这里，别处都是自动生成的副本。
+**HarnessOS · Agent 资产中枢（Agent Asset Hub）**。白话版：把 AI 编程助手的规矩、技能、工具、环境配置都收进一个中枢统一管理——平时从这发布到各 AI 工具，机器坏了或换电脑，照清单一键重建。本仓库是唯一真相源，改动只动这里，别处都是自动生成的副本。
 
 ## 项目干什么
 
