@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 两技能纳入管理：kimi-webbridge 回收 + image-understand 引入
+
+- [新增] `vendor/kimi-webbridge/`（第三方物理引入，原样不改）：Kimi 官方 WebBridge 技能 v1.11.3（官方页 kimi.com/features/webbridge），从部署的 skill 目录回收进仓库。背景（owner 2026-08-04 询问并拍板纳入）：技能机制是本地守护进程 HTTP API（127.0.0.1:10086），不绑定 Kimi 运行时，其他 Agent 同样可调——事实证据是引入前已散装复制在 .claude/.codex/.config-opencode 三池，脱离 HarnessOS 管理。SOURCES.md 登记来源
+- [新增] `skills/image-understand` v1.0.0（自研，从 .claude 池既有部署回收）：识图/图像理解，默认免费通道智谱 GLM-4V-Flash，付费 GLM-4V-Plus 需用户确认；写法为本体系目标模式 + 机制标注风格（与 grsai-image-gen 同风格），原仅有 .claude 池一份，回收后由发布流水线铺全
+- [修订] README 徽章 `Skills-11 active` → `Skills-13 active`（11 自有 + 2 vendor）
+- 影响范围：发布流水线自动铺全 3 池（.agents/.codex/.claude）；opencode 池不在发布映射内，手动同步 kimi-webbridge（已在）与 image-understand（补）
+
 ## 2026-08-04 — 可迁移安装流程：HARNESSOS_ROOT + install.py（冷冻期豁免）
 
 - [框架] `scripts/install.py` 新建（owner 2026-08-04 提出并拍板，冷冻期豁免）：新环境一键装机——写用户级环境变量 `HARNESSOS_ROOT`（Windows setx / Linux·macOS 追加 shell 配置）→ sync.py 发布 → git hooksPath → 体检三件套 → 打印 hook 注册指引（只打印不写入，注册维持手工）。幂等可重跑

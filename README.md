@@ -3,7 +3,7 @@
 [![Stars](https://img.shields.io/github/stars/XGWNJE/HarnessOS?style=flat-square&label=Stars)](https://github.com/XGWNJE/HarnessOS)
 [![Top Language](https://img.shields.io/github/languages/top/XGWNJE/HarnessOS?style=flat-square&label=Top%20Language)](https://github.com/XGWNJE/HarnessOS)
 [![Last Commit](https://img.shields.io/github/last-commit/XGWNJE/HarnessOS?style=flat-square&label=Last%20Commit)](https://github.com/XGWNJE/HarnessOS)
-[![Skills](https://img.shields.io/badge/Skills-11%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS/tree/master/skills)
+[![Skills](https://img.shields.io/badge/Skills-13%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS/tree/master/skills)
 
 Agent 长期约束的备份分发引擎：实战经验在这里被加工成规则和技能（单一真相源在本仓库），发布到各 AI 编程工具中运行。
 
