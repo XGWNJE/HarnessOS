@@ -239,7 +239,7 @@
     },
     {
       "name": "claude.json",
-      "路径": "C:/Users/Administrator/.claude.json",
+      "路径": "~/.claude.json",
       "用途": "Claude Code 全局状态（MCP 全局段）",
       "分级": "必需",
       "现状": "存在（含 OAuth 状态不做快照；MCP 全局段重建依据 = global/mcp/registry.json）"
