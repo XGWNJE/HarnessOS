@@ -70,6 +70,7 @@ HarnessOS · Agent 资产中枢（Agent Asset Hub，owner-declared 2026-08-04）
 - `README.md`：面向人——项目干什么、怎么开始、文档导航（其余全部链接，操作细节一律不出现）
 - `CHANGELOG.md`：规则加工历史（只新增条目，不改旧条目）
 - `global/AGENTS.md`：全局通用规则源文件
+- `global/` 登记中心：hook / MCP / CLI 的 registry 与脱敏配置快照（跨环境重建依据，清单见上文）
 - `vendor/SOURCES.md`：第三方 skill 来源登记
 - `notes/`：原料区（粗糙允许，两行元信息必需：日期 + 场景）
 - `reviews/`：评审摘要（owner 主动质检时生成）

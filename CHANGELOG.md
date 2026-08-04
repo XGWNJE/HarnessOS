@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 全文档对齐重构（doc-structure skill）：五类资产全景 + 登记中心导航
+
+- [修订] `README.md`（doc-structure 中等重构）：「项目干什么」从收料三通道升级为五类资产全景（收料 → 加工 → 管理/体检/验证/重建）；「怎么开始」补发布与体检、迁移重建；「文档地图」加 global/ 登记中心行。无操作细节越界（细节仍全在 AGENTS.md）
+- [修订] `vendor/SOURCES.md`：「不计入管理」段更新——~/.claude/skills 池已全部纳入管理（2026-08-04 核验 13 个均为 HarnessOS 产物/已登记），原「约 30 个」表述过时
+- [修订] HarnessOS `AGENTS.md` 文档地图：补 global/ 登记中心行（hooks/mcp/cli + 配置快照）
+- 验收：check_docs.py 通过 + sync.py --check 全绿
+
 ## 2026-08-04 — 定位升级：HarnessOS · Agent 资产中枢（owner 拍板）
 
 - [修订] 定位从「Agent 长期约束的备份分发引擎」升级为「**HarnessOS · Agent 资产中枢（Agent Asset Hub）**」（owner 2026-08-04 拍板：A 方向 + 中文定位词「资产中枢」与英文项目名 HarnessOS 组合）：AI 编程助手全部可配置资产——规矩（规则）、能力（技能）、钩子（hook）、外部工具（MCP）、环境依赖（CLI/配置）——统一加工、发布、体检、交叉验证，跨环境完整重建。README 定位句、AGENTS.md 定位句、GitHub 简介三处同步
