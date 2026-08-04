@@ -1,0 +1,363 @@
+model_provider = "custom"
+model = "deepseek-v4-flash"
+model_catalog_json = "cc-switch-model-catalog.json"
+notify = [ "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\ecfc0d9aa02807e3\\bin\\node_modules\\@oai\\sky\\bin\\windows\\codex-computer-use.exe", "turn-ended" ]
+personality = "pragmatic"
+approval_policy = "never"
+approvals_reviewer = "user"
+sandbox_mode = "danger-full-access"
+service_tier = "priority"
+model_reasoning_effort = "medium"
+disable_response_storage = true
+
+[model_providers.custom]
+name = "deepseek"
+base_url = "https://api.deepseek.com"
+wire_api = "responses"
+requires_openai_auth = true
+experimental_bearer_token = "<REDACTED-2026-08-04>"
+
+[features]
+goals = true
+js_repl = false
+memories = true
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-08-02T14:02:11Z"
+source_type = "local"
+source = "\\\\?\\C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\plugins\\openai-primary-runtime"
+
+[marketplaces.echobird-cn]
+last_updated = "2026-06-29T14:34:58Z"
+source_type = "git"
+source = "https://cnb.cool/echobird/codex-plugins.git"
+
+[marketplaces.openai-bundled]
+last_updated = "2026-08-02T13:28:27Z"
+source_type = "local"
+source = "\\\\?\\C:\\Users\\Administrator\\.codex\\.tmp\\bundled-marketplaces\\openai-bundled"
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."canva@openai-curated"]
+enabled = true
+
+[plugins."gmail@openai-curated"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."brainstorming@echobird-superpowers"]
+enabled = true
+
+[plugins."dispatching-parallel-agents@echobird-superpowers"]
+enabled = true
+
+[plugins."executing-plans@echobird-superpowers"]
+enabled = true
+
+[plugins."receiving-code-review@echobird-superpowers"]
+enabled = true
+
+[plugins."requesting-code-review@echobird-superpowers"]
+enabled = true
+
+[plugins."finishing-a-development-branch@echobird-superpowers"]
+enabled = true
+
+[plugins."subagent-driven-development@echobird-superpowers"]
+enabled = true
+
+[plugins."systematic-debugging@echobird-superpowers"]
+enabled = true
+
+[plugins."test-driven-development@echobird-superpowers"]
+enabled = true
+
+[plugins."using-git-worktrees@echobird-superpowers"]
+enabled = true
+
+[plugins."using-superpowers@echobird-superpowers"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[projects."d:\\objectcode\\read me preset"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\visionguard"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\webhome"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\grsai-api"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\vps-proxies"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\linear"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\slack"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\gpt-5-4-5-5"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\chrome-plugin-chrome-openai-bundled-file"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\canva-plugin-canva-openai-curated"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\jianli"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\open-design"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\achilng-floral-notepaper-git-https-github"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-18\\new-chat"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\keyxlm"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-05-19\\skill"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-04\\hermehermes"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\my-server"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-23\\430"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\my-server\\home-page"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\homepage"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-28\\https-chromewebstore-google-com"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\server-infra"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-29\\ban"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-29\\plugin-creator-c-users-administrator-codex"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-29\\plugin-creator-c-users-administrator-codex-2"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-29\\https-huggingface-co-empero-ai-qwythos"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-29\\hugging-face-plugin-hugging-face-openai"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-30\\codex"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-30\\https-chatgpt-com-share-6a427157-5564"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\visual-rules-collection"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-06-30\\new-chat"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\bilibili-recipe-workflow"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-01\\c"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\bookmarktab"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-04\\new-chat"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-05\\github-readme"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-06\\codex-computer-use-macos-windows"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-06\\cloud-code"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex\\2026-07-07\\new-chat"]
+trust_level = "trusted"
+
+[projects."c:\\users\\administrator\\documents\\codex"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\codex-journal"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\codex-scope-guard"]
+trust_level = "trusted"
+
+[projects."d:\\objectcode\\personal-writing-skill"]
+trust_level = "trusted"
+
+[desktop]
+followUpQueueMode = "queue"
+browser-annotation-screenshots-mode = "always"
+localeOverride = "zh-CN"
+
+[desktop.open-in-target-preferences]
+global = "vscode"
+
+[desktop.open-in-target-preferences.perPath]
+"D:\\ObjectCode\\vps-proxies" = "fileManager"
+"D:\\ObjectCode\\My-server\\Home-page" = "fileManager"
+"D:\\ObjectCode\\HomePage" = "vscode"
+
+[windows]
+sandbox = "elevated"
+
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+ANTHROPIC_AUTH_TOKEN = "PROXY_MANAGED"
+ANTHROPIC_BASE_URL = "http://127.0.0.1:15721"
+ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4-5"
+ANTHROPIC_DEFAULT_HAIKU_MODEL_NAME = "deepseek-v4-flash"
+ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-4-7[1M]"
+ANTHROPIC_DEFAULT_OPUS_MODEL_NAME = "DeepSeek-V4-Pro"
+ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-sonnet-4-6[1M]"
+ANTHROPIC_DEFAULT_SONNET_MODEL_NAME = "DeepSeek-V4-Pro"
+CLAUDE_CODE_EFFORT_LEVEL = "max"
+
+[memories]
+generate_memories = true
+use_memories = true
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:post_tool_use:1:0"]
+trusted_hash = "sha256:ff63038b1a5112bbd359d6fd484781f7cd1379cc3d081054ad0a6f21ce483d34"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:ace6808285f5b5dcfd18a92c7db986a705b880992b69cf2b1e8e4424cc3e7f0d"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:778bb016d14ce638af8e2bd74dd82e651a0c866f0e21e878d3a3886d72b85921"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:user_prompt_submit:1:0"]
+trusted_hash = "sha256:c444ed9739d838755c6d0c4c0e99240190eb432b1244ee20137f7513b72bb20b"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:stop:0:0"]
+trusted_hash = "sha256:4fb61c9550b9b2f4d4125f1ebaa675383c92ab3fefa710b5daf7b2f1f51c5133"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:post_tool_use:2:0"]
+trusted_hash = "sha256:551ac41a604b402a35639034d45e65c7db290db9a538ea145d53b004ff91768f"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:session_start:0:0"]
+trusted_hash = "sha256:f4cfcf3037e7b4fd3ecf01be95b5071d6e23e3893867b9ee8de1024455118926"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:subagent_start:0:0"]
+trusted_hash = "sha256:4eb2e84ffa27c37f3d722ce8925b43a45e76a7ec04d809180ddec92bfaa6312a"
+
+[hooks.state."C:\\Users\\Administrator\\.codex\\hooks.json:subagent_stop:0:0"]
+trusted_hash = "sha256:d69acba5226e1a7f14826073a8bfc31c79e137ed52dc1f2030ef79843b3e7e78"
+
+[mcp_servers.memory]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "npx", "-y", "@modelcontextprotocol/server-memory" ]
+enabled = false
+[mcp_servers.sequential-thinking]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking" ]
+enabled = false
+
+[mcp_servers.context7]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "npx", "-y", "@upstash/context7-mcp" ]
+
+[mcp_servers.chrome-devtools]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "npx", "chrome-devtools-mcp@latest" ]
+
+[mcp_servers.excalidraw]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "node", "C:\\mcp\\mcp_excalidraw\\dist\\index.js" ]
+enabled = false
+
+[mcp_servers.excalidraw.env]
+EXPRESS_SERVER_URL = "http://127.0.0.1:3737"
+ENABLE_CANVAS_SYNC = "true"
+
+[mcp_servers.github]
+type = "stdio"
+command = "cmd"
+args = [ "/c", "npx", "-y", "@modelcontextprotocol/server-github" ]
+enabled = false
+
+[mcp_servers.node_repl]
+args = []
+command = "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\ecfc0d9aa02807e3\\bin\\node_repl.exe"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\ecfc0d9aa02807e3\\bin\\node_modules"
+NODE_REPL_NODE_PATH = "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\ecfc0d9aa02807e3\\bin\\node.exe"
+NODE_REPL_TRUSTED_CODE_PATHS = "C:\\Users\\Administrator\\.codex"
+CODEX_HOME = "C:\\Users\\Administrator\\.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "7ed52dae165c3bc22b6d24f282e2c1fbc87f6949fbbe037767a7418d8f517f01,e2cad16d8d9f60f09c9f0951ec7dfdd9e8f59dedd06045c0b6827dc8fa8322f0"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.707.62119"
+SKY_CUA_NATIVE_PIPE = "1"
+SKY_CUA_NATIVE_PIPE_DIRECTORY = "\\\\.\\pipe\\codex-computer-use-68b12e7a-278e-4395-9053-5b15e42ff00f"
+CODEX_CLI_PATH = "C:\\Users\\Administrator\\AppData\\Local\\OpenAI\\Codex\\bin\\3135b80b111fd431\\codex.exe"
+
+[mcp_servers.pencil]
+command = "c:\\Users\\Administrator\\.vscode\\extensions\\highagency.pencildev-0.6.64\\out\\mcp-server-windows-x64.exe"
+args = [ "--app", "visual_studio_code", "--agent", "codexCLI" ]
+enabled = false

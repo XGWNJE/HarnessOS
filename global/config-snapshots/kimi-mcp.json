@@ -1,0 +1,57 @@
+{
+  "mcpServers": {
+    "pencil": {
+      "enabled": false,
+      "command": "C:\\Users\\Administrator\\.pencil\\mcp\\visual_studio_code\\out\\mcp-server-windows-x64.exe",
+      "args": [
+        "--app",
+        "visual_studio_code"
+      ],
+      "env": {}
+    },
+    "excalidraw": {
+      "enabled": false,
+      "command": "cmd",
+      "args": [
+        "/c",
+        "node",
+        "C:\\mcp\\mcp_excalidraw\\dist\\index.js"
+      ],
+      "env": {
+        "EXPRESS_SERVER_URL": "http://127.0.0.1:3737",
+        "ENABLE_CANVAS_SYNC": "true"
+      }
+    },
+    "github": {
+      "enabled": false,
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {}
+    },
+    "context7": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "enabled": false,
+      "transport": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--allow-unrestricted-file-access"
+      ]
+    }
+  }
+}

@@ -2,6 +2,14 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — CLI/环境/配置纳入管理：global/cli 登记中心 + 脱敏配置快照（owner 拍板）
+
+- [框架] `global/cli/registry.json` + `scripts/check_cli.py` 新建（owner 2026-08-04 拍板，冷冻期豁免）：迁移/重装时工作流可完整重建——CLI 清单（13 必需 + 4 按需，平台标注 win/mac，核验自动安装半自动）、环境变量清单（只记名不记值：HARNESSOS_ROOT/GRSAI_API_KEY/ZHIPU_API_KEY）、配置文件清单（opencode.json/codex config.toml/claude settings.json/claude.json/kimi mcp.json/git 全局）。核验自动、安装按指引人工执行（choco/scoop/brew/winget 差异大不自动装）
+- [框架] `global/config-snapshots/` 新建：脱敏配置快照 4 份（opencode.json 原样、codex-config.toml 脱敏 experimental_bearer_token、claude-settings.json 脱敏 ANTHROPIC_AUTH_TOKEN、kimi-mcp.json 原样）——迁移参考模板，含密钥字段一律 `<REDACTED>`
+- [框架] `scripts/sync.py` 两种模式并入 CLI/环境/配置核验段；AGENTS.md 关键路径表加行 + global/cli/ 说明条目
+- 盘点事实（2026-08-04）：13 必需 CLI 全存在；gradle/java/jq 缺失（按需，有替代）；git-bash 随 Git for Windows 自带（PATH 不可见属正常）
+- 影响范围：新环境流程 = 克隆仓库 → install.py（env+发布+体检）→ check_cli 看缺什么 → 按清单补装
+
 ## 2026-08-04 — cross-validate v1.1.0：配对表微调——表外主体按难度选验证方（owner 拍板）
 
 - [修订] `skills/cross-validate` v1.0.0 → v1.1.0（owner 2026-08-04 微调）：K3-256K 与 DeepSeek V4 flash 互为备用验证方——主体是其中一个时用另一个验证（盲区互补）；主体是表外 Agent（如 opencode）时按难度选：困难任务（逻辑链路长/跨模块/盲区风险高）交 K3（能力更强），普通/中上难度交 DeepSeek（性价比高）；拿不准按普通处理（DeepSeek），成本克制优先。description、配对表、参考流程第 1 步、失效模式同步

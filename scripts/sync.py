@@ -51,6 +51,8 @@ def main() -> None:
         ok &= run("check_hooks.py")
         print("== MCP 登记体检 ==")
         ok &= run("check_mcp.py")
+        print("== CLI/环境/配置核验 ==")
+        ok &= run("check_cli.py")
         sys.exit(0 if ok else 1)
     print("== 1/3 打包 skill ==")
     ok = run("pack.py")
@@ -62,6 +64,8 @@ def main() -> None:
     ok &= run("check_hooks.py")
     print("== MCP 登记体检 ==")
     ok &= run("check_mcp.py")
+    print("== CLI/环境/配置核验 ==")
+    ok &= run("check_cli.py")
     print("\n[完成] 全部同步" if ok else "\n[注意] 部分步骤有警告，见上方输出")
     sys.exit(0 if ok else 1)
 
