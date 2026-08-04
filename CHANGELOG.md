@@ -2,6 +2,10 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 删除不可用 MCP：time/fetch 不留残留（owner 指示）
+
+- [修订] 删除 time、fetch 两个已确认不可用的 MCP（claude mcp list 实测连接失败：time Connection closed、fetch uvx 启动失败）：opencode.json 删 2 条目、codex config.toml 删 fetch 段（无 time）、claude 上轮已删、registry.json 删 2 条目。原则：不可用的 MCP 直接删除，不留 enabled:false 残留。改前备份 backups/mcp-remove-broken-20260804-*/；check_mcp 全绿
+
 ## 2026-08-04 — MCP 启用策略精简：只留 context7 + chrome-devtools（owner 拍板）
 
 - [修订] 启用策略（owner 2026-08-04 拍板，CLI 优先原则）：MCP 占用上下文，默认只启用 context7（文档查询）+ chrome-devtools（浏览器调试）两个高频刚需；github 操作走 gh CLI；excalidraw/pencil 等低频工具不默认加载，需要时临时启用。落地：opencode 7 个 enabled:false（配置保留）、codex memory/pencil 加 enabled=false（原 4 个已禁）、claude 删除 7 个（claude mcp remove，保留 context7/chrome-devtools/node_repl 自带）、kimi 原状（仅 context7 启用）

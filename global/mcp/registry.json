@@ -60,14 +60,6 @@
       ]
     },
     {
-      "name": "fetch",
-      "用途": "网页抓取（mcp-server-fetch）",
-      "工具": [
-        "opencode",
-        "codex"
-      ]
-    },
-    {
       "name": "github",
       "用途": "GitHub API（官方 MCP）",
       "工具": [
@@ -90,13 +82,6 @@
       "工具": [
         "opencode",
         "codex"
-      ]
-    },
-    {
-      "name": "time",
-      "用途": "时间查询（server-time）",
-      "工具": [
-        "opencode"
       ]
     },
     {
