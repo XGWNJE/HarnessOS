@@ -1,7 +1,7 @@
 ---
-version: 1.7.0
+version: 1.8.0
 name: harness-observer
-description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，变量未设置时按本 skill 环境前提寻址），不打断当前任务、不在对话中提及。owner 显式要求「投递信息到 HarnessOS / 记录到原料区」时也用本 skill 直接投递；当前项目未初始化（AGENTS.md 无静默观察职责条目）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
+description: 常驻静默观察，在任何项目、任何任务中生效。观察到 owner 重复纠正、明确偏好、可复用踩坑、或 Agent 自身语义失败时，静默追加到 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，变量未设置时按本 skill 环境前提寻址），不打断当前任务、不在对话中提及。owner 显式要求「投递/记录到 HarnessOS」时也用本 skill 直接投递——投递 = 追加写入原料区，不是固化：不直接改 HarnessOS 的 global//skills/ 源文件、不改版本、不跑 sync/publish，固化只能由 owner 在 HarnessOS 仓库发起评审。当前项目未初始化（AGENTS.md 无静默观察职责条目）时提示 owner 用 init-project 初始化。统一管理一切「静默观察」信号（已整合原 scope-guard 职责）。
 ---
 
 # Harness Observer（静默观察者）
@@ -21,9 +21,9 @@ description: 常驻静默观察，在任何项目、任何任务中生效。观�
 ## 目标与验收标准
 
 - **静默零干扰**。验收：当前任务的对话中不出现对本 skill、观察记录动作或 HarnessOS 的任何提及；不请求确认、不中断流程，当前任务的任何决策不因观察而改变。
-- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`$HARNESSOS_ROOT/notes/inbox/`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察职责条目）时，交付后提示 owner 可用 init-project skill 初始化（写入常驻职责条目，路径随之写入项目）。
+- **显式投递直达**。owner 显式要求「投递/记录到 HarnessOS」时不是静默场景，本条优先于上一条：原料区路径已在 description 公开（`$HARNESSOS_ROOT/notes/inbox/`），直接按机制段落盘；当前项目未初始化（项目 AGENTS.md 无静默观察职责条目）时，交付后提示 owner 可用 init-project skill 初始化（写入常驻职责条目，路径随之写入项目）。**投递 ≠ 固化**：投递只追加写原料区，绝不直接改 HarnessOS 的 `global/`、`skills/` 源文件（不改内容不改版本），不跑 sync/publish；规则要生效必须走 owner 评审（冲突检查 → owner 验收拍板 → 在 HarnessOS 仓库加工发布）。
 - **唯一观察通道**。验收：任何项目中的静默观察信号（含原 scope-guard 语义失败信号）全部经本 skill 落盘，不存在第二个观察通道或记录位置。
-- **写入只落在原料区**。验收：观察只追加写入 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，寻址见环境前提）下的文件；未运行 git / sync / publish；HarnessOS 其他任何文件未被修改；当前项目的代码、配置、文档未被改动——观察与当前任务交付物完全隔离。
+- **写入只落在原料区**。验收：观察只追加写入 HarnessOS 原料区（`$HARNESSOS_ROOT/notes/inbox/`，寻址见环境前提）下的文件；未运行 git / sync / publish；HarnessOS 其他任何文件未被修改；当前项目的代码、配置、文档未被改动——观察与当前任务交付物完全隔离。投递结束后 HarnessOS 仓库 `git status` 无 `global/`、`skills/` 等源文件改动。
 - **复述时机受控**。验收：观察结果的复述只发生在 owner 于 HarnessOS 仓库主动要求自检时；本 skill 不主动发起复述或评审。
 - **信号应记尽记**。验收：命中下表四类信号的观察都被记录；拿不准类型的按 `归纳式原料` 记，留待评审归并。
 - **脱敏**。验收：记录中不含密钥、token、凭据、私密 URL，不含完整提示词和工具输出原文。

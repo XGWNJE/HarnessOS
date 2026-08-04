@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 投递机制优化：投递 ≠ 固化，只落原料区（投递越权事件复盘）
+
+- [修订] `skills/harness-observer` v1.7.0 → v1.8.0：投递语义去歧义——description 与「显式投递直达」条目明确「投递 = 追加写入原料区，不是固化：不直接改 HarnessOS 的 global//skills/ 源文件、不改版本、不跑 sync/publish；固化只能由 owner 在 HarnessOS 仓库发起评审」；「写入只落在原料区」验收补「投递结束后 HarnessOS 仓库 git status 无源文件改动」
+- [修订] `skills/init-project` v1.10.0 → v1.11.0：常驻职责条目要点补投递边界——owner 要求「投递/记录规则到 HarnessOS」时同理只写原料区，不直接改源文件
+- 事件复盘（2026-08-04）：global/AGENTS.md 出现 v1.26.0 未提交改动（「初始化即建 git 库」）——其他项目投递规则时 Agent 直接改了 HarnessOS 源文件并发布（绕过原料区→评审流程），漏提交暴露了越权。修复：投递语义写死（只落原料区），固化通道唯一（HarnessOS 仓库评审）
+- 影响范围：发布 3 池 + dist；体检全绿
+
 ## 2026-08-04 — global v1.27.0：安卓工具链定位不靠搜（owner 拍板）+ 补提交 v1.26.0
 
 - [修订] `global/AGENTS.md` v1.26.0 → v1.27.0：「安卓工具链定位不靠搜」新条目（owner 2026-08-04 拍板）——Android 工具（adb/emulator 等）一律从 `ANDROID_HOME` 派生或走 PATH 中 SDK 版本，不盲搜文件系统；验收：不用非 SDK 来源同名工具（实锤：本机 where adb 同时命中 SDK platform-tools 与 scrcpy 自带旧版 adb，误用会版本不匹配）
