@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — global v1.27.0：安卓工具链定位不靠搜（owner 拍板）+ 补提交 v1.26.0
+
+- [修订] `global/AGENTS.md` v1.26.0 → v1.27.0：「安卓工具链定位不靠搜」新条目（owner 2026-08-04 拍板）——Android 工具（adb/emulator 等）一律从 `ANDROID_HOME` 派生或走 PATH 中 SDK 版本，不盲搜文件系统；验收：不用非 SDK 来源同名工具（实锤：本机 where adb 同时命中 SDK platform-tools 与 scrcpy 自带旧版 adb，误用会版本不匹配）
+- [补提交] v1.26.0（「初始化即建 git 库」，owner-declared 2026-08-04）：该条目与版本号改动此前已发布未提交（源与 4 发布点一致，属漏提交，非漂移），本次一并补提交
+- 影响范围：sync.py 发布 4 点 + check 全绿
+
 ## 2026-08-04 — Android 工具链登记 + emulator 入用户 PATH（owner 提议）
 
 - [修订] Android 开发痛点（owner 2026-08-04 提议）：Agent 频繁寻找模拟器——emulator.exe 不在 PATH。处理：① 用户 PATH 追加 `%ANDROID_HOME%\emulator`（重新登录后生效；当前会话/Agent 用 `$env:ANDROID_HOME\emulator\emulator.exe` 或备用路径核验）；② `global/cli/registry.json` 登记 emulator（必需，AVD: Pixel_3a_XL / VisionGuard_API36）+ sdkmanager（按需，未装，Android Studio 可替代）+ 环境变量 ANDROID_HOME / ANDROID_SDK_ROOT / JAVA_HOME（均已设置）
