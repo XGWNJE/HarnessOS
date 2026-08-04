@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 定位句归属收敛：README 独管定位，AGENTS.md 只留机制句（owner 裁决 a 方案）
+
+- [修订] HarnessOS `AGENTS.md` 定位句压缩（owner 2026-08-04 裁决交叉验证中缺陷，选 a 方案）：README 负责定位句（面向人），AGENTS.md 压缩为「本仓库是 Agent 资产中枢的单一真相源（定位见 README.md）+ 流水线机制句」——消除与 README 的重复段落，同时解决「事实只更新负责该事实的文档」规则下的未来漂移面（下次定位升级只改 README 一处）
+- 影响范围：仅 AGENTS.md 一处；README 定位句不变；体检全绿
+
 ## 2026-08-04 — 文档对齐复核修复（cross-validate 实战：DeepSeek 验证 1 中 4 低，低项全修）
 
 - [修订] 交叉验证（DeepSeek V4 flash 验证，2026-08-04）：验收 A/B/C/D 全通过。修复 4 个低缺陷：① SOURCES.md 段名「不计入管理」→「~/.claude/skills 池对账」（段名与内容矛盾）；② README Skills 徽章 href 指向 skills/（点进去只见 11 个）→ 改仓库根；③ README 文档地图补 global/AGENTS.md 行；④ 括号术语风格统一（中文在前，与 AGENTS.md 一致）
