@@ -1,5 +1,5 @@
 {
-  "说明": "全机 MCP 服务器登记单一事实源（owner 2026-08-04 拍板纳入管理，冷冻期豁免）。check_mcp.py 据此体检各工具实际配置（只读不写）：登记过的必须存在、实际存在的必须已登记（工具自带除外）。新增/停用/更换 MCP：先改本表，再改各工具配置，最后跑 sync.py --check。enabled 开关是各工具侧状态，不在本表机械比对（opencode 全部启用、codex 部分禁用属各自现状，2026-08-04 核验）。",
+  "说明": "全机 MCP 服务器登记单一事实源（owner 2026-08-04 拍板纳入管理，冷冻期豁免）。check_mcp.py 据此体检各工具实际配置（只读不写）：登记过的必须存在、实际存在的必须已登记（工具自带除外）。新增/停用/更换 MCP：先改本表，再改各工具配置，最后跑 sync.py --check。启用策略（owner 2026-08-04 拍板，CLI 优先）：仅 context7 + chrome-devtools 默认启用，其余一律禁用（保留配置 enabled=false 或删除，需要时临时启用）；github 类操作走 gh CLI，画图/低频工具用前再开。enabled 开关属各工具侧状态，不在本表机械比对。",
   "工具配置": {
     "opencode": {
       "path": "C:/Users/Administrator/.config/opencode/opencode.json",
@@ -24,10 +24,10 @@
       "注": "只校验顶层全局段；项目级 mcpServers 属各项目自己，不在本表范围"
     },
     "kimi": {
-      "path": "C:/Users/Administrator/.kimi-code/config.toml",
-      "格式": "toml",
-      "键": "mcp_servers",
-      "现状": "无 MCP 注册（2026-08-04 核验，无 mcp_servers 段）"
+      "path": "C:/Users/Administrator/.kimi-code/mcp.json",
+      "格式": "json",
+      "键": "mcpServers",
+      "现状": "仅 context7 启用（2026-08-04 复核：pencil/excalidraw/github/playwright 均 disabled）；另有 ~/.kimi/mcp.json 遗留配置（含 chrome-devtools，桌面版用，不纳入 CLI 体检）"
     }
   },
   "servers": [
@@ -46,7 +46,8 @@
       "工具": [
         "opencode",
         "codex",
-        "claude"
+        "claude",
+        "kimi"
       ]
     },
     {
@@ -55,7 +56,7 @@
       "工具": [
         "opencode",
         "codex",
-        "claude"
+        "kimi"
       ]
     },
     {
@@ -63,8 +64,7 @@
       "用途": "网页抓取（mcp-server-fetch）",
       "工具": [
         "opencode",
-        "codex",
-        "claude"
+        "codex"
       ]
     },
     {
@@ -73,7 +73,7 @@
       "工具": [
         "opencode",
         "codex",
-        "claude"
+        "kimi"
       ]
     },
     {
@@ -81,8 +81,7 @@
       "用途": "知识图谱记忆（server-memory）",
       "工具": [
         "opencode",
-        "codex",
-        "claude"
+        "codex"
       ]
     },
     {
@@ -90,16 +89,14 @@
       "用途": "逐步推理（server-sequential-thinking）",
       "工具": [
         "opencode",
-        "codex",
-        "claude"
+        "codex"
       ]
     },
     {
       "name": "time",
       "用途": "时间查询（server-time）",
       "工具": [
-        "opencode",
-        "claude"
+        "opencode"
       ]
     },
     {
@@ -108,7 +105,14 @@
       "工具": [
         "opencode",
         "codex",
-        "claude"
+        "kimi"
+      ]
+    },
+    {
+      "name": "playwright",
+      "用途": "浏览器自动化（@playwright/mcp）",
+      "工具": [
+        "kimi"
       ]
     }
   ]
