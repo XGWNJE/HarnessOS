@@ -1,7 +1,7 @@
 ---
 name: cross-validate
-version: 1.0.0
-description: 复杂任务交付前的跨模型交叉验证。复杂任务交付前自动触发，或 owner 显式要求「交叉验证」时使用。机制：自检当前运行时与模型 → 按预设配对表选定不同模型的验证方 → headless 调对端 CLI 执行 review → 对照收敛、分歧交 owner 裁决。默认配对 Kimi Code K3-256K ↔ Claude Code DeepSeek V4 flash；当前模型在配对表外时默认用 DeepSeek V4 flash 验证。目标：单模型的系统性盲区被不同模型的 review 兜住，交付结论经得起第二双眼睛检验。
+version: 1.1.0
+description: 复杂任务交付前的跨模型交叉验证。复杂任务交付前自动触发，或 owner 显式要求「交叉验证」时使用。机制：自检当前运行时与模型 → 按预设配对表选定不同模型的验证方 → headless 调对端 CLI 执行 review → 对照收敛、分歧交 owner 裁决。配对（owner 2026-08-04 微调）：K3-256K 与 DeepSeek V4 flash 互为备用验证方——主体是其中一个时用另一个验证（盲区互补）；主体是表外 Agent（如 opencode）时按难度选：困难任务交 K3（能力更强），普通/中上难度交 DeepSeek（性价比高）。目标：单模型的系统性盲区被不同模型的 review 兜住，交付结论经得起第二双眼睛检验。
 ---
 
 # 跨模型交叉验证
@@ -19,13 +19,16 @@ description: 复杂任务交付前的跨模型交叉验证。复杂任务交付�
 | Kimi Code | `~/.kimi-code/config.toml` 的 `default_model`（当前为 `kimi-code/k3-256k`；启动用 `-m` 覆盖时以实际为准） |
 | Claude Code | `~/.claude/settings.json` 的 `env.ANTHROPIC_MODEL`（当前为 `deepseek-v4-flash[1M]`） |
 
-**预设配对表**（owner-declared 2026-08-04）：
+**预设配对表**（owner-declared 2026-08-04；2026-08-04 微调：表外主体按难度选验证方）：
 
-| 当前模型 | 验证方 | 调用命令 |
-|---|---|---|
-| Kimi Code / K3-256K | Claude Code / DeepSeek V4 flash | `claude -p "<review prompt>"` |
-| Claude Code / DeepSeek V4 flash | Kimi Code / K3-256K | `kimi -p "<review prompt>"` |
-| 表外任意模型 | Claude Code / DeepSeek V4 flash（默认验证模型） | `claude -p "<review prompt>"` |
+| 当前模型 | 任务难度 | 验证方 | 调用命令 |
+|---|---|---|---|
+| Kimi Code / K3-256K | 任意 | Claude Code / DeepSeek V4 flash | `claude -p "<review prompt>"` |
+| Claude Code / DeepSeek V4 flash | 任意 | Kimi Code / K3-256K | `kimi -p "<review prompt>"` |
+| 表外任意 Agent（如 opencode） | 困难 | Kimi Code / K3-256K（能力更强） | `kimi -p "<review prompt>"` |
+| 表外任意 Agent（如 opencode） | 普通/中上 | Claude Code / DeepSeek V4 flash（性价比高） | `claude -p "<review prompt>"` |
+
+难度判据：逻辑链路长、跨模块、盲区风险高（并发/边界/半实现易藏）→ 困难交 K3；单点改动、常规实现、文档类 → 普通/中上交 DeepSeek；拿不准按普通处理（DeepSeek），成本克制优先。
 
 **headless 调用实测**（2026-08-04 双方向冒烟通过）：`claude -p` 输出即结论正文；`kimi -p` 输出混有要点符号行与末尾 `To resume this session:` 提示行，取结论部分、丢弃噪声行。调用均走对端各自登录态，无需传密钥。
 
@@ -40,7 +43,7 @@ description: 复杂任务交付前的跨模型交叉验证。复杂任务交付�
 
 ## 参考流程（锚点）
 
-1. 自检当前运行时与模型（机制见上），确定验证方与调用命令。
+1. 自检当前运行时与模型（机制见上），确定验证方与调用命令（表外时先按难度判据选验证方）。
 2. 打包交接材料（变更摘要 + diff/文件 + 验收点 + 己方结论与疑点），要求对端按「逻辑缺陷 / 边界条件 / 半实现」三类输出结论。
 3. headless 调对端 CLI，超时按 300 秒计。
 4. 拿回结论后对照己方结论：一致 → 合并进交付说明；分歧 → 逐条列出交 owner 裁决；对端发现实锤缺陷 → 修复后不必重跑全量，修复点单独送对端确认。
@@ -50,6 +53,6 @@ description: 复杂任务交付前的跨模型交叉验证。复杂任务交付�
 | 前提失败 | 降级行为 |
 |---|---|
 | 对端 CLI 不存在、未登录、调用报错 | 重试 1 次；仍败则降级：把 review prompt 与材料写成交接文件交给 owner 手工跑，如实报告「本次未自动交叉验证」。 |
-| 当前模型无法确定 | 按表外处理（默认 DeepSeek V4 flash 验证），并在结论中注明。 |
+| 当前模型无法确定 | 按表外处理（按难度判据选验证方，拿不准用 DeepSeek），并在结论中注明。 |
 | 对端输出为空或明显跑题 | 不视为已验证；重试 1 次，仍败按上一条降级。 |
 | 任务被 owner 明确叫停验证 | 停止，交付说明中注明「应 owner 要求未交叉验证」。 |

@@ -2,6 +2,10 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — cross-validate v1.1.0：配对表微调——表外主体按难度选验证方（owner 拍板）
+
+- [修订] `skills/cross-validate` v1.0.0 → v1.1.0（owner 2026-08-04 微调）：K3-256K 与 DeepSeek V4 flash 互为备用验证方——主体是其中一个时用另一个验证（盲区互补）；主体是表外 Agent（如 opencode）时按难度选：困难任务（逻辑链路长/跨模块/盲区风险高）交 K3（能力更强），普通/中上难度交 DeepSeek（性价比高）；拿不准按普通处理（DeepSeek），成本克制优先。description、配对表、参考流程第 1 步、失效模式同步
+
 ## 2026-08-04 — 删除不可用 MCP：time/fetch 不留残留（owner 指示）
 
 - [修订] 删除 time、fetch 两个已确认不可用的 MCP（claude mcp list 实测连接失败：time Connection closed、fetch uvx 启动失败）：opencode.json 删 2 条目、codex config.toml 删 fetch 段（无 time）、claude 上轮已删、registry.json 删 2 条目。原则：不可用的 MCP 直接删除，不留 enabled:false 残留。改前备份 backups/mcp-remove-broken-20260804-*/；check_mcp 全绿
