@@ -52,6 +52,9 @@ def main() -> int:
             print(f"  [{'存在' if found else '缺失'}] {name}（随附于 {item['随附于']}）")
         else:
             found = shutil.which(name) is not None
+            if not found and item.get("备用路径"):
+                alt = os.path.expandvars(item["备用路径"])
+                found = Path(alt).is_file()
             print(f"  [{'存在' if found else '缺失'}] {name}（{item['分级']}）")
         if item["分级"] == "必需" and not found:
             problems.append(f"CLI {name} 缺失（安装：{item['安装']}）")

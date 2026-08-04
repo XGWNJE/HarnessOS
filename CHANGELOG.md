@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — Android 工具链登记 + emulator 入用户 PATH（owner 提议）
+
+- [修订] Android 开发痛点（owner 2026-08-04 提议）：Agent 频繁寻找模拟器——emulator.exe 不在 PATH。处理：① 用户 PATH 追加 `%ANDROID_HOME%\emulator`（重新登录后生效；当前会话/Agent 用 `$env:ANDROID_HOME\emulator\emulator.exe` 或备用路径核验）；② `global/cli/registry.json` 登记 emulator（必需，AVD: Pixel_3a_XL / VisionGuard_API36）+ sdkmanager（按需，未装，Android Studio 可替代）+ 环境变量 ANDROID_HOME / ANDROID_SDK_ROOT / JAVA_HOME（均已设置）
+- [修订] `scripts/check_cli.py` 新增「备用路径」核验支持：which 找不到时按 registry 备用路径（expandvars 展开）检查存在——解决 PATH 引用未展开导致的误报（如 emulator）
+- 影响范围：体检全绿；重新登录后 emulator 命令全局可用
+
 ## 2026-08-04 — 定位句归属收敛：README 独管定位，AGENTS.md 只留机制句（owner 裁决 a 方案）
 
 - [修订] HarnessOS `AGENTS.md` 定位句压缩（owner 2026-08-04 裁决交叉验证中缺陷，选 a 方案）：README 负责定位句（面向人），AGENTS.md 压缩为「本仓库是 Agent 资产中枢的单一真相源（定位见 README.md）+ 流水线机制句」——消除与 README 的重复段落，同时解决「事实只更新负责该事实的文档」规则下的未来漂移面（下次定位升级只改 README 一处）

@@ -190,6 +190,31 @@
       "核验": "跟随 git（随 Git for Windows 自带，无独立可执行名）",
       "安装": "随 Git for Windows",
       "随附于": "git"
+    },
+    {
+      "name": "emulator",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Android 模拟器（列表/启动 AVD；已入用户 PATH，%ANDROID_HOME%\\emulator）",
+      "核验": "emulator -list-avds（或 $env:ANDROID_HOME\\emulator\\emulator.exe -list-avds）",
+      "安装": "Android SDK Manager 安装 emulator 包 + 创建 AVD",
+      "现状": "已安装（AVD: Pixel_3a_XL / VisionGuard_API36，2026-08-04 核验）",
+      "备用路径": "%ANDROID_HOME%/emulator/emulator.exe"
+    },
+    {
+      "name": "sdkmanager",
+      "分级": "按需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "SDK 包管理（cmdline-tools；未安装，SDK 由 Android Studio 管理）",
+      "核验": "sdkmanager --version",
+      "安装": "Android Studio SDK Manager 安装 cmdline-tools",
+      "现状": "缺失（2026-08-04，Android Studio 可替代）"
     }
   ],
   "环境变量": [
@@ -212,6 +237,27 @@
       "分级": "必需",
       "用途": "智谱识图 API 密钥（image-understand skill）",
       "设置者": "值存于个人密码管理器；重新申请于 open.bigmodel.cn（智谱开放平台）",
+      "现状": "已设置"
+    },
+    {
+      "name": "ANDROID_HOME",
+      "分级": "必需",
+      "用途": "Android SDK 根目录（Android Studio 安装时写入；emulator/adb 路径派生基准）",
+      "设置者": "Android Studio 安装时写入",
+      "现状": "已设置"
+    },
+    {
+      "name": "ANDROID_SDK_ROOT",
+      "分级": "必需",
+      "用途": "Android SDK 根目录（与 ANDROID_HOME 同值）",
+      "设置者": "Android Studio 安装时写入",
+      "现状": "已设置"
+    },
+    {
+      "name": "JAVA_HOME",
+      "分级": "必需",
+      "用途": "JDK 路径（Android Studio 自带 JBR）",
+      "设置者": "Android Studio 安装时写入",
       "现状": "已设置"
     }
   ],
