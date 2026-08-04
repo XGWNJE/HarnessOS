@@ -2,6 +2,18 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — CLI 机制交叉验证修复（cross-validate 实战：K3 审查发现 6 缺陷，全部修复）
+
+- [修订] 交叉验证（K3-256K 审查，2026-08-04）：验收 B/D 通过，A 碰巧、C 不成立。修复 6 项：
+  1. 高：git 未安装时 check_cli.py 崩溃（subprocess FileNotFoundError 未捕获）——恰是迁移首日场景。修复：try/except 包住，git 缺失判 git-global 缺失（模拟验证：优雅报告 + 退出码 1）
+  2. 高：配置路径硬编码 C:/Users/Administrator/...，Mac/换用户名全误报。修复：registry 改 ~/ 相对 home，脚本 expanduser 展开（win/mac 同构）
+  3. 中：git-bash「现状.startswith(随)」特判把盘点记录当实时核验。修复：改显式「随附于: git」字段，存在性跟随 git
+  4. 中：快照保鲜/脱敏无机制保障。修复：check_cli.py 加快照密钥扫描段（sk-/Bearer/token 模式，泄露即退出码 1）+ registry 说明补「快照不自动同步，变更后手工更新并过脱敏扫描」
+  5. 低：claude.json 无快照取舍未说明。修复：registry 现状注明「含 OAuth 状态不做快照，MCP 重建依据 = global/mcp/registry.json」
+  6. 低：环境变量缺迁移指引。修复：设置者字段补取值来源（密码管理器/申请地址）
+- 平台过滤补上：CLI 项按「平台」字段过滤，win-only 项在 mac 跳过不误报
+- 影响范围：check_cli.py 重写（平台过滤/随附字段/快照扫描/git 容错）；registry 路径 home 化；体检全绿
+
 ## 2026-08-04 — CLI/环境/配置纳入管理：global/cli 登记中心 + 脱敏配置快照（owner 拍板）
 
 - [框架] `global/cli/registry.json` + `scripts/check_cli.py` 新建（owner 2026-08-04 拍板，冷冻期豁免）：迁移/重装时工作流可完整重建——CLI 清单（13 必需 + 4 按需，平台标注 win/mac，核验自动安装半自动）、环境变量清单（只记名不记值：HARNESSOS_ROOT/GRSAI_API_KEY/ZHIPU_API_KEY）、配置文件清单（opencode.json/codex config.toml/claude settings.json/claude.json/kimi mcp.json/git 全局）。核验自动、安装按指引人工执行（choco/scoop/brew/winget 差异大不自动装）

@@ -1,35 +1,262 @@
 {
-  "说明": "全机 CLI/环境/配置登记单一事实源（owner 2026-08-04 拍板：迁移与系统重装时工作流可完整重建）。check_cli.py 据此核验本机（只读不写）：必需项缺失即漂移退出码 1；按需项缺失只报告不失败。安装半自动：核验自动、安装按指引人工/Agent 执行（choco/scoop/brew/winget 差异大，不自动装）。密钥只记名不记值，值绝不入仓库。现状为 2026-08-04 盘点。",
+  "说明": "全机 CLI/环境/配置登记单一事实源（owner 2026-08-04 拍板：迁移与系统重装时工作流可完整重建）。check_cli.py 据此核验本机（只读不写）：必需项缺失即漂移退出码 1；按需项缺失只报告不失败。安装半自动：核验自动、安装按指引人工/Agent 执行（choco/scoop/brew/winget 差异大，不自动装）。密钥只记名不记值，值绝不入仓库。现状为 2026-08-04 盘点。 快照不自动同步：配置变更后手工更新 global/config-snapshots/ 并确保脱敏（check_cli.py 每次核验都会扫密钥残留）。",
   "cli": [
-    { "name": "git", "分级": "必需", "平台": ["win", "mac"], "用途": "版本控制（全工作流基础）", "核验": "git --version", "安装": "win: winget install Git.Git / mac: brew install git" },
-    { "name": "python", "分级": "必需", "平台": ["win", "mac"], "用途": "HarnessOS 脚本/发布流水线（3.13）", "核验": "python --version", "安装": "win: winget install Python.Python.3.13 / mac: brew install python" },
-    { "name": "node", "分级": "必需", "平台": ["win", "mac"], "用途": "npx 生态（MCP/技能依赖，含 npm/npx）", "核验": "node --version", "安装": "win: winget install OpenJS.NodeJS.LTS / mac: brew install node" },
-    { "name": "gh", "分级": "必需", "平台": ["win", "mac"], "用途": "GitHub CLI（git 操作/仓库管理，替代 github MCP）", "核验": "gh --version", "安装": "win: winget install GitHub.cli / mac: brew install gh" },
-    { "name": "curl", "分级": "必需", "平台": ["win", "mac"], "用途": "HTTP 请求（中转站/API 核验）", "核验": "curl --version", "安装": "win/mac 系统自带" },
-    { "name": "claude", "分级": "必需", "平台": ["win", "mac"], "用途": "Claude Code CLI（交叉验证验证方/日常编码）", "核验": "claude --version", "安装": "win/mac: npm i -g @anthropic-ai/claude-code" },
-    { "name": "kimi", "分级": "必需", "平台": ["win", "mac"], "用途": "Kimi Code CLI（交叉验证验证方/日常编码）", "核验": "kimi --version", "安装": "官方安装器（kimi.com）" },
-    { "name": "codex", "分级": "必需", "平台": ["win", "mac"], "用途": "Codex CLI（日常编码）", "核验": "codex --version", "安装": "官方安装器（openai.com）" },
-    { "name": "opencode", "分级": "必需", "平台": ["win", "mac"], "用途": "opencode CLI（日常编码）", "核验": "opencode --version", "安装": "官方安装器（opencode.ai）" },
-    { "name": "uvx", "分级": "必需", "平台": ["win", "mac"], "用途": "uv 工具运行器（mcp-server-fetch 等）", "核验": "uvx --version", "安装": "win: pip install uv / mac: brew install uv" },
-    { "name": "adb", "分级": "必需", "平台": ["win", "mac"], "用途": "Android 真机调试（Vigil 等项目）", "核验": "adb --version", "安装": "Android SDK platform-tools" },
-    { "name": "dotnet", "分级": "必需", "平台": ["win", "mac"], "用途": ".NET 构建（Vigil PC）", "核验": "dotnet --version", "安装": "win: winget install Microsoft.DotNet.SDK.8 / mac: brew install dotnet" },
-    { "name": "ffmpeg", "分级": "必需", "平台": ["win", "mac"], "用途": "音视频处理（调试/素材）", "核验": "ffmpeg -version", "安装": "win: winget install Gyan.FFmpeg / mac: brew install ffmpeg" },
-    { "name": "gradle", "分级": "按需", "平台": ["win", "mac"], "用途": "Android 构建（项目 gradle wrapper 可替代）", "核验": "gradle --version", "安装": "win/mac: brew/官方包", "现状": "缺失（2026-08-04）" },
-    { "name": "java", "分级": "按需", "平台": ["win", "mac"], "用途": "JVM 运行时（Android 构建链）", "核验": "java -version", "安装": "win/mac: 官方包或 Android Studio 自带 JDK", "现状": "缺失（2026-08-04，Android Studio 自带可替代）" },
-    { "name": "jq", "分级": "按需", "平台": ["win", "mac"], "用途": "JSON 处理（python/curl 可替代）", "核验": "jq --version", "安装": "win: winget install jqlang.jq / mac: brew install jq", "现状": "缺失（2026-08-04）" },
-    { "name": "git-bash", "分级": "按需", "平台": ["win"], "用途": "Git Bash 环境（随 Git for Windows 自带，PATH 不可见属正常）", "核验": "bash --version（Git 安装目录下）", "安装": "随 Git for Windows", "现状": "随 git 存在，PATH 不暴露属正常" }
+    {
+      "name": "git",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "版本控制（全工作流基础）",
+      "核验": "git --version",
+      "安装": "win: winget install Git.Git / mac: brew install git"
+    },
+    {
+      "name": "python",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "HarnessOS 脚本/发布流水线（3.13）",
+      "核验": "python --version",
+      "安装": "win: winget install Python.Python.3.13 / mac: brew install python"
+    },
+    {
+      "name": "node",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "npx 生态（MCP/技能依赖，含 npm/npx）",
+      "核验": "node --version",
+      "安装": "win: winget install OpenJS.NodeJS.LTS / mac: brew install node"
+    },
+    {
+      "name": "gh",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "GitHub CLI（git 操作/仓库管理，替代 github MCP）",
+      "核验": "gh --version",
+      "安装": "win: winget install GitHub.cli / mac: brew install gh"
+    },
+    {
+      "name": "curl",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "HTTP 请求（中转站/API 核验）",
+      "核验": "curl --version",
+      "安装": "win/mac 系统自带"
+    },
+    {
+      "name": "claude",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Claude Code CLI（交叉验证验证方/日常编码）",
+      "核验": "claude --version",
+      "安装": "win/mac: npm i -g @anthropic-ai/claude-code"
+    },
+    {
+      "name": "kimi",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Kimi Code CLI（交叉验证验证方/日常编码）",
+      "核验": "kimi --version",
+      "安装": "官方安装器（kimi.com）"
+    },
+    {
+      "name": "codex",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Codex CLI（日常编码）",
+      "核验": "codex --version",
+      "安装": "官方安装器（openai.com）"
+    },
+    {
+      "name": "opencode",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "opencode CLI（日常编码）",
+      "核验": "opencode --version",
+      "安装": "官方安装器（opencode.ai）"
+    },
+    {
+      "name": "uvx",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "uv 工具运行器（mcp-server-fetch 等）",
+      "核验": "uvx --version",
+      "安装": "win: pip install uv / mac: brew install uv"
+    },
+    {
+      "name": "adb",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Android 真机调试（Vigil 等项目）",
+      "核验": "adb --version",
+      "安装": "Android SDK platform-tools"
+    },
+    {
+      "name": "dotnet",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": ".NET 构建（Vigil PC）",
+      "核验": "dotnet --version",
+      "安装": "win: winget install Microsoft.DotNet.SDK.8 / mac: brew install dotnet"
+    },
+    {
+      "name": "ffmpeg",
+      "分级": "必需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "音视频处理（调试/素材）",
+      "核验": "ffmpeg -version",
+      "安装": "win: winget install Gyan.FFmpeg / mac: brew install ffmpeg"
+    },
+    {
+      "name": "gradle",
+      "分级": "按需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "Android 构建（项目 gradle wrapper 可替代）",
+      "核验": "gradle --version",
+      "安装": "win/mac: brew/官方包",
+      "现状": "缺失（2026-08-04）"
+    },
+    {
+      "name": "java",
+      "分级": "按需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "JVM 运行时（Android 构建链）",
+      "核验": "java -version",
+      "安装": "win/mac: 官方包或 Android Studio 自带 JDK",
+      "现状": "缺失（2026-08-04，Android Studio 自带可替代）"
+    },
+    {
+      "name": "jq",
+      "分级": "按需",
+      "平台": [
+        "win",
+        "mac"
+      ],
+      "用途": "JSON 处理（python/curl 可替代）",
+      "核验": "jq --version",
+      "安装": "win: winget install jqlang.jq / mac: brew install jq",
+      "现状": "缺失（2026-08-04）"
+    },
+    {
+      "name": "git-bash",
+      "分级": "按需",
+      "平台": [
+        "win"
+      ],
+      "用途": "Git Bash 环境（随 Git for Windows 自带，PATH 不可见属正常）",
+      "核验": "跟随 git（随 Git for Windows 自带，无独立可执行名）",
+      "安装": "随 Git for Windows",
+      "随附于": "git"
+    }
   ],
   "环境变量": [
-    { "name": "HARNESSOS_ROOT", "分级": "必需", "用途": "HarnessOS 仓库路径（observer 寻址）", "设置者": "install.py 写入", "现状": "已设置" },
-    { "name": "GRSAI_API_KEY", "分级": "必需", "用途": "Grsai 绘图 API 密钥（grsai-image-gen skill）", "设置者": "手工（值不入库）", "现状": "已设置" },
-    { "name": "ZHIPU_API_KEY", "分级": "必需", "用途": "智谱识图 API 密钥（image-understand skill）", "设置者": "手工（值不入库）", "现状": "已设置" }
+    {
+      "name": "HARNESSOS_ROOT",
+      "分级": "必需",
+      "用途": "HarnessOS 仓库路径（observer 寻址）",
+      "设置者": "install.py 自动写入（新环境跑 install.py 即得）",
+      "现状": "已设置"
+    },
+    {
+      "name": "GRSAI_API_KEY",
+      "分级": "必需",
+      "用途": "Grsai 绘图 API 密钥（grsai-image-gen skill）",
+      "设置者": "值存于个人密码管理器；重新申请于 grsai 控制台（gr-sai 平台）",
+      "现状": "已设置"
+    },
+    {
+      "name": "ZHIPU_API_KEY",
+      "分级": "必需",
+      "用途": "智谱识图 API 密钥（image-understand skill）",
+      "设置者": "值存于个人密码管理器；重新申请于 open.bigmodel.cn（智谱开放平台）",
+      "现状": "已设置"
+    }
   ],
   "配置文件": [
-    { "name": "opencode.json", "路径": "C:/Users/Administrator/.config/opencode/opencode.json", "用途": "opencode 配置（MCP/工具）", "分级": "必需", "现状": "存在" },
-    { "name": "codex-config.toml", "路径": "C:/Users/Administrator/.codex/config.toml", "用途": "Codex 配置（MCP/hook 信任）", "分级": "必需", "现状": "存在" },
-    { "name": "claude-settings.json", "路径": "C:/Users/Administrator/.claude/settings.json", "用途": "Claude Code 配置（模型/env）", "分级": "必需", "现状": "存在（含密钥，快照已脱敏）" },
-    { "name": "claude.json", "路径": "C:/Users/Administrator/.claude.json", "用途": "Claude Code 全局状态（MCP 全局段）", "分级": "必需", "现状": "存在" },
-    { "name": "kimi-mcp.json", "路径": "C:/Users/Administrator/.kimi-code/mcp.json", "用途": "Kimi MCP 配置", "分级": "必需", "现状": "存在" },
-    { "name": "git-global", "路径": "git config --global", "用途": "git 全局身份（user.name/user.email）", "分级": "必需", "现状": "已配置（user.name=xgwnje）" }
+    {
+      "name": "opencode.json",
+      "路径": "~/.config/opencode/opencode.json",
+      "用途": "opencode 配置（MCP/工具）",
+      "分级": "必需",
+      "现状": "存在"
+    },
+    {
+      "name": "codex-config.toml",
+      "路径": "~/.codex/config.toml",
+      "用途": "Codex 配置（MCP/hook 信任）",
+      "分级": "必需",
+      "现状": "存在"
+    },
+    {
+      "name": "claude-settings.json",
+      "路径": "~/.claude/settings.json",
+      "用途": "Claude Code 配置（模型/env）",
+      "分级": "必需",
+      "现状": "存在（含密钥，快照已脱敏）"
+    },
+    {
+      "name": "claude.json",
+      "路径": "C:/Users/Administrator/.claude.json",
+      "用途": "Claude Code 全局状态（MCP 全局段）",
+      "分级": "必需",
+      "现状": "存在（含 OAuth 状态不做快照；MCP 全局段重建依据 = global/mcp/registry.json）"
+    },
+    {
+      "name": "kimi-mcp.json",
+      "路径": "~/.kimi-code/mcp.json",
+      "用途": "Kimi MCP 配置",
+      "分级": "必需",
+      "现状": "存在"
+    },
+    {
+      "name": "git-global",
+      "路径": "git config --global",
+      "用途": "git 全局身份（user.name/user.email）",
+      "分级": "必需",
+      "现状": "已配置（user.name=xgwnje）"
+    }
   ]
 }
