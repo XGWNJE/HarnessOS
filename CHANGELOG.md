@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-04 — 退役残留修补：发布池清理入流程 + 脚本自动检测
+
+- [修订] HarnessOS 项目 `AGENTS.md`「退役 skill」条目：补充「清除发布池残留」（3 标准池 + `~/.config/opencode/skills` 私有池 + `dist/` 历史包）+ 验收标准（`publish_skills.py --check` 无 `[残留]` 报告）。来源：security-review 退役残留事件——HarnessOS 已归档 security-review，但 opencode 私有池副本未清，opencode 仍在加载（owner 2026-08-04 指正）
+- [修订] `scripts/publish_skills.py`：新增退役残留检测——池中存在、源中不存在的 skill 目录判为残留（范围：3 标准池 + `~/.config/opencode/skills` 私有池），`--check` 检出即退出码 1；发布模式只报告不删除（防误删第三方）；豁免名单自动解析 SOURCES.md「仅登记来源」节（skill-creator 等 git 原地管理技能），不硬编码
+- [清理] 现存残留 2 处（已备份 backups/）：`~/.config/opencode/skills/security-review`（退役残留，opencode 实际仍在加载）、`dist/scope-guard-1.0.0.skill`（退役历史包，reviews/2026-07-26 已知晓）
+- 影响范围：体检会拦截未清残留的退役流程；第三方 git 管理技能（skill-creator）不受影响
+
 ## 2026-08-04 — 两技能纳入管理：kimi-webbridge 回收 + image-understand 引入
 
 - [新增] `vendor/kimi-webbridge/`（第三方物理引入，原样不改）：Kimi 官方 WebBridge 技能 v1.11.3（官方页 kimi.com/features/webbridge），从部署的 skill 目录回收进仓库。背景（owner 2026-08-04 询问并拍板纳入）：技能机制是本地守护进程 HTTP API（127.0.0.1:10086），不绑定 Kimi 运行时，其他 Agent 同样可调——事实证据是引入前已散装复制在 .claude/.codex/.config-opencode 三池，脱离 HarnessOS 管理。SOURCES.md 登记来源
