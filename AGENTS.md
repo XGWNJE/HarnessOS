@@ -31,7 +31,7 @@
 | 文档结构体检（职责越界/堆积退出码 1） | `scripts/check_docs.py` |
 | 安装 commit 体检钩子（一次性） | `git config core.hooksPath hooks` |
 
-- hooks/ 是 git hooks 源目录（hook 流水线试点）：pre-commit 在提交前提醒文档偏移清零、跑 `sync.py --check` 与 `check_docs.py`（文档体检），发现漂移或文档职责越界则拦截，保底流程是运行 doc-structure skill 修复。改 hooks 源后无需重装（core.hooksPath 直接指向源目录）。
+- hooks/ 是 git hooks 源目录（hook 流水线试点）：pre-commit 在提交前提醒文档偏移清零、跑 `sync.py --check` 与 `check_docs.py`（文档体检），发现漂移或文档职责越界则拦截，保底流程是运行 project-doc-boundary skill 修复。改 hooks 源后无需重装（core.hooksPath 直接指向源目录）。
 - `global/hooks/` 是 HarnessOS 自有公共 Hook 的源目录与登记中心：注册点直引源路径、无发布拷贝，改源即生效；`registry.json` 只登记 HarnessOS 自有条目，`scripts/check_hooks.py` 只读体检。其他项目的 Hook 源码、注册和运行状态由其项目负责。
 
 - skill 源：`skills/<name>/SKILL.md`（frontmatter 含 name/version/description）
@@ -58,7 +58,7 @@
 - 退役 skill：撤出全部发布点 + 源目录归档 `archive/skills/` + **清除发布池残留**（`~/.agents`、`~/.codex`、`~/.claude` 三池 + `~/.config/opencode/skills` 私有池 + `dist/` 历史包）+ CHANGELOG 记废止；归档可复活。验收：`publish_skills.py --check` 无 `[残留]` 报告（脚本自动检测源外残留，来源：security-review 退役残留事件 2026-08-04）。
 - 全局规则编写原则（owner-declared，2026-07-31）：能精简就精简，最少的话讲清最明确的规则。规则文件目标读者是机器（Agent），不是人——机器准确理解并执行最重要，节省上下文同等重要。验收：每条规则验收标准不超过两句话；无歧义、无冗余。
 - 规则术语与来源标注：声明式规则（owner 显式声明）标 `owner-declared`；归纳式规则（踩坑归纳）标 `来源：notes/2026-07-xxx.md`；固化流程见铁律 2（术语定义原在全局「术语」节，2026-08-04 归属评审迁回本文件）。
-- 归属收口（2026-08-04 全局归属评审）：新声明判归属时，主题已有 skill 落地机制的直接进该 skill，不再写入全局——防全局与 skill 两处漂移（历史实例：文档分工在全局与 doc-structure 两处表述漂移）。
+- 归属收口（2026-08-04 全局归属评审）：新声明判归属时，主题已有 skill 落地机制的直接进该 skill，不再写入全局——防全局与 skill 两处漂移。
 - 加工成果最小验证矩阵通过后自动提交一次，无需再请示（owner-declared 2026-08-04）；提交信息仍按全局规则（改了什么、为什么、影响范围）。
 
 ## 文档地图
@@ -71,6 +71,6 @@
 - `notes/`：原料区（粗糙允许，两行元信息必需：日期 + 场景）
 - `reviews/`：评审摘要（owner 主动质检时生成）
 
-文档结构与风格由 doc-structure skill 维护（多项目共用同一套模板与验收标准）：README 职责越界/堆积由 `scripts/check_docs.py` 机械拦截（pre-commit 联动），修复走 doc-structure skill 保底流程。
+文档责任边界与漂移由 project-doc-boundary skill 维护：README 职责越界/堆积由 `scripts/check_docs.py` 机械拦截（pre-commit 联动），修复走 project-doc-boundary skill 保底流程。
 
 事实变化时只更新负责该事实的文档。

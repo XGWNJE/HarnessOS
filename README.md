@@ -3,7 +3,7 @@
 [![Stars](https://img.shields.io/github/stars/XGWNJE/HarnessOS?style=flat-square&label=Stars)](https://github.com/XGWNJE/HarnessOS)
 [![Top Language](https://img.shields.io/github/languages/top/XGWNJE/HarnessOS?style=flat-square&label=Top%20Language)](https://github.com/XGWNJE/HarnessOS)
 [![Last Commit](https://img.shields.io/github/last-commit/XGWNJE/HarnessOS?style=flat-square&label=Last%20Commit)](https://github.com/XGWNJE/HarnessOS)
-[![Skills](https://img.shields.io/badge/Skills-13%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS)
+[![Skills](https://img.shields.io/badge/Skills-12%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS)
 
 **HarnessOS · Agent 通用资产中枢（Agent Asset Hub）**。白话版：把跨项目复用的规矩、技能和公共 Hook 放在一个源头加工、发布和核验。本仓库是这些资产的唯一真相源；各业务项目、外部工具和本机环境仍由各自负责。
 
@@ -21,8 +21,8 @@
 
 - **安装**：新环境克隆本仓库后运行安装入口，发布并核验 HarnessOS 自己的资产（命令与细节见 AGENTS.md）。
 - **发布与体检**：改完资产运行发布入口；体检覆盖发布漂移、HarnessOS 自有 Hook 注册和文档职责（命令与细节见 AGENTS.md）。
-- **提交体检**：内置提交前检查——发现发布状态漂移或文档越界直接拦截提交，按提示修复即可（保底流程是运行 doc-structure skill）。
-- **文档结构**：文档职责与模板由 doc-structure skill 维护，多项目共用同一套风格与自动验收标准。
+- **提交体检**：内置提交前检查——发现发布状态漂移或文档越界直接拦截提交，按提示修复即可。
+- **文档边界**：项目文档的事实归属与漂移纠正由 project-doc-boundary skill 维护。
 
 ## 文档地图
 
