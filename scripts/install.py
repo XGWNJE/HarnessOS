@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HarnessOS 装机脚本：新环境一键完成「环境变量 + 发布 + 体检」。
+"""HarnessOS 安装脚本：新环境完成「环境变量 + 发布 + 体检」。
 
 用法：
     python scripts/install.py
@@ -10,7 +10,7 @@
     2. python scripts/sync.py（打包 + 发布全局规则与 skills）
     3. git config core.hooksPath hooks（启用提交体检钩子）
     4. 体检三件套：sync.py --check、check_docs.py、check_hooks.py
-    5. 打印 hook 注册指引（只打印不写入——hook 注册维持手工，check_hooks.py 只读体检）
+    5. 打印 HarnessOS 自有 Hook 注册指引（只打印不写入）
 
 任一步失败即停并报告。规则/skill 文本中的路径一律读 HARNESSOS_ROOT，
 未设置时按 harness-observer skill 的寻址链兜底（本脚本就是「设置」的那一环）。

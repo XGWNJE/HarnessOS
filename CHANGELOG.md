@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-08 — 责任范围收窄：回归 Agent 通用资产中枢（owner-declared）
+
+- [框架] owner 明确结束框架冷冻期并要求立即纠偏：HarnessOS 只负责跨项目规则、技能与自有公共 Hook 的收料、加工、发布和一致性核验；不再承担业务项目私有 Hook、MCP、CLI、账号、密钥或本机开发环境的登记、体检、安装与运行维护。
+- [废止] 删除 `global/mcp/`、`global/cli/`、`global/config-snapshots/` 及 `check_mcp.py`、`check_cli.py`；`sync.py` 不再对全机 MCP/CLI/配置执行体检。真实工具配置与环境保持原状，由各自属主维护。
+- [修订] `global/hooks/registry.json` 与 Hook 体检收回为 HarnessOS 自有公共 Hook；Codex-Journal 等项目 Hook 不再由本仓库登记或背书。
+- [修订] README、项目规则和安装说明改为“通用资产发布与核验”定位，删除“全机统一管理”“跨环境完整重建”等过宽承诺。
+
 ## 2026-08-04 — 投递机制优化：投递 ≠ 固化，只落原料区（投递越权事件复盘）
 
 - [修订] `skills/harness-observer` v1.7.0 → v1.8.0：投递语义去歧义——description 与「显式投递直达」条目明确「投递 = 追加写入原料区，不是固化：不直接改 HarnessOS 的 global//skills/ 源文件、不改版本、不跑 sync/publish；固化只能由 owner 在 HarnessOS 仓库发起评审」；「写入只落在原料区」验收补「投递结束后 HarnessOS 仓库 git status 无源文件改动」

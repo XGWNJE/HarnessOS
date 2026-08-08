@@ -10,8 +10,8 @@
     2. publish_global.py  发布全局规则到 4 个 Agent 读取位置
     3. publish_skills.py  发布自有 skill 到各 skill 目录
 
-hook 登记体检（check_hooks.py）两种模式都跑：对照 global/hooks/registry.json
-校验全机 Agent hook 注册点与源文件，漂移即失败。只读不写，漂移按登记表手工修复。
+Hook 登记体检（check_hooks.py）两种模式都跑：对照 global/hooks/registry.json
+校验 HarnessOS 自有公共 Hook 的注册点与源文件，漂移即失败。只读不写，漂移按登记表手工修复。
 """
 
 import os
@@ -49,10 +49,6 @@ def main() -> None:
         ok &= run("publish_skills.py", "--check")
         print("== hook 登记体检 ==")
         ok &= run("check_hooks.py")
-        print("== MCP 登记体检 ==")
-        ok &= run("check_mcp.py")
-        print("== CLI/环境/配置核验 ==")
-        ok &= run("check_cli.py")
         sys.exit(0 if ok else 1)
     print("== 1/3 打包 skill ==")
     ok = run("pack.py")
@@ -62,10 +58,6 @@ def main() -> None:
     ok &= run("publish_skills.py")
     print("== hook 登记体检 ==")
     ok &= run("check_hooks.py")
-    print("== MCP 登记体检 ==")
-    ok &= run("check_mcp.py")
-    print("== CLI/环境/配置核验 ==")
-    ok &= run("check_cli.py")
     print("\n[完成] 全部同步" if ok else "\n[注意] 部分步骤有警告，见上方输出")
     sys.exit(0 if ok else 1)
 
