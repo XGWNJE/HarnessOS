@@ -28,7 +28,7 @@
 | 只体检不写入（漂移退出码 1） | `python scripts/sync.py --check` |
 | 单独打包 / 发全局 / 发 skill | `scripts/pack.py` `publish_global.py` `publish_skills.py` |
 | hook 登记体检（漂移退出码 1） | `scripts/check_hooks.py` |
-| 文档结构体检（职责越界/堆积退出码 1） | `scripts/check_docs.py` |
+| 文档边界体检（职责越界/重复/导航漂移退出码 1） | `scripts/check_docs.py` |
 | 安装 commit 体检钩子（一次性） | `git config core.hooksPath hooks` |
 
 - hooks/ 是 git hooks 源目录（hook 流水线试点）：pre-commit 在提交前提醒文档偏移清零、跑 `sync.py --check` 与 `check_docs.py`（文档体检），发现漂移或文档职责越界则拦截，保底流程是运行 project-doc-boundary skill 修复。改 hooks 源后无需重装（core.hooksPath 直接指向源目录）。
@@ -45,7 +45,7 @@
 | 改 skill 源 | 版本 +1 → `sync.py` → `sync.py --check` 全绿 |
 | 改 `global/AGENTS.md` | 文件头版本 +1 → `sync.py` → 4 个全局发布点全同步 |
 | 改 `scripts/` | `sync.py --check` 跑通 |
-| 改 README / 文档结构 | `check_docs.py` 通过（行数/禁止词/导航）→ `sync.py --check` 全绿 |
+| 改 README / 文档边界 | `check_docs.py` 通过（禁止词/导航/徽章）→ `sync.py --check` 全绿 |
 | 改流水线结构/目录约定 | 同步更新 README 与本文件 |
 
 ## 工作规则

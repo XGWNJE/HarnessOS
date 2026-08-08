@@ -91,7 +91,7 @@ def main() -> None:
     run([sys.executable, "scripts/sync.py"], "发布（打包 + 全局 + skills）")
     run(["git", "config", "core.hooksPath", "hooks"], "启用提交体检钩子")
     run([sys.executable, "scripts/sync.py", "--check"], "体检 1/3：发布漂移")
-    run([sys.executable, "scripts/check_docs.py"], "体检 2/3：文档结构")
+    run([sys.executable, "scripts/check_docs.py"], "体检 2/3：文档边界")
     run([sys.executable, "scripts/check_hooks.py"], "体检 3/3：hook 登记")
     hook_guide()
     print("\n[install] 完成。全部体检通过。")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""文档结构体检：验证 README 守住职责边界（面向人、只留门面、不越界）。
+"""文档边界体检：验证 README 守住职责边界（面向人、只留门面、不越界）。
 
 用法：
     python scripts/check_docs.py                     # 体检当前仓库，违规退出码 1
