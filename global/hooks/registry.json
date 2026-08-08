@@ -5,7 +5,5 @@
     "codex": "C:/Users/Administrator/.codex/hooks.json 的 hooks.<event> 数组",
     "claude": "无 hook 注册（~/.claude/settings.json 无 hooks 段）"
   },
-  "registrations": [
-    { "runtime": "kimi-code", "event": "UserPromptSubmit", "matcher": "收口|可以 ?[Pp]ush|提交吧|差不多了", "source": "D:/ObjectCode/HarnessOS/global/hooks/observer_reminder.py", "owner": "HarnessOS", "via_adapter": false }
-  ]
+  "registrations": []
 }

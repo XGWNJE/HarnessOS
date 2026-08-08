@@ -2,6 +2,15 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-09 — global v1.29.0：全局规则瘦身（owner-declared）
+
+- [修订] 18 条主体规则收拢为判断与授权、执行与验证、沟通与沉淀、协作与版本控制、安全与边界五组核心约束，加一条 observer 常驻机制；保留授权、验证、Git 与安全红线。
+- [废止] 从全局规则移除 Android 工具链、锁屏、真机中转站、UI 目检及 Windows 命令细节；这些专项机制由相关项目规则或 Skill 承担，避免通用上下文膨胀。
+
+## 2026-08-09 — 清理全部 Agent 运行时 Hook（owner-declared）
+
+- [废止] 移除 Codex 的 3 个和 Kimi Code 的 5 个运行时 Hook；其中 7 个指向已不存在的 Codex-Journal observer，另 1 个为 Kimi 的收口提醒。同步清空 HarnessOS 公共 Hook 登记，并删除无引用的 `observer_reminder.py` 与 Kimi→Codex 事件适配器；Git `pre-commit` 保留不变。
+
 ## 2026-08-09 — 全项目文档边界审查：命名与实际职责对齐
 
 - [修订] 全量核对当前入口文档、专题来源登记、全局规则、评审/原料/归档的职责边界：README、AGENTS、CHANGELOG 与专题文档无事实重复或错位；历史记录维持原样。`check_docs.py`、安装输出与验证矩阵的“文档结构”旧称统一为“文档边界”，与 `project-doc-boundary` 的实际职责一致。
