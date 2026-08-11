@@ -1,0 +1,4 @@
+interface:
+  display_name: "Electron 运行时调试"
+  short_description: "诊断 Electron 运行态、IPC、快捷键与打包产物问题"
+  default_prompt: "定位 Electron 运行时行为、IPC、快捷键或打包产物问题，并给出可验证结论。"
