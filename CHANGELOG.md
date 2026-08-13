@@ -2,6 +2,10 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-13 — cross-validate 技能退役（owner-declared）
+
+- [废止] `cross-validate` v1.1.0：按 owner 指示撤出活跃技能集；源目录归档至 `archive/skills/cross-validate/`，三个标准发布池与 `dist/` 历史包同步清除。`ai-coding-workflow` 中“复杂任务应有不同模型 review”的目标保留，但不再由本技能提供固定 CLI 配对与执行机制。
+
 ## 2026-08-11 — Codex 会话恢复与 Electron 运行时调试技能
 
 - [新增] `codex-session-recovery` v1.0.0：分层核对 rollout、SQLite 索引、Provider 与项目可见性元数据；历史数据只追加合并、写前备份，并以 Codex App 实际读取正文验收。

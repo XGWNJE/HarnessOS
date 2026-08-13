@@ -3,7 +3,7 @@
 [![Stars](https://img.shields.io/github/stars/XGWNJE/HarnessOS?style=flat-square&label=Stars)](https://github.com/XGWNJE/HarnessOS)
 [![Top Language](https://img.shields.io/github/languages/top/XGWNJE/HarnessOS?style=flat-square&label=Top%20Language)](https://github.com/XGWNJE/HarnessOS)
 [![Last Commit](https://img.shields.io/github/last-commit/XGWNJE/HarnessOS?style=flat-square&label=Last%20Commit)](https://github.com/XGWNJE/HarnessOS)
-[![Skills](https://img.shields.io/badge/Skills-14%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS)
+[![Skills](https://img.shields.io/badge/Skills-13%20active-4caf50?style=flat-square)](https://github.com/XGWNJE/HarnessOS)
 
 **HarnessOS · Agent 通用资产中枢（Agent Asset Hub）**。白话版：把跨项目复用的规矩、技能和公共 Hook 放在一个源头加工、发布和核验。本仓库是这些资产的唯一真相源；各业务项目、外部工具和本机环境仍由各自负责。
 
