@@ -2,6 +2,18 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-26 — 退役 readme-layout（源外残留清理）
+
+- [废止] `readme-layout`（v2.0.0）：源中已不存在（`skills/`、`archive/`、`vendor/SOURCES.md`、`dist/` 均无），仅残留 `~/.agents/skills/readme-layout` 一处副本，按退役处理。副本内容归档至 `archive/skills/readme-layout/SKILL.md`（可复活，字节一致），池中残留副本已清除。DSH 即时停止加载（本会话 skill 目录已移除）。
+
+## 2026-08-26 — 增加 DSH 全局规则发布点
+
+- [框架] `scripts/publish_global.py` 登记 DSH 为第 5 个全局发布点：`~/.dsh/AGENTS.md`（即 `$DSH_HOME/AGENTS.md`）。全局规则源 `global/AGENTS.md` 内容不变；`sync.py`、README 文档地图与 AGENTS.md 验证矩阵同步从「4 个发布点」更新为「5 个」。
+
+## 2026-08-26 — DSH 纳入 skill 发布池与体检范围
+
+- [框架] `scripts/publish_skills.py` 将 `~/.dsh/skills`（`$DSH_HOME/skills`，DSH user-dsh 根，rank 400 优先于共享池）加入 `POOLS`：DSH 成为第 4 个 skill 池发布点，同时纳入退役残留体检范围（标准池由 3 → 4）。发布映射与残留检测范围 docstring 同步更新；AGENTS.md「退役 skill」条目「三池」→「四池」。DSH 本已通过共享池 `~/.agents/skills` 读取 skill，此登记使 repo 的 skill 管线显式受管 DSH 自家池并纳入体检。
+
 ## 2026-08-13 — cross-validate 技能退役（owner-declared）
 
 - [废止] `cross-validate` v1.1.0：按 owner 指示撤出活跃技能集；源目录归档至 `archive/skills/cross-validate/`，三个标准发布池与 `dist/` 历史包同步清除。`ai-coding-workflow` 中“复杂任务应有不同模型 review”的目标保留，但不再由本技能提供固定 CLI 配对与执行机制。

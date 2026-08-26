@@ -7,7 +7,7 @@
 
 流程：
     1. pack.py            打包有改动的 skill 为 .skill（同版本已存在则跳过，不视为失败）
-    2. publish_global.py  发布全局规则到 4 个 Agent 读取位置
+    2. publish_global.py  发布全局规则到 5 个 Agent 读取位置
     3. publish_skills.py  发布自有 skill 到各 skill 目录
 
 Hook 登记体检（check_hooks.py）两种模式都跑：对照 global/hooks/registry.json

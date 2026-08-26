@@ -10,6 +10,7 @@
     ~/.codex/AGENTS.md                  Codex
     ~/.config/opencode/AGENTS.md        OpenCode
     ~/.claude/CLAUDE.md                 Claude Code
+    ~/.dsh/AGENTS.md                    DSH（$DSH_HOME/AGENTS.md）
 Kimi Code 无全局规则注入机制，不发布（规则走项目级 AGENTS.md / skills）。
 
 目标文件被视为发布产物：写入前若已有不同内容，先备份到 backups/ 再覆盖。
@@ -30,6 +31,7 @@ TARGETS = [
     ("codex",    HOME / ".codex" / "AGENTS.md"),
     ("opencode", HOME / ".config" / "opencode" / "AGENTS.md"),
     ("claude",   HOME / ".claude" / "CLAUDE.md"),
+    ("dsh",      HOME / ".dsh" / "AGENTS.md"),
 ]
 
 

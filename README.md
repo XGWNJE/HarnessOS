@@ -29,7 +29,7 @@
 - `README.md`：本文件，面向人——项目干什么、怎么开始。
 - `AGENTS.md`：面向 Agent 的完整操作规则（铁律、命令、验证矩阵、工作规则）——所有操作细节都在这里。
 - `CHANGELOG.md`：规则加工历史（新增/修订/废止/框架）。
-- `global/AGENTS.md`：全局通用规则源文件（发布到 4 个 Agent 读取位置）。
+- `global/AGENTS.md`：全局通用规则源文件（发布到 5 个 Agent 读取位置：home/Codex/OpenCode/Claude Code/DSH）。
 - `global/hooks/`：HarnessOS 自有公共 Hook 源文件与注册清单。
 - `vendor/SOURCES.md`：第三方 skill 来源登记。
 - `notes/`：原料区（observer 静默写入，加工完毕即销毁）。
