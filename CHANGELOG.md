@@ -6,6 +6,7 @@
 
 - [新增] `vendor/archify`：原样引入 `tt-a1i/archify`（MIT，package v2.16.0-dev.0，SKILL metadata v2.16），登记来源并由既有技能发布链同步到共享池、Codex、Claude 与 DSH；不修改 vendor 内容。
 - [新增] `assets/architecture/harnessos-asset-pipeline.*`：以受管 Archify 源生成 HarnessOS 公共资产流水线的可复现 JSON、交互 HTML 和 README 静态图入口，事实更新为 Archify 已纳管。
+- [修订] `vendor/SOURCES.md`：补 Archify 迁移条件——完整目录、Node.js >=18；核心渲染无需 node_modules，视觉检查需 Chrome/Chromium。
 
 ## 2026-08-26 — 退役 readme-layout（源外残留清理）
 

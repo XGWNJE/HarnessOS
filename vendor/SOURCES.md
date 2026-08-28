@@ -8,7 +8,7 @@
 |---|---|---|---|
 | vibehub | https://github.com/oil-oil/vibe-hub-skill （skills/vibehub 目录 + LICENSE） | 2026-07-24 | Vibe Coding 术语学习助手（面向普通人的教学流程，依赖 VibeHub 网站知识源） |
 | kimi-webbridge | Kimi 官方 WebBridge 技能（官方页 https://www.kimi.com/features/webbridge ，版本 1.11.3，随 Kimi Code 生态发布；非 git 仓库，从部署的 skill 目录回收） | 2026-08-04 | 浏览器控制：经本地守护进程（127.0.0.1:10086）控制真实浏览器。机制不绑定 Kimi 运行时，HTTP API 通用，任何 Agent 可调用；引入前已散装部署于 .claude/.codex/.config-opencode 三池 |
-| archify | https://github.com/tt-a1i/archify （archify/ 目录 + LICENSE，MIT，v2.16.0-dev.0；SKILL metadata v2.16） | 2026-08-28 | 架构、流程、时序、数据流和生命周期图的本地渲染与校验技能；从 Codex 试点安装副本原样回收 |
+| archify | https://github.com/tt-a1i/archify （archify/ 目录 + LICENSE，MIT，v2.16.0-dev.0；SKILL metadata v2.16） | 2026-08-28 | 架构、流程、时序、数据流和生命周期图的本地渲染与校验技能；从 Codex 试点安装副本原样回收。迁移时保留完整目录，目标需 Node.js >=18；核心渲染不需安装 node_modules，视觉检查另需本机 Chrome/Chromium |
 
 ## 上游更新（owner 问"是否最新"时执行）
 
