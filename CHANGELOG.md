@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-28 — Archify 第三方技能纳管与架构图入口
+
+- [新增] `vendor/archify`：原样引入 `tt-a1i/archify`（MIT，package v2.16.0-dev.0，SKILL metadata v2.16），登记来源并由既有技能发布链同步到共享池、Codex、Claude 与 DSH；不修改 vendor 内容。
+- [新增] `assets/architecture/harnessos-asset-pipeline.*`：以受管 Archify 源生成 HarnessOS 公共资产流水线的可复现 JSON、交互 HTML 和 README 静态图入口，事实更新为 Archify 已纳管。
+
 ## 2026-08-26 — 退役 readme-layout（源外残留清理）
 
 - [废止] `readme-layout`（v2.0.0）：源中已不存在（`skills/`、`archive/`、`vendor/SOURCES.md`、`dist/` 均无），仅残留 `~/.agents/skills/readme-layout` 一处副本，按退役处理。副本内容归档至 `archive/skills/readme-layout/SKILL.md`（可复活，字节一致），池中残留副本已清除。DSH 即时停止加载（本会话 skill 目录已移除）。

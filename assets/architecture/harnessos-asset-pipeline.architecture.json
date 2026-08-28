@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HarnessOS 公共资产流水线",
+    "locale": "zh-CN",
+    "visual_preset": "editorial",
+    "quality_profile": "showcase",
+    "viewBox": [1350, 740],
+    "views": [
+      {
+        "id": "processing-path",
+        "label": "规则加工主路径",
+        "focus": ["notes", "owner", "sources", "checks", "sync", "pools"],
+        "note": "原料在 owner 主动评审后才进入源文件，并由校验通过的同步流程发布。"
+      },
+      {
+        "id": "quality-gates",
+        "label": "质量门禁",
+        "focus": ["sources", "hooks", "checks", "sync"],
+        "note": "提交前钩子与静态检查共同防止文档和发布状态漂移。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "notes",
+      "type": "external",
+      "label": "原料笔记",
+      "sublabel": "notes/ 与 notes/inbox/",
+      "tag": "只追加",
+      "pos": [60, 340],
+      "size": [180, 76]
+    },
+    {
+      "id": "owner",
+      "type": "security",
+      "label": "Owner 评审",
+      "sublabel": "主动发起；决定去向",
+      "tag": "最终验收",
+      "pos": [310, 340],
+      "size": [180, 76]
+    },
+    {
+      "id": "sources",
+      "type": "backend",
+      "label": "受控源文件",
+      "sublabel": "skills/、vendor/、global/",
+      "tag": "单一真相源",
+      "pos": [570, 340],
+      "size": [200, 76]
+    },
+    {
+      "id": "hooks",
+      "type": "security",
+      "label": "提交前 Hook",
+      "sublabel": "文档与同步漂移拦截",
+      "pos": [570, 130],
+      "size": [200, 72]
+    },
+    {
+      "id": "checks",
+      "type": "backend",
+      "label": "静态体检",
+      "sublabel": "sync --check / check_docs",
+      "tag": "最小验证矩阵",
+      "pos": [850, 340],
+      "size": [210, 76]
+    },
+    {
+      "id": "sync",
+      "type": "cloud",
+      "label": "发布同步",
+      "sublabel": "scripts/sync.py",
+      "tag": "从源重新发布",
+      "pos": [1140, 340],
+      "size": [180, 76]
+    },
+    {
+      "id": "pools",
+      "type": "external",
+      "label": "Agent 技能池",
+      "sublabel": "Codex、Claude、DSH 等",
+      "tag": "发布产物",
+      "pos": [1140, 570],
+      "size": [180, 76]
+    },
+    {
+      "id": "docs",
+      "type": "database",
+      "label": "文档地图",
+      "sublabel": "README / CHANGELOG / AGENTS",
+      "pos": [850, 570],
+      "size": [210, 76]
+    }
+  ],
+  "connections": [
+    {
+      "id": "review-input",
+      "from": "notes",
+      "to": "owner",
+      "label": "候选规则与经验",
+      "labelAt": [275, 430],
+      "variant": "emphasis"
+    },
+    {
+      "id": "approved-to-source",
+      "from": "owner",
+      "to": "sources",
+      "label": "评审后加工",
+      "variant": "emphasis"
+    },
+    {
+      "id": "source-to-checks",
+      "from": "sources",
+      "to": "checks",
+      "label": "最小验证"
+    },
+    {
+      "id": "checks-to-sync",
+      "from": "checks",
+      "to": "sync",
+      "label": "通过后发布",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sync-to-pools",
+      "from": "sync",
+      "to": "pools",
+      "label": "覆盖式同步",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [1230, 445]
+    },
+    {
+      "id": "source-to-hooks",
+      "from": "sources",
+      "to": "hooks",
+      "label": "登记 Hook",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "variant": "security"
+    },
+    {
+      "id": "hooks-to-checks",
+      "from": "hooks",
+      "to": "checks",
+      "label": "提交前触发",
+      "fromSide": "right",
+      "toSide": "top",
+      "variant": "security"
+    },
+    {
+      "id": "source-to-docs",
+      "from": "sources",
+      "to": "docs",
+      "label": "事实变化同步文档",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "docs-to-checks",
+      "from": "docs",
+      "to": "checks",
+      "label": "职责边界检查",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelAt": [1045, 520]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "边界",
+      "items": [
+        "只修改 skills/、global/ 与 HarnessOS 自有 hooks 源文件。",
+        "dist/ 与各 Agent 技能池是发布产物，不直接编辑。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "发布门槛",
+      "items": [
+        "技能变更需要版本递增并记录 CHANGELOG。",
+        "发布前后以 sync.py 与 sync.py --check 验证。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Archify 纳管",
+      "items": [
+        "Archify 原样存放于 vendor/archify，不手工修补。",
+        "同步发布到共享池、Codex、Claude 与 DSH。"
+      ]
+    }
+  ]
+}
