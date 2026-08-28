@@ -13,19 +13,15 @@
     ~/.dsh/AGENTS.md                    DSH（$DSH_HOME/AGENTS.md）
 Kimi Code 无全局规则注入机制，不发布（规则走项目级 AGENTS.md / skills）。
 
-目标文件被视为发布产物：写入前若已有不同内容，先备份到 backups/ 再覆盖。
+目标文件被视为发布产物：与源不一致时直接覆盖。
 """
 
-import shutil
 import sys
-from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 CORE = ROOT / "global" / "AGENTS.md"
-BACKUPS = ROOT / "backups"
-
 TARGETS = [
     ("home",     HOME / "AGENTS.md"),
     ("codex",    HOME / ".codex" / "AGENTS.md"),
@@ -53,10 +49,6 @@ def main() -> None:
             state = "不存在" if current is None else "与源文件不一致"
             print(f"[漂移] {name:9s} {target}（{state}）")
             continue
-        if current is not None:
-            BACKUPS.mkdir(exist_ok=True)
-            ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-            shutil.copy2(target, BACKUPS / f"{name}-{ts}.md")
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(want, encoding="utf-8")
         print(f"[发布] {name:9s} {target}")

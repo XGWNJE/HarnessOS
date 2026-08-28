@@ -13,7 +13,7 @@
 Kimi Code CLI 无独立 skills 目录（config 有 merge_all_available_skills，推测读取共享池），不单独发布。
 
 发布以目录为单位做整目录镜像（源多余文件全拷、目标多余文件删除）。
-目标被视为发布产物：写入前若不一致，先备份到 backups/ 再覆盖。
+目标被视为发布产物：与源不一致时直接覆盖。
 
 退役残留检测：池中存在、源中不存在的 skill 目录 = 退役时未清理的残留（如
 security-review 退役后仍留在 ~/.config/opencode/skills）。--check 检出即失败；
@@ -26,13 +26,10 @@ import filecmp
 import re
 import shutil
 import sys
-from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
-BACKUPS = ROOT / "backups"
-
 def publishable_skills() -> list[tuple[str, Path]]:
     """可发布 skill = skills/（自有）与 vendor/（第三方，原样中转）下含 SKILL.md 的目录，自动扫描，不硬编码。"""
     out = []
@@ -74,7 +71,7 @@ def residue_dirs() -> list[tuple[str, Path]]:
         if not pool.is_dir():
             continue
         for d in sorted(pool.iterdir()):
-            if not d.is_dir() or d.name.startswith("."):
+            if not d.is_dir() or d.name.startswith(".") or not (d / "SKILL.md").is_file():
                 continue
             if d.name in tracked or d.name in exempt:
                 continue
@@ -112,11 +109,6 @@ def main() -> None:
             if check_only:
                 print(f"[漂移] {name:18s} {target}")
                 continue
-            if target.exists():
-                BACKUPS.mkdir(exist_ok=True)
-                ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-                pool_name = target.parent.parent.name  # .agents / .claude
-                shutil.copytree(target, BACKUPS / f"skill-{pool_name}-{name}-{ts}")
             mirror(src, target)
             print(f"[发布] {name:18s} {target}")
     residues = residue_dirs()

@@ -509,3 +509,10 @@
 - 新增自有 skill：`ai-stack-harness` v1.0.0（提炼自 lencx《编程心得：Vibe 上百亿 Token 后，我收获了什么？》，核心：选型看反馈闭环而非生成能力；Rust + TS + React/Tailwind + Electron 分层栈；Tauri 与自编译 Chromium 反面清单；长链路任务证据链收敛法）
 - 引入第三方 skill：`keel` v1.0.0、`coding-protocol` v1.1.0（来源 github.com/lencx/skills，原样未改）
 - 首批原料入库：notes/2026-07-vibe-coding-观察.md
+## 2026-08-28 — 职责收缩：仅管理 AGENTS 与技能
+
+- [框架] 仓库收缩为全局 `AGENTS.md`、自有 skills、第三方 `vendor/` skills 及其迁移来源登记；README 改为最小入口。
+- [废止] 移除 Hook、原料观察/评审、架构图资产、打包/备份、文档治理及 `harness-observer` 的源与已发布内容。
+- [修订] 全局规则 v1.30.0 → v1.31.0；发布流程只同步全局规则与 skills，直接覆盖且不再创建备份。
+- [修订] `webbridge-acceptance` v1.2.0 → v1.2.1：去除已废止的原料目录引用。
+- [修订] `project-doc-boundary` v1.0.0 → v1.0.1：移除 HarnessOS 文档检查脚本依赖。

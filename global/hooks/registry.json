@@ -1,9 +1,0 @@
-{
-  "说明": "HarnessOS 自有公共 Hook 的登记单一事实源。check_hooks.py 据此体检：注册点真实存在该条目（event + command 引用源文件 + matcher 一致）且源文件存在。项目私有 Hook 由其项目登记和维护，不纳入本表。新增/修改/删除本仓库 Hook 时先改本表，再改注册点，最后跑 sync.py --check。",
-  "注册点": {
-    "kimi-code": "C:/Users/Administrator/.kimi-code/config.toml 的 [[hooks]]（kimi 无默认 hook 目录、无项目级配置，注册是唯一加载通道）",
-    "codex": "C:/Users/Administrator/.codex/hooks.json 的 hooks.<event> 数组",
-    "claude": "无 hook 注册（~/.claude/settings.json 无 hooks 段）"
-  },
-  "registrations": []
-}
