@@ -2,6 +2,10 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-08-28 — README 架构入口
+
+- [修订] README 增加受管资产简图与交互式 `architecture.html` 链接；该展示文件是仓库职责收缩后的文档展示例外。
+
 ## 2026-08-28 — Archify 第三方技能纳管与架构图入口
 
 - [新增] `vendor/archify`：原样引入 `tt-a1i/archify`（MIT，package v2.16.0-dev.0，SKILL metadata v2.16），登记来源并由既有技能发布链同步到共享池、Codex、Claude 与 DSH；不修改 vendor 内容。
