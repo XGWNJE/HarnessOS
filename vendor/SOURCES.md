@@ -23,6 +23,7 @@ vendor 原样不改——不手工修补内容，只整目录替换。以 vibehu
 | Skill | 来源 | 管理位置 | 更新方式 |
 |---|---|---|---|
 | skill-creator | https://github.com/anthropics/skills （Anthropic 官方，git clone） | `~/.agents/skills/skill-creator`（自带 .git） | 原地 `git pull`，不入 HarnessOS 库 |
+| quarkclouddrive | 夸克网盘（Quark Drive）官方 Skill，版本 1.0.15，经夸克开放平台 API（`@ali/qkop-*` SDK）操作网盘；非 git 仓库，预编译 minified 包（约 650KB），从已部署的 skill 目录（`~/.agents/skills` 等）回收 | `~/.agents/skills/quarkclouddrive`（另有 codex/dsh 池副本） | 从夸克官方渠道获取/替换，不入 HarnessOS 库 |
 
 ## ~/.claude/skills 池对账
 
