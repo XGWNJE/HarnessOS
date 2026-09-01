@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-02 — quarkclouddrive 物理引入 vendor（夸克网盘官方 Skill）
+
+- [新增] `vendor/quarkclouddrive`：夸克网盘（Quark Drive）官方 Skill v1.0.15（非 git，经夸克开放平台 API `@ali/qkop-*` 操作网盘），从已部署的 skill 目录原样回收。由既有技能发布链同步到共享池、Codex、Claude 与 DSH；不修改 vendor 内容。
+- [修订] `vendor/SOURCES.md`：quarkclouddrive 由「仅登记来源」移入「物理引入」节，补引入时间（2026-09-02）与运行依赖（Node.js，`scripts/install.sh` 装 CLI）。
+
 ## 2026-08-28 — README 架构入口
 
 - [修订] README 增加受管资产简图与交互式 `architecture.html` 链接；该展示文件是仓库职责收缩后的文档展示例外。
