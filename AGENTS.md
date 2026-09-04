@@ -28,5 +28,5 @@
 
 - `catalog.py plan` 只生成恢复清单，不安装软件、连接服务或恢复数据。
 - `sync.py` 普通模式先重建 `catalog.html` 与 `CATALOG.md`，再沿用既有路径发布 Rules 与 Skills；`--check` 只检查，不修改文件或发布目标。Inventory 与 Workflows 不发布到 Agent Skills 池。
-- 修改 `global/AGENTS.md` 后递增文件头版本并发布；修改自有 Skill 后递增其版本并发布；第三方 Skill 只整目录更新并登记来源。
+- 修改 `global/AGENTS.md` 后发布；修改自有 Skill 后递增其版本并发布；第三方 Skill 只整目录更新并登记来源。
 - 交付前运行与改动对应的检查、`python scripts/sync.py --check` 和 `git diff --check`。验证通过后自动创建一次仅含本次变更的中文本地提交，不推送。
