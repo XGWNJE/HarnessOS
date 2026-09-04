@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:feishu-desktop"
+type = "software"
+name = "飞书桌面客户端"
+domain = "communication"
+status = "managed"
+purpose = "在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/feishu-desktop.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "使用 WinGet 稳定源中的 ByteDance.Feishu；中国区飞书客户端，不使用 Lark 国际版或企业批量部署工具。"
+relationships = []
+
+[software]
+install_form = "package-manager"
+release_channel = "stable"
+minimum_verified_version = "7.75.18"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://www.feishu.cn/download?lang=zh-CN"
+config_restore = "重新安装后由用户登录飞书账号；账号、登录状态及凭据不进入 HarnessOS。"
+backup_location = "不适用（工作区数据由飞书服务端承载）"
+post_restore_checks = ["WinGet 显示 ByteDance.Feishu 已安装", "客户端可启动并显示登录页或主界面", "主程序 Authenticode 签名有效"]

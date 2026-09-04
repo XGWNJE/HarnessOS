@@ -2,7 +2,13 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 15 项资产、0 个配置档。
+共 17 项资产、0 个配置档。
+
+## development-tool
+
+| ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
+|---|---|---|---|---|---|---|---|---|
+| `development-tool:lark-cli` | Lark/飞书 CLI | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。 |
 
 ## rule
 
@@ -26,6 +32,12 @@
 | `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 帮助人们获取并学习 Vibe Coding 相关知识，包括 UI、网页、软件、Git、AI Agent 与设计概念。适用于用户明确调用 VibeHub、在 Vibe Coding 过程中看不懂 Agent 回复里的术语并要求通俗解释、描述… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用，目标是安全、准确地完成 VPS 相关操作。 |
 | `skill:webbridge-acceptance` | webbridge-acceptance | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | Kimi WebBridge（浏览器控制）可用性验收。当需要在新环境/新机器验收 WebBridge 是否可用、或验收类操作后清理现场时使用。验收目标：守护进程连通、navigate、snapshot、evaluate、screensho… |
+
+## software
+
+| ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
+|---|---|---|---|---|---|---|---|---|
+| `software:feishu-desktop` | 飞书桌面客户端 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
 
 ## workflow
 

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:lark-cli"
+type = "development-tool"
+name = "Lark/飞书 CLI"
+domain = "communication"
+status = "managed"
+purpose = "通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/lark-cli.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "官方仓库为 larksuite/cli；运行要求 Node.js >=16。应用创建、账号登录与 OAuth 授权需由用户另行确认，不纳入安装步骤。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["lark-cli"]
+install_source = "npm 官方 registry"
+package_id = "@larksuite/cli"
+version_constraint = ">=1.0.93"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "操作系统凭据存储与飞书 CLI 用户级配置（仅逻辑引用，不纳入仓库）"
+verification_commands = ["lark-cli --version", "lark-cli --help"]
