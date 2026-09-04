@@ -2,6 +2,15 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-04 — 轻量受管资产中枢
+
+- [框架] HarnessOS 从仅管理 Agent Rules 与 Skills，扩展为个人 AI 工作台的轻量受管资产中枢；首批统一类型为 `rule`、`skill`、`workflow`、`software`、`development-tool`，并为硬件、服务、数据等后续非软件类型保留扩展入口。
+- [新增] `inventory/` 定义统一资产分类、公共字段、类型扩展、关系、生命周期和配置档结构；本次不登记真实软件、开发环境工具或工作台配置档，也不引入主动扫描和自动登记。
+- [新增] `workflows/` 纳入“登记受管资产”和“恢复工作站”两张流程卡；恢复只生成决策与核验依据，不执行安装、连接服务或恢复数据。
+- [新增] `scripts/catalog.py` 从 Rules、Skills、Workflows 和结构化资产源生成 `CATALOG.md`，提供校验、筛选查询与配置档恢复清单；同时拒绝敏感字段、绝对备份路径、悬空引用和循环依赖。
+- [修订] `scripts/sync.py` 普通模式先重建统一目录再发布 Rules 与 Skills，检查模式先校验资产目录再检查既有发布漂移；Inventory 与 Workflows 不进入 Agent Skills 发布池。
+- [修订] README、项目规则与交互式架构图改为“原生事实源 → 统一资产目录 → 发布、配置档与恢复”的新定位；仓库只保存索引与恢复配方，不保存安装包、完整配置或凭据。
+
 ## 2026-09-02 — quarkclouddrive 物理引入 vendor（夸克网盘官方 Skill）
 
 - [新增] `vendor/quarkclouddrive`：夸克网盘（Quark Drive）官方 Skill v1.0.15（非 git，经夸克开放平台 API `@ali/qkop-*` 操作网盘），从已部署的 skill 目录原样回收。由既有技能发布链同步到共享池、Codex、Claude 与 DSH；不修改 vendor 内容。

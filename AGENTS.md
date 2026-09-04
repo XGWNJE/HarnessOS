@@ -1,22 +1,31 @@
 # HarnessOS 项目规则
 
-本仓库只管理全局 `AGENTS.md` 与可复用 skills。
+本仓库是个人 AI 工作台的轻量受管资产中枢，管理资产索引、恢复配方以及 Rules 与 Skills 的既有发布链。
 
 ## 源与边界
 
-- 全局规则源是 `global/AGENTS.md`；自有 skill 源是 `skills/`；第三方 skill 原样存放于 `vendor/`，来源与迁移条件登记在 `vendor/SOURCES.md`。
-- 只能修改上述源文件，不能直接修改各 Agent 的发布目标。
-- `vendor/` 不手工修补；上游更新时整目录替换。第三方 skill 的完整运行依赖必须随目录保留。
-- 密钥、token、私钥和生产配置不得进入仓库。
+- `global/AGENTS.md` 是跨项目 Rule 正文的事实源；`skills/` 是自有 Skill 的事实源；`vendor/` 是第三方 Skill 的原样副本；`workflows/` 是 Workflow 正文的事实源；`inventory/` 管理资产分类、结构化资产记录与工作台配置档。
+- `CATALOG.md` 是从事实源生成的统一目录，不手工修改；不能直接修改各 Agent 的 Rules 或 Skills 发布目标。
+- `vendor/` 不手工修补；上游更新时整目录替换，并在 `vendor/SOURCES.md` 登记来源、许可证和迁移条件。第三方 Skill 的完整运行依赖必须随目录保留。
+- 仓库只保存索引和恢复配方，不保存安装包、完整配置、账号、许可证正文、密钥、token、私钥、私有分享链接、生产配置或机器绝对路径。备份位置使用不含凭据的逻辑引用。
+- 只有用户明确要求登记、纳管或更新某项资产时，才能探索并写入对应记录；不得主动扫描已安装软件、枚举整机环境、从普通对话推断个人偏好或设置后台巡检。
+- 软件安装形态、版本通道、主要用途和恢复范围等偏好由用户确认；动态事实在真实迁移前重新核验官方来源、兼容性、支持版本与许可条件。
+- 新资产类型先登记到 `inventory/taxonomy.toml`，再按 `inventory/README.md` 的公共字段和类型扩展字段创建事实源；未来类型仍复用统一资产 ID、关系、生命周期、目录和配置档，不另建平行管理体系。
 
-## 发布与验证
+## 目录与发布
 
 | 用途 | 命令 |
 |---|---|
-| 发布全局 AGENTS 与全部 skill | `python scripts/sync.py` |
-| 只检查发布漂移 | `python scripts/sync.py --check` |
-| 单独发布全局 AGENTS | `python scripts/publish_global.py` |
-| 单独发布全部 skill | `python scripts/publish_skills.py` |
+| 校验资产源、引用与生成目录 | `python scripts/catalog.py check` |
+| 从事实源重建统一目录 | `python scripts/catalog.py render` |
+| 查询受管资产 | `python scripts/catalog.py list` |
+| 生成配置档恢复清单 | `python scripts/catalog.py plan <profile> [--satisfied <asset-id>]` |
+| 重建目录并发布 Rules 与 Skills | `python scripts/sync.py` |
+| 只检查目录与发布漂移 | `python scripts/sync.py --check` |
+| 单独发布全局 Rules | `python scripts/publish_global.py` |
+| 单独发布全部 Skills | `python scripts/publish_skills.py` |
 
-- 改 `global/AGENTS.md` 后递增文件头版本并发布；改自有 skill 后递增其版本并发布。第三方 skill 只整目录更新并登记来源。
-- 交付前运行 `python scripts/sync.py --check`；验证通过后自动提交一次，提交只包含本次变更。
+- `catalog.py plan` 只生成恢复清单，不安装软件、连接服务或恢复数据。
+- `sync.py` 普通模式先重建 `CATALOG.md`，再沿用既有路径发布 Rules 与 Skills；`--check` 只检查，不修改文件或发布目标。Inventory 与 Workflows 不发布到 Agent Skills 池。
+- 修改 `global/AGENTS.md` 后递增文件头版本并发布；修改自有 Skill 后递增其版本并发布；第三方 Skill 只整目录更新并登记来源。
+- 交付前运行与改动对应的检查、`python scripts/sync.py --check` 和 `git diff --check`。验证通过后自动创建一次仅含本次变更的中文本地提交，不推送。

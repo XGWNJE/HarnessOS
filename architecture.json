@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HarnessOS · 受管资产架构",
+    "locale": "zh-CN",
+    "output": "architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [1260, 760]
+  },
+  "components": [
+    { "id": "owner", "type": "external", "label": "用户", "sublabel": "明确声明纳管", "pos": [40, 330], "size": [140, 70] },
+    { "id": "sources", "type": "database", "label": "原生事实源", "sublabel": "Rules · Skills · Workflows · Inventory", "pos": [250, 315], "size": [230, 100] },
+    { "id": "catalog", "type": "backend", "label": "统一资产目录", "sublabel": "身份 · 关系 · 状态", "pos": [570, 325], "size": [190, 80], "tag": "CATALOG.md" },
+    { "id": "publisher", "type": "backend", "label": "发布管线", "sublabel": "Rules + Skills", "pos": [570, 100], "size": [170, 72] },
+    { "id": "profiles", "type": "frontend", "label": "Profiles", "sublabel": "目标环境配置档", "pos": [850, 330], "size": [170, 72] },
+    { "id": "recovery", "type": "backend", "label": "恢复清单", "sublabel": "实时核验后执行", "pos": [850, 520], "size": [170, 72] },
+    { "id": "agents", "type": "external", "label": "Agent 运行时", "sublabel": "规则与能力", "pos": [850, 100], "size": [170, 72] },
+    { "id": "workbench", "type": "external", "label": "个人工作台", "sublabel": "软件 · 环境 · 数据", "pos": [1080, 520], "size": [170, 76] }
+  ],
+  "connections": [
+    { "id": "owner-sources", "from": "owner", "to": "sources", "label": "声明与维护", "variant": "dashed" },
+    { "id": "sources-catalog", "from": "sources", "to": "catalog", "label": "统一索引", "labelDy": 24 },
+    { "id": "sources-publisher", "from": "sources", "to": "publisher", "label": "Rules + Skills", "variant": "emphasis" },
+    { "id": "publisher-agents", "from": "publisher", "to": "agents", "label": "同步", "variant": "emphasis" },
+    { "id": "catalog-profiles", "from": "catalog", "to": "profiles", "label": "组合" },
+    { "id": "profiles-recovery", "from": "profiles", "to": "recovery", "label": "生成清单", "labelDy": 24 },
+    { "id": "recovery-workbench", "from": "recovery", "to": "workbench", "label": "用户确认后恢复", "labelDy": 64, "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "violet", "title": "统一概念", "items": ["所有内容都是受管资产", "类型可扩展，事实源不强行合并"] },
+    { "dot": "emerald", "title": "轻量边界", "items": ["仓库只保存索引与恢复配方", "不保存密钥、安装包或完整配置"] },
+    { "dot": "cyan", "title": "两条出口", "items": ["Rules 与 Skills 继续发布", "Profiles 生成可审阅的恢复清单"] }
+  ]
+}

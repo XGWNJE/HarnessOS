@@ -1,0 +1,137 @@
+schema_version = 1
+default_review_days = 90
+
+statuses = ["managed", "excluded", "retired"]
+computed_freshness = ["current", "stale", "incomplete"]
+relationship_types = ["depends-on", "uses", "replaces", "backs-up-to", "published-to"]
+profile_tiers = ["required", "standard", "optional"]
+platforms = ["windows", "macos", "linux", "web", "cross-platform", "not-applicable"]
+preference_sources = ["owner-declared", "verified-public", "unknown"]
+
+software_install_forms = ["portable", "installer", "package-manager", "store", "web", "other", "unknown"]
+release_channels = ["lts", "stable", "beta", "nightly", "pinned", "other", "unknown"]
+development_tool_kinds = ["version-control", "package-manager", "compiler", "runtime-sdk", "cli", "other"]
+
+[[asset_types]]
+id = "rule"
+label = "规则"
+active = true
+native_sources = ["global/AGENTS.md"]
+
+[[asset_types]]
+id = "skill"
+label = "技能"
+active = true
+native_sources = ["skills/", "vendor/"]
+
+[[asset_types]]
+id = "workflow"
+label = "工作流"
+active = true
+native_sources = ["workflows/*.md"]
+
+[[asset_types]]
+id = "software"
+label = "软件"
+active = true
+native_sources = ["inventory/assets/software/*.toml"]
+extension_table = "software"
+
+[[asset_types]]
+id = "development-tool"
+label = "开发环境工具"
+active = true
+native_sources = ["inventory/assets/development-tool/*.toml"]
+extension_table = "development_tool"
+
+[[asset_types]]
+id = "hardware"
+label = "硬件"
+active = false
+native_sources = ["inventory/assets/hardware/*.toml"]
+
+[[asset_types]]
+id = "service"
+label = "服务"
+active = false
+native_sources = ["inventory/assets/service/*.toml"]
+
+[[asset_types]]
+id = "data"
+label = "数据"
+active = false
+native_sources = ["inventory/assets/data/*.toml"]
+
+[[asset_types]]
+id = "template"
+label = "模板"
+active = false
+native_sources = ["inventory/assets/template/*.toml"]
+
+[[asset_types]]
+id = "font"
+label = "字体"
+active = false
+native_sources = ["inventory/assets/font/*.toml"]
+
+[[asset_types]]
+id = "model"
+label = "模型"
+active = false
+native_sources = ["inventory/assets/model/*.toml"]
+
+[[asset_types]]
+id = "license-reference"
+label = "许可证引用"
+active = false
+native_sources = ["inventory/assets/license-reference/*.toml"]
+
+[[asset_types]]
+id = "other"
+label = "其他"
+active = false
+native_sources = ["inventory/assets/other/*.toml"]
+
+[[domains]]
+id = "ai-agent"
+label = "AI 与 Agent"
+
+[[domains]]
+id = "development"
+label = "开发"
+
+[[domains]]
+id = "creative-media"
+label = "创意与媒体"
+
+[[domains]]
+id = "productivity"
+label = "效率办公"
+
+[[domains]]
+id = "communication"
+label = "通信"
+
+[[domains]]
+id = "browser-web"
+label = "浏览器与 Web"
+
+[[domains]]
+id = "storage-backup"
+label = "存储与备份"
+
+[[domains]]
+id = "system-hardware"
+label = "系统与硬件"
+
+[[domains]]
+id = "network-remote"
+label = "网络与远程"
+
+[[domains]]
+id = "entertainment"
+label = "娱乐"
+
+[[domains]]
+id = "other"
+label = "其他"
