@@ -14,8 +14,8 @@
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
-| `skill:ai-coding-workflow` | ai-coding-workflow | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程的工作流 Harness（目标集合）：组织人、模型与验证环节要达到的结果与验收标准。当需要设计 AI 编程协作流程、评估模型真实干活水平、判断任务该用单模型还是多模型交叉验证、或反思 AI 产出效率时使用。核心：Token 消耗… |
-| `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程时代的技术栈选型与评估 Harness（目标模式）。当需要为项目（尤其是 Agent 应用、桌面应用、AI Coding 工作流）选择语言、框架、运行时或工具链时使用。核心判断标准：不只看 AI 能否生成代码，更看生成后能否快速… |
+| `skill:ai-coding-workflow` | ai-coding-workflow | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程工作流与选型判断基线（来源索引）。工作流与选型的原则、验收标准与红线已上移浓缩进 global/AGENTS.md 的「AI 协作与工程判断基线」一节。触发本 skill 时以全局 Rules 为准；本文件为 Harness 来… |
+| `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程时代的技术栈参考与取证基线（来源索引）。「选型服务于反馈闭环」的判断基线、验收红线与长链路证据链原则已上移浓缩进 global/AGENTS.md 的「AI 协作与工程判断基线」一节。本文件仅保留推荐分层栈与证据链收敛回路作为参… |
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:codex-session-recovery` | codex-session-recovery | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断与恢复 Codex Desktop 历史会话。用于切换 Provider 或账号后任务列表缺失、rollout 正文缺失、SQLite 索引与文件不一致、旧会话不可见或需要从备份安全合并历史记录的场景。 |
 | `skill:electron-runtime-debugging` | electron-runtime-debugging | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断 Electron 桌面应用中类型声明与运行时不一致、IPC 重复监听或过早发送、ESM 迁移连带故障、打包遗漏运行时数据，以及 globalShortcut/RegisterHotKey 自动重复导致的交互异常。 |
@@ -23,7 +23,7 @@
 | `skill:image-understand` | image-understand | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 识图/图像理解能力。当默认模型不支持图片输入（如纯文本模型）或需要独立视觉分析时，把本地图片/图片 URL 转成文字描述、OCR 文本、图表解读交给主模型使用。默认通道智谱 GLM-4V-Flash（永久免费）；免费通道结果不佳时提醒用户… |
 | `skill:kimi-webbridge` | kimi-webbridge | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Kimi WebBridge lets AI control the user's real browser — navigate, click, type, read, screenshot, and interact with any… |
 | `skill:mini-vault` | mini-vault | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 中转站（get.xgwnje.cn / mini-vault）文件上传与下载核验。当需要把构建产物（APK/安装包/截图/日志等）传到中转站供用户自行下载到真机测试，或核验中转站可用性时使用。目标：上传前已获用户明确同意（问过才传，不擅自… |
-| `skill:project-doc-boundary` | project-doc-boundary | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 管理项目文档的责任边界并纠正漂移。当 README、AGENTS.md、CHANGELOG、专题文档或文档导航出现重复、错位、过期或职责不清时使用；适用于文档重构、提交前文档体检失败和项目文档职责审查。只处理文档事实归属与漂移，不初始化项… |
+| `skill:project-doc-boundary` | project-doc-boundary | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 项目文档的责任边界（来源索引）。「每份文档只负责自己的事实」的约定已上移浓缩进 global/AGENTS.md 的「文档边界」一节。触发本 skill 时以全局 Rules 为准；本文件保留文档职责表与纠正流程的操作细节。 |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、网盘文件搜索、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户需要操作夸克网盘文件或进行身份验证时使用。 |
 | `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 帮助人们获取并学习 Vibe Coding 相关知识，包括 UI、网页、软件、Git、AI Agent 与设计概念。适用于用户明确调用 VibeHub、在 Vibe Coding 过程中看不懂 Agent 回复里的术语并要求通俗解释、描述… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用，目标是安全、准确地完成 VPS 相关操作。 |
