@@ -1,4 +1,0 @@
-interface:
-  display_name: "项目文档边界"
-  short_description: "澄清文档职责并纠正漂移"
-  default_prompt: "检查当前项目文档的责任边界，找出并修复重复、错位或过期的事实。"

@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-04 — 浓缩原则型 Skill 进全局 Rules，退役指针型 Skill（owner-declared）
+
+- [修订] `global/AGENTS.md` v1.31.0 → v1.32.0：新增「AI 协作与工程判断基线」（九条：验证增量计量、真实任务选型、交叉验证、封装层诚实失败、AI 输出当线索、重写前置、选型服务反馈闭环、验收红线、证据链收敛）与「文档边界」两节；「该沉淀进文件」对 `project-doc-boundary` 的引用改指向「文档边界」节。原因：这些内容是无调用机制的纯原则/判断基线，应是每次会话常驻的全局规则，按需加载的 Skill 会因描述不匹配而漏触发。
+- [废止] `ai-coding-workflow`（v2.0.0）与 `project-doc-boundary`（v2.0.0）两个自有 Skill：其原则已上移承载于全局「AI 协作与工程判断基线」「文档边界」两节，正文不再有独立维护价值；owner 指示不保留指针，直接退役。源与四个发布池（.agents/.codex/.claude/.dsh）残留副本已清除；内容可经 git 历史恢复，未单独归档。
+- [修订] `ai-stack-harness` v1.4.0 → v2.0.0（拆半）：选型判断基线、验收红线并入全局「AI 协作与工程判断基线」，本 Skill 仅保留推荐分层栈（Rust/TS/React+Tailwind/Electron）与证据链收敛回路作参考事实。
+- [修订] 自有技能由 14 → 12；`CATALOG.md` 随源重渲染。
+
 ## 2026-09-04 — 轻量受管资产中枢
 
 - [框架] HarnessOS 从仅管理 Agent Rules 与 Skills，扩展为个人 AI 工作台的轻量受管资产中枢；首批统一类型为 `rule`、`skill`、`workflow`、`software`、`development-tool`，并为硬件、服务、数据等后续非软件类型保留扩展入口。
