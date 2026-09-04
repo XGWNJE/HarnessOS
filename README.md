@@ -11,7 +11,10 @@ HarnessOS 是个人 AI 工作台的轻量受管资产中枢：统一索引用户
 - `vendor/`：第三方 Skills 的原样副本；来源、许可证与迁移条件见 `vendor/SOURCES.md`。
 - `workflows/`：组合人、Agent、Skills 与其他资产的流程卡。
 - `inventory/`：资产分类、结构化资产记录与工作台配置档。
-- [`CATALOG.md`](CATALOG.md)：由上述事实源生成的统一资产目录。
+- [`catalog.html`](catalog.html)：由上述事实源生成的资产快速浏览入口，支持搜索、筛选和详情查看。
+- [`CATALOG.md`](CATALOG.md)：同源生成的精简文本索引，便于 Git 审阅与命令行检索。
+
+Windows 本地日常查看可直接双击 `catalog.html`，或在仓库目录运行 `Start-Process .\catalog.html`。
 
 维护命令和边界见 [AGENTS.md](AGENTS.md)。
 
@@ -26,7 +29,7 @@ flowchart LR
         I[其他资产<br/>inventory/]
     end
 
-    R --> C[统一资产目录<br/>CATALOG.md]
+    R --> C[统一目录双视图<br/>catalog.html · CATALOG.md]
     S --> C
     W --> C
     I --> C

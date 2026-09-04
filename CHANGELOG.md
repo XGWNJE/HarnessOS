@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-04 — 资产目录增加静态 HTML 快速浏览入口
+
+- [新增] `catalog.html`：从既有资产事实源生成单文件离线浏览页，提供名称/ID/用途搜索、类型/领域/状态/时效组合筛选、类型计数、零结果提示与资产详情抽屉；桌面和窄屏布局共用同一份数据。
+- [新增] `scripts/catalog_template.html`：浏览页的代码原生模板，不依赖 CDN、字体、图片、服务端或前端框架；动态内容通过转义后的 JSON 和 DOM `textContent` 渲染，外链只放行 HTTP/HTTPS。
+- [修订] `catalog.py render` 同时生成 Markdown 与 HTML，`catalog.py check` 同时拒绝两种产物的缺失或漂移；生成前先在内存完成两份渲染，避免模板错误留下半更新状态。
+- [修订] README 与项目规则将 `catalog.html` 定位为快速浏览入口、`CATALOG.md` 定位为 Git 审阅和命令行检索用精简索引。
+
 ## 2026-09-04 — 飞书桌面客户端与官方 CLI 纳管
 
 - [新增] `software:feishu-desktop`：登记 Windows 中国区飞书桌面客户端，采用 WinGet 稳定源 `ByteDance.Feishu`；本机已安装并验证 7.75.18、有效发布者签名及客户端启动。

@@ -11,7 +11,7 @@
   "components": [
     { "id": "owner", "type": "external", "label": "用户", "sublabel": "明确声明纳管", "pos": [40, 330], "size": [140, 70] },
     { "id": "sources", "type": "database", "label": "原生事实源", "sublabel": "Rules · Skills · Workflows · Inventory", "pos": [250, 315], "size": [230, 100] },
-    { "id": "catalog", "type": "backend", "label": "统一资产目录", "sublabel": "身份 · 关系 · 状态", "pos": [570, 325], "size": [190, 80], "tag": "CATALOG.md" },
+    { "id": "catalog", "type": "backend", "label": "统一资产目录", "sublabel": "身份 · 关系 · 状态", "pos": [570, 325], "size": [190, 80], "tag": "HTML · Markdown" },
     { "id": "publisher", "type": "backend", "label": "发布管线", "sublabel": "Rules + Skills", "pos": [570, 100], "size": [170, 72] },
     { "id": "profiles", "type": "frontend", "label": "Profiles", "sublabel": "目标环境配置档", "pos": [850, 330], "size": [170, 72] },
     { "id": "recovery", "type": "backend", "label": "恢复清单", "sublabel": "实时核验后执行", "pos": [850, 520], "size": [170, 72] },

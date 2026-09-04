@@ -372,18 +372,106 @@ class CatalogTests(unittest.TestCase):
         self.repo.software()
         catalog = self.load()
         self.assert_valid(catalog)
-        expected = catalog.render_text()
-        (self.root / "CATALOG.md").write_text(expected, encoding="utf-8", newline="\n")
+        expected_markdown = catalog.render_text()
+        expected_html = catalog.render_html()
+        with redirect_stdout(stdout := io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+            code = catalog_module.main(["--root", str(self.root), "render"])
+        self.assertEqual(0, code, stderr.getvalue())
+        self.assertEqual(expected_markdown, (self.root / "CATALOG.md").read_text(encoding="utf-8"))
+        self.assertEqual(expected_html, (self.root / "catalog.html").read_text(encoding="utf-8"))
+
         stdout, stderr = io.StringIO(), io.StringIO()
         with redirect_stdout(stdout), redirect_stderr(stderr):
             code = catalog_module.main(["--root", str(self.root), "check"])
         self.assertEqual(0, code, stderr.getvalue())
         self.assertIn("检查通过", stdout.getvalue())
-        (self.root / "CATALOG.md").write_text(expected + "drift\n", encoding="utf-8")
+
+        (self.root / "CATALOG.md").write_text(expected_markdown + "drift\n", encoding="utf-8")
         with redirect_stdout(io.StringIO()), redirect_stderr(stderr := io.StringIO()):
             code = catalog_module.main(["--root", str(self.root), "check"])
         self.assertEqual(1, code)
+        self.assertIn("CATALOG.md", stderr.getvalue())
         self.assertIn("不同步", stderr.getvalue())
+
+        (self.root / "CATALOG.md").write_text(expected_markdown, encoding="utf-8", newline="\n")
+        (self.root / "catalog.html").write_text(expected_html + "drift\n", encoding="utf-8")
+        with redirect_stdout(io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+            code = catalog_module.main(["--root", str(self.root), "check"])
+        self.assertEqual(1, code)
+        self.assertIn("catalog.html", stderr.getvalue())
+        self.assertIn("不同步", stderr.getvalue())
+
+    def test_check_reports_each_missing_catalog_output(self) -> None:
+        self.repo.software()
+        with redirect_stdout(io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+            self.assertEqual(0, catalog_module.main(["--root", str(self.root), "render"]), stderr.getvalue())
+
+        for missing in ("CATALOG.md", "catalog.html"):
+            path = self.root / missing
+            content = path.read_text(encoding="utf-8")
+            path.unlink()
+            with redirect_stdout(io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+                code = catalog_module.main(["--root", str(self.root), "check"])
+            self.assertEqual(1, code)
+            self.assertIn(f"缺少 {missing}", stderr.getvalue())
+            path.write_text(content, encoding="utf-8", newline="\n")
+
+    def test_html_catalog_uses_taxonomy_labels_and_escapes_payload(self) -> None:
+        self.repo.software()
+        path = self.root / "inventory/assets/software/design-app.toml"
+        text = path.read_text(encoding="utf-8").replace(
+            'notes = "fixture"',
+            'notes = "fixture </script><img src=x onerror=alert(1)> & <> \\u2028\\u2029"',
+        )
+        path.write_text(text, encoding="utf-8")
+        catalog = self.load()
+        self.assert_valid(catalog)
+        self.assertIn(chr(0x2028), catalog.assets["software:design-app"].data["notes"])
+        self.assertIn(chr(0x2029), catalog.assets["software:design-app"].data["notes"])
+        rendered = catalog.render_html()
+        self.assertIn('"software":"Software"', rendered)
+        self.assertIn('"creative-media":"Creative"', rendered)
+        self.assertNotIn("</script><img", rendered)
+        self.assertIn("\\u003c/script\\u003e", rendered)
+        self.assertNotIn("\u2028", rendered)
+        self.assertNotIn("\u2029", rendered)
+        self.assertIn("\\u2028", rendered)
+        self.assertIn("\\u2029", rendered)
+
+    def test_html_template_requires_exactly_one_payload_marker(self) -> None:
+        self.repo.software()
+        catalog = self.load()
+        self.assert_valid(catalog)
+        original = catalog_module.CATALOG_HTML_TEMPLATE
+        try:
+            for content in ("<html></html>", "__CATALOG_DATA____CATALOG_DATA__"):
+                template = self.root / "invalid-template.html"
+                template.write_text(content, encoding="utf-8")
+                catalog_module.CATALOG_HTML_TEMPLATE = template
+                with self.assertRaisesRegex(catalog_module.CatalogError, "必须且只能包含一个"):
+                    catalog.render_html()
+        finally:
+            catalog_module.CATALOG_HTML_TEMPLATE = original
+
+    def test_render_template_failure_preserves_existing_outputs(self) -> None:
+        self.repo.software()
+        markdown_path = self.root / "CATALOG.md"
+        html_path = self.root / "catalog.html"
+        markdown_path.write_text("existing markdown\n", encoding="utf-8")
+        html_path.write_text("existing html\n", encoding="utf-8")
+        invalid_template = self.root / "invalid-template.html"
+        invalid_template.write_text("<html>missing marker</html>", encoding="utf-8")
+        original = catalog_module.CATALOG_HTML_TEMPLATE
+        try:
+            catalog_module.CATALOG_HTML_TEMPLATE = invalid_template
+            with redirect_stdout(io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+                code = catalog_module.main(["--root", str(self.root), "render"])
+            self.assertEqual(1, code)
+            self.assertIn("ERROR:", stderr.getvalue())
+            self.assertEqual("existing markdown\n", markdown_path.read_text(encoding="utf-8"))
+            self.assertEqual("existing html\n", html_path.read_text(encoding="utf-8"))
+        finally:
+            catalog_module.CATALOG_HTML_TEMPLATE = original
 
 
 if __name__ == "__main__":

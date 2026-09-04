@@ -8,6 +8,7 @@ The catalog is deliberately read-only except for ``render``.  In particular,
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import tomllib
@@ -20,6 +21,8 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG_NAME = "CATALOG.md"
+CATALOG_HTML_NAME = "catalog.html"
+CATALOG_HTML_TEMPLATE = Path(__file__).resolve().parent / "catalog_template.html"
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 WINDOWS_ABSOLUTE_RE = re.compile(r"^[A-Za-z]:[\\/]")
@@ -140,6 +143,8 @@ class Taxonomy:
     release_channels: set[str]
     development_tool_kinds: set[str]
     default_review_days: int
+    asset_type_labels: dict[str, str] = field(default_factory=dict)
+    domain_labels: dict[str, str] = field(default_factory=dict)
 
 
 def _text(value: Any) -> str:
@@ -259,6 +264,16 @@ def _taxonomy_ids(items: Any) -> set[str]:
     return {_text(item.get("id")) for item in items if isinstance(item, dict) and item.get("id")}
 
 
+def _taxonomy_labels(items: Any) -> dict[str, str]:
+    if not isinstance(items, list):
+        return {}
+    return {
+        _text(item.get("id")): _text(item.get("label")) or _text(item.get("id"))
+        for item in items
+        if isinstance(item, dict) and item.get("id")
+    }
+
+
 class Catalog:
     def __init__(self, root: Path, *, today: date | None = None):
         self.root = root.resolve()
@@ -318,6 +333,8 @@ class Catalog:
             set(_string_list(data.get("release_channels"))),
             set(_string_list(data.get("development_tool_kinds"))),
             days,
+            asset_type_labels=_taxonomy_labels(data.get("asset_types")),
+            domain_labels=_taxonomy_labels(data.get("domains")),
         )
         required_types = {"rule", "skill", "workflow", "software", "development-tool"}
         missing_types = required_types - self.taxonomy.asset_types
@@ -784,6 +801,100 @@ class Catalog:
             lines.append("暂无。")
         return "\n".join(lines).rstrip() + "\n"
 
+    def render_html(self) -> str:
+        assets: list[dict[str, Any]] = []
+        for asset in sorted(self.assets.values(), key=lambda item: item.id):
+            data = asset.data or {}
+            details: list[dict[str, Any]] = []
+
+            def add_detail(label: str, value: Any, kind: str = "text") -> None:
+                if value in (None, "", []):
+                    return
+                if isinstance(value, (date, datetime)):
+                    value = value.isoformat()
+                details.append({"label": label, "value": value, "kind": kind})
+
+            add_detail("事实源", asset.source, "path")
+            add_detail("平台", asset.platforms, "list")
+            add_detail("偏好来源", data.get("preference_source"))
+            add_detail("声明日期", data.get("declared_on"))
+            add_detail("最后核验", data.get("last_verified_on", data.get("verified_at")))
+            review_days = data.get("review_days")
+            add_detail("复核周期", f"{review_days} 天" if review_days else "")
+            add_detail("备注", data.get("notes"))
+            if asset.relationships:
+                add_detail(
+                    "关系",
+                    [f"{relation} → {target}" for relation, target in asset.relationships],
+                    "list",
+                )
+
+            if asset.type == "software":
+                extension = data.get("software", {})
+                add_detail("安装形态", extension.get("install_form"))
+                add_detail("发布通道", extension.get("release_channel"))
+                add_detail("最低验证版本", extension.get("minimum_verified_version"))
+                add_detail("固定版本", extension.get("pinned_version"))
+                add_detail("避开版本", extension.get("avoid_versions"), "list")
+                add_detail("官方来源", extension.get("official_source"), "url")
+                add_detail("配置恢复", extension.get("config_restore"))
+                add_detail("备份位置", extension.get("backup_location"))
+                add_detail("恢复后检查", extension.get("post_restore_checks"), "list")
+            elif asset.type == "development-tool":
+                extension = data.get("development_tool", {})
+                add_detail("工具类型", extension.get("tool_kind"))
+                add_detail("命令", extension.get("commands"), "codes")
+                add_detail("安装来源", extension.get("install_source"))
+                add_detail("包 ID", extension.get("package_id"), "code")
+                add_detail("版本约束", extension.get("version_constraint"), "code")
+                add_detail("更新通道", extension.get("update_channel"))
+                add_detail("环境变量", extension.get("environment_variables"), "codes")
+                add_detail("配置引用", extension.get("config_reference"))
+                add_detail("验证命令", extension.get("verification_commands"), "codes")
+
+            freshness = "stale" if asset.stale else "incomplete" if asset.incomplete else "current"
+            assets.append({
+                "id": asset.id,
+                "name": asset.name,
+                "type": asset.type,
+                "domain": asset.domain,
+                "status": asset.status,
+                "freshness": freshness,
+                "purpose": asset.purpose,
+                "provenance": _provenance_label(asset),
+                "upstream": _upstream_label(asset),
+                "details": details,
+            })
+
+        payload = json.dumps(
+            {
+                "assetCount": len(self.assets),
+                "profileCount": len(self.profiles),
+                "labels": {
+                    "type": self.taxonomy.asset_type_labels if self.taxonomy else {},
+                    "domain": self.taxonomy.domain_labels if self.taxonomy else {},
+                },
+                "assets": assets,
+            },
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        payload = (
+            payload.replace("&", "\\u0026")
+            .replace("<", "\\u003c")
+            .replace(">", "\\u003e")
+            .replace("\u2028", "\\u2028")
+            .replace("\u2029", "\\u2029")
+        )
+        try:
+            template = CATALOG_HTML_TEMPLATE.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            raise CatalogError(f"缺少 HTML 模板: {CATALOG_HTML_TEMPLATE}") from exc
+        marker = "__CATALOG_DATA__"
+        if template.count(marker) != 1:
+            raise CatalogError("HTML 模板必须且只能包含一个 __CATALOG_DATA__ 占位符")
+        return template.replace(marker, payload)
+
     def plan_text(self, profile_id: str, satisfied: Iterable[str] = ()) -> str:
         profile = self.profiles.get(profile_id)
         if not profile:
@@ -912,8 +1023,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="HarnessOS 受管资产目录")
     parser.add_argument("--root", type=Path, default=ROOT, help=argparse.SUPPRESS)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    subparsers.add_parser("check", help="校验源数据与 CATALOG.md 同步状态")
-    subparsers.add_parser("render", help="重建 CATALOG.md")
+    subparsers.add_parser("check", help="校验源数据与目录产物同步状态")
+    subparsers.add_parser("render", help="重建 Markdown 与 HTML 目录")
     list_parser = subparsers.add_parser("list", help="查询受管资产")
     list_parser.add_argument("--type")
     list_parser.add_argument("--domain")
@@ -939,20 +1050,36 @@ def main(argv: Iterable[str] | None = None) -> int:
         _print_problems(catalog)
         return 1
     output_path = catalog.root / CATALOG_NAME
+    html_output_path = catalog.root / CATALOG_HTML_NAME
     if args.command == "render":
-        output_path.write_text(catalog.render_text(), encoding="utf-8", newline="\n")
-        print(f"已生成 {output_path}")
+        try:
+            markdown = catalog.render_text()
+            html = catalog.render_html()
+        except CatalogError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        output_path.write_text(markdown, encoding="utf-8", newline="\n")
+        html_output_path.write_text(html, encoding="utf-8", newline="\n")
+        print(f"已生成 {output_path} 与 {html_output_path}")
         return 0
     if args.command == "check":
-        expected = catalog.render_text()
         try:
-            actual = output_path.read_text(encoding="utf-8")
-        except FileNotFoundError:
-            print(f"ERROR: 缺少 {CATALOG_NAME}，请运行 catalog.py render", file=sys.stderr)
+            outputs = (
+                (CATALOG_NAME, output_path, catalog.render_text()),
+                (CATALOG_HTML_NAME, html_output_path, catalog.render_html()),
+            )
+        except CatalogError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
             return 1
-        if actual.replace("\r\n", "\n") != expected:
-            print(f"ERROR: {CATALOG_NAME} 与源数据不同步，请运行 catalog.py render", file=sys.stderr)
-            return 1
+        for name, path, expected in outputs:
+            try:
+                actual = path.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                print(f"ERROR: 缺少 {name}，请运行 catalog.py render", file=sys.stderr)
+                return 1
+            if actual.replace("\r\n", "\n") != expected:
+                print(f"ERROR: {name} 与源数据不同步，请运行 catalog.py render", file=sys.stderr)
+                return 1
         print(f"资产目录检查通过：{len(catalog.assets)} 项资产，{len(catalog.profiles)} 个配置档")
         return 0
     if args.command == "list":
