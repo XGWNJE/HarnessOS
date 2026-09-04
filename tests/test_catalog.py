@@ -28,6 +28,7 @@ relationship_types = ["depends-on", "uses", "replaces", "backs-up-to", "publishe
 profile_tiers = ["required", "standard", "optional"]
 platforms = ["windows", "cross-platform", "not-applicable"]
 preference_sources = ["owner-declared", "verified-public", "unknown"]
+provenance_types = ["owner-produced", "third-party"]
 software_install_forms = ["portable", "installer", "unknown"]
 release_channels = ["lts", "stable", "beta", "unknown"]
 development_tool_kinds = ["version-control", "package-manager", "cli"]
@@ -76,7 +77,18 @@ label = "Creative"
 """
 
 
-def _asset_common(asset_id: str, asset_type: str, name: str, domain: str, *, verified: str = "2026-08-15", status: str = "managed", preference: str = "owner-declared") -> str:
+def _asset_common(
+    asset_id: str,
+    asset_type: str,
+    name: str,
+    domain: str,
+    *,
+    verified: str = "2026-08-15",
+    status: str = "managed",
+    preference: str = "owner-declared",
+    provenance: str = "owner-produced",
+    upstream_updates: bool = False,
+) -> str:
     return f"""
 schema_version = 1
 id = "{asset_id}"
@@ -88,6 +100,8 @@ purpose = "fixture purpose"
 platforms = ["windows"]
 fact_source = "test fixture"
 preference_source = "{preference}"
+provenance = "{provenance}"
+upstream_updates = {str(upstream_updates).lower()}
 declared_on = "2026-08-01"
 last_verified_on = "{verified}"
 review_days = 90
@@ -204,7 +218,42 @@ class CatalogTests(unittest.TestCase):
         rendered = catalog.render_text()
         self.assertIn("First sentence describes the real capability.", rendered)
         self.assertNotIn("Second line contains", rendered)
-        self.assertIn("| 偏好来源 |", rendered)
+        self.assertIn("| 来源性质 | 上游更新 |", rendered)
+        self.assertEqual("owner-produced", catalog.assets["rule:global-agents"].provenance)
+        self.assertFalse(catalog.assets["rule:global-agents"].upstream_updates)
+        self.assertEqual("owner-produced", catalog.assets["skill:test-skill"].provenance)
+        self.assertIn("用户自产 | 不适用", rendered)
+
+    def test_vendor_and_structured_assets_expose_upstream_policy(self) -> None:
+        self.repo.write("vendor/vendor-skill/SKILL.md", "---\nname: vendor-skill\ndescription: vendor capability\n---\n")
+        self.repo.write("inventory/assets/hardware/vendor-rig.toml", _asset_common(
+            "hardware:vendor-rig",
+            "hardware",
+            "Vendor Rig",
+            "development",
+            provenance="third-party",
+            upstream_updates=True,
+        ) + "relationships = []\n")
+        catalog = self.load()
+        self.assert_valid(catalog)
+        self.assertEqual("third-party", catalog.assets["skill:vendor-skill"].provenance)
+        self.assertTrue(catalog.assets["skill:vendor-skill"].upstream_updates)
+        self.assertIn("第三方 | 跟踪", catalog.render_text())
+        with redirect_stdout(stdout := io.StringIO()), redirect_stderr(stderr := io.StringIO()):
+            code = catalog_module.main(["--root", str(self.root), "list"])
+        self.assertEqual(0, code, stderr.getvalue())
+        self.assertIn("skill:vendor-skill\tmanaged\tcurrent\t第三方\t跟踪\tvendor-skill", stdout.getvalue())
+
+    def test_owner_produced_asset_cannot_claim_upstream_updates(self) -> None:
+        self.repo.write("inventory/assets/hardware/test-rig.toml", _asset_common(
+            "hardware:test-rig",
+            "hardware",
+            "Test Rig",
+            "development",
+            upstream_updates=True,
+        ) + "relationships = []\n")
+        catalog = self.load()
+        self.assertTrue(any("用户自产资产没有上游更新" in problem.message for problem in catalog.problems))
 
     def test_software_and_development_tool_extensions(self) -> None:
         self.repo.software()
@@ -257,6 +306,7 @@ class CatalogTests(unittest.TestCase):
         catalog = self.load()
         self.assert_valid(catalog)
         plan = catalog.plan_text("main", ["software:design-app"])
+        self.assertIn("用户自产；上游更新不适用", plan)
         satisfied_section = plan.split("## 已经满足", 1)[1].split("## 可选", 1)[0]
         self.assertIn("software:design-app", satisfied_section)
         with redirect_stdout(stdout := io.StringIO()), redirect_stderr(stderr := io.StringIO()):

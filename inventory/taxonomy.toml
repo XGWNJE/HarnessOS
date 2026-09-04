@@ -7,6 +7,7 @@ relationship_types = ["depends-on", "uses", "replaces", "backs-up-to", "publishe
 profile_tiers = ["required", "standard", "optional"]
 platforms = ["windows", "macos", "linux", "web", "cross-platform", "not-applicable"]
 preference_sources = ["owner-declared", "verified-public", "unknown"]
+provenance_types = ["owner-produced", "third-party"]
 
 software_install_forms = ["portable", "installer", "package-manager", "store", "web", "other", "unknown"]
 release_channels = ["lts", "stable", "beta", "nightly", "pinned", "other", "unknown"]

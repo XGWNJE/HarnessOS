@@ -30,6 +30,8 @@ purpose = "为何纳管，以及恢复后解决什么问题"
 platforms = ["windows"]
 fact_source = "当前事实源的仓库相对路径"
 preference_source = "owner-declared"
+provenance = "owner-produced"
+upstream_updates = false
 declared_on = "YYYY-MM-DD"
 last_verified_on = "YYYY-MM-DD"
 review_days = 90
@@ -42,6 +44,8 @@ target = "另一资产的完整 ID"
 
 - `status` 只取 `managed`、`excluded`、`retired`。后两者保留决策历史，但不进入恢复清单。
 - `preference_source` 只描述偏好依据：用户明确声明、已核验的公开事实或未知。公开事实不能代替个人偏好。
+- `provenance` 只取 `owner-produced`（用户自产）或 `third-party`（第三方）。Rule 与自有 Skill 由生成器自动标记为用户自产，`vendor/` 中的 Skill 自动标记为第三方；Workflow 和结构化资产在源记录中显式声明。
+- `upstream_updates` 表示是否跟踪外部上游更新。用户自产资产没有外部上游，必须为 `false`，目录显示“不适用”；这不妨碍它在 Git 中继续修订和版本化。第三方资产可按实际维护策略填写 `true` 或 `false`。
 - `current`、`stale`、`incomplete` 是根据日期和字段计算的展示状态，不写回源文件。
 - `review_days` 默认 90 天，可按资产覆盖；执行真实迁移时即使记录仍新鲜，也要实时核验易变的版本、兼容性、来源和许可条件。
 - 关系只引用资产 ID，不复制对方事实。`depends-on` 不得形成循环；目标不存在时校验失败。

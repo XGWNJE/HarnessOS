@@ -34,6 +34,7 @@ RELATION_TYPES = {
 }
 STATUSES = {"managed", "excluded", "retired"}
 PROFILE_TIERS = {"required", "standard", "optional"}
+PROVENANCE_TYPES = {"owner-produced", "third-party"}
 SENSITIVE_KEY_PARTS = {
     "api-key",
     "api_key",
@@ -95,6 +96,8 @@ class Asset:
     status: str
     purpose: str
     platforms: list[str]
+    provenance: str
+    upstream_updates: bool
     source: str
     path: Path
     data: dict[str, Any] = field(default_factory=dict)
@@ -132,6 +135,7 @@ class Taxonomy:
     profile_tiers: set[str]
     platforms: set[str]
     preference_sources: set[str]
+    provenance_types: set[str]
     software_install_forms: set[str]
     release_channels: set[str]
     development_tool_kinds: set[str]
@@ -286,13 +290,13 @@ class Catalog:
         path = self.root / "inventory" / "taxonomy.toml"
         if not path.is_file():
             self.problem(path, "缺少 taxonomy.toml")
-            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), set(), set(), set(), 90)
+            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), 90)
             return
         try:
             data = _read_toml(path)
         except CatalogError as exc:
             self.problem(path, str(exc))
-            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), set(), set(), set(), 90)
+            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), 90)
             return
         if data.get("schema_version") != 1:
             self.problem(path, "schema_version 必须为 1")
@@ -309,6 +313,7 @@ class Catalog:
             set(_string_list(data.get("profile_tiers"))) or PROFILE_TIERS,
             set(_string_list(data.get("platforms"))),
             set(_string_list(data.get("preference_sources"))),
+            set(_string_list(data.get("provenance_types"))) or PROVENANCE_TYPES,
             set(_string_list(data.get("software_install_forms"))),
             set(_string_list(data.get("release_channels"))),
             set(_string_list(data.get("development_tool_kinds"))),
@@ -326,6 +331,8 @@ class Catalog:
             self.problem(path, "statuses 必须且只能包含 managed、excluded、retired")
         if self.taxonomy.profile_tiers != PROFILE_TIERS:
             self.problem(path, "profile_tiers 必须且只能包含 required、standard、optional")
+        if self.taxonomy.provenance_types != PROVENANCE_TYPES:
+            self.problem(path, "provenance_types 必须且只能包含 owner-produced、third-party")
 
     def _validate_taxonomy_tables(self, path: Path, data: dict[str, Any]) -> None:
         for key in ("asset_types", "domains"):
@@ -368,6 +375,8 @@ class Catalog:
             status="managed",
             purpose="跨项目协作约束",
             platforms=["cross-platform"],
+            provenance="owner-produced",
+            upstream_updates=False,
             source="global/AGENTS.md",
             path=path,
             native=True,
@@ -404,6 +413,8 @@ class Catalog:
                     status="managed",
                     purpose=meta.get("description", "Agent 可调用能力"),
                     platforms=["cross-platform"],
+                    provenance="third-party" if base_name == "vendor" else "owner-produced",
+                    upstream_updates=base_name == "vendor",
                     source=path.relative_to(self.root).as_posix(),
                     path=path,
                     native=True,
@@ -462,6 +473,8 @@ class Catalog:
             status=_text(data.get("status")),
             purpose=_text(data.get("purpose")),
             platforms=_string_list(data.get("platforms")),
+            provenance=_text(data.get("provenance")),
+            upstream_updates=data.get("upstream_updates") is True,
             source=_text(data.get("fact_source")),
             path=path,
             data=data,
@@ -495,6 +508,17 @@ class Catalog:
         preference = data.get("preference_source")
         if preference and taxonomy.preference_sources and preference not in taxonomy.preference_sources:
             self.problem(path, f"未知 preference_source: {preference}")
+        provenance = data.get("provenance")
+        if not provenance:
+            self.problem(path, "缺少必填字段 provenance")
+        elif taxonomy.provenance_types and provenance not in taxonomy.provenance_types:
+            self.problem(path, f"未知 provenance: {provenance}")
+        if "upstream_updates" not in data:
+            self.problem(path, "缺少必填字段 upstream_updates")
+        elif not isinstance(data["upstream_updates"], bool):
+            self.problem(path, "upstream_updates 必须是布尔值")
+        elif provenance == "owner-produced" and data["upstream_updates"]:
+            self.problem(path, "用户自产资产没有上游更新，upstream_updates 必须为 false")
         for key in ("declared_on", "last_verified_on"):
             if key in data and _date(data[key]) is None:
                 self.problem(path, f"{key} 必须是 ISO 日期")
@@ -541,8 +565,10 @@ class Catalog:
                 self.problem(path, f"未知 development_tool.tool_kind: {tool_kind}")
 
     def _is_incomplete(self, data: dict[str, Any], asset_type: str) -> bool:
-        common = ("fact_source", "preference_source", "declared_on", "last_verified_on")
+        common = ("fact_source", "preference_source", "provenance", "declared_on", "last_verified_on")
         if any(not data.get(key) for key in common):
+            return True
+        if "upstream_updates" not in data:
             return True
         if data.get("preference_source") == "unknown":
             return True
@@ -716,14 +742,14 @@ class Catalog:
             lines.extend((
                 f"## {asset_type}",
                 "",
-                "| ID | 名称 | 领域 | 状态 | 时效 | 偏好来源 | 用途 |",
-                "|---|---|---|---|---|---|---|",
+                "| ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |",
+                "|---|---|---|---|---|---|---|---|---|",
             ))
             for asset in sorted(by_type[asset_type], key=lambda item: item.id):
                 freshness = "stale" if asset.stale else "incomplete" if asset.incomplete else "current"
                 preference = _text(asset.data.get("preference_source")) if asset.data else "—"
                 lines.append(
-                    f"| `{asset.id}` | {_cell(asset.name)} | `{asset.domain}` | `{asset.status}` | `{freshness}` | {_cell(preference or '—')} | {_cell(_summary(asset.purpose))} |"
+                    f"| `{asset.id}` | {_cell(asset.name)} | `{asset.domain}` | {_provenance_label(asset)} | {_upstream_label(asset)} | `{asset.status}` | `{freshness}` | {_cell(preference or '—')} | {_cell(_summary(asset.purpose))} |"
                 )
             lines.append("")
         lines.extend(("## 关系", ""))
@@ -808,7 +834,9 @@ class Catalog:
             else:
                 for entry, asset in items:
                     suffix = f" — {entry.notes}" if entry.notes else ""
-                    lines.append(f"- `{asset.id}` {asset.name}（{entry.tier}）{suffix}")
+                    lines.append(
+                        f"- `{asset.id}` {asset.name}（{entry.tier}；{_provenance_label(asset)}；上游更新{_upstream_label(asset)}）{suffix}"
+                    )
             lines.append("")
         return "\n".join(lines).rstrip() + "\n"
 
@@ -847,6 +875,16 @@ def _summary(value: str, limit: int = 120) -> str:
     if len(single_line) <= limit:
         return single_line
     return single_line[: limit - 1].rstrip() + "…"
+
+
+def _provenance_label(asset: Asset) -> str:
+    return "用户自产" if asset.provenance == "owner-produced" else "第三方"
+
+
+def _upstream_label(asset: Asset) -> str:
+    if asset.provenance == "owner-produced":
+        return "不适用"
+    return "跟踪" if asset.upstream_updates else "不跟踪"
 
 
 def _configure_output_encoding() -> None:
@@ -932,7 +970,9 @@ def main(argv: Iterable[str] | None = None) -> int:
         ]
         for asset in sorted(assets, key=lambda item: item.id):
             freshness = "stale" if asset.stale else "incomplete" if asset.incomplete else "current"
-            print(f"{asset.id}\t{asset.status}\t{freshness}\t{asset.name}")
+            print(
+                f"{asset.id}\t{asset.status}\t{freshness}\t{_provenance_label(asset)}\t{_upstream_label(asset)}\t{asset.name}"
+            )
         return 0
     if args.command == "plan":
         try:
