@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:deepseek-harness"
+type = "development-tool"
+name = "DeepSeek Harness CLI"
+domain = "ai-agent"
+status = "managed"
+purpose = "提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/deepseek-harness.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 30
+notes = "当前通过 npm 全局安装 @deepseek-ai/dsh 0.1.1-rc.2，属于预发布版本并直接依赖 Node.js。配置、Provider 凭据与本地会话不纳入仓库。"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:nodejs"
+
+[development_tool]
+tool_kind = "cli"
+commands = ["dsh"]
+install_source = "npm 官方 registry"
+package_id = "@deepseek-ai/dsh"
+version_constraint = "=0.1.1-rc.2"
+update_channel = "beta"
+environment_variables = ["PATH"]
+config_reference = "DeepSeek Harness 用户级配置与凭据存储"
+verification_commands = ["dsh --version", "npm ls -g @deepseek-ai/dsh --depth=0"]

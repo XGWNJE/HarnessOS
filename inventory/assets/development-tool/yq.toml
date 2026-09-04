@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:yq"
+type = "development-tool"
+name = "yq"
+domain = "development"
+status = "managed"
+purpose = "在脚本和终端中查询、转换与验证 YAML 数据。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/yq.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 MikeFarah.yq；本机 4.53.6。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["yq"]
+install_source = "WinGet"
+package_id = "MikeFarah.yq"
+version_constraint = ">=4.53.6"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "不适用"
+verification_commands = ["yq --version"]

@@ -2,13 +2,41 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 17 项资产、0 个配置档。
+共 49 项资产、0 个配置档。
 
 ## development-tool
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
+| `development-tool:aws-cli` | AWS CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Amazon Web Services 资源。 |
+| `development-tool:azure-cli` | Azure CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Microsoft Azure 资源。 |
+| `development-tool:bun` | Bun | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供独立的 JavaScript 运行时、包管理器、测试与打包工具。 |
+| `development-tool:claude-code` | Claude Code | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
+| `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
+| `development-tool:deepseek-harness` | DeepSeek Harness CLI | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
+| `development-tool:git` | Git for Windows | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。 |
+| `development-tool:github-cli` | GitHub CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。 |
+| `development-tool:google-cloud-sdk` | Google Cloud SDK | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。 |
+| `development-tool:jq` | jq | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在脚本和终端中查询、转换与验证 JSON 数据。 |
+| `development-tool:kubectl` | Kubernetes CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 通过 kubectl 检查和管理 Kubernetes 集群资源与清单。 |
 | `development-tool:lark-cli` | Lark/飞书 CLI | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。 |
+| `development-tool:llvm` | LLVM Toolchain | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Clang/LLVM 编译、链接、调试、格式化和语言服务工具。 |
+| `development-tool:nodejs` | Node.js | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 JavaScript/TypeScript 运行时及 npm 生态的基础开发环境。 |
+| `development-tool:openssl` | OpenSSL Developer Tools | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 TLS、证书、密钥格式和密码学相关的开发与诊断命令。 |
+| `development-tool:php` | PHP | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 PHP 命令行运行、调试和服务端项目开发环境。 |
+| `development-tool:pnpm` | pnpm | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供高效、严格的 Node.js 包依赖安装与工作区管理。 |
+| `development-tool:poetry` | Poetry | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 管理 Python 项目的依赖、虚拟环境、构建与发布元数据。 |
+| `development-tool:python` | Python | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Python 解释器、脚本运行、自动化与包管理基础环境。 |
+| `development-tool:ripgrep` | ripgrep | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供高速递归文本与代码搜索能力。 |
+| `development-tool:ruby` | RubyInstaller | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Ruby 解释器、RubyGems 与常用 Ruby 项目工具。 |
+| `development-tool:rust-toolchain` | Rust Toolchain | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Rust 编译、包管理、格式化、静态检查和语言服务工具链。 |
+| `development-tool:sqlite` | SQLite CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本地 SQLite 数据库查询、差异与分析命令。 |
+| `development-tool:temurin-jdk` | Eclipse Temurin JDK | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Java LTS 运行时、编译器、打包、诊断和调试工具。 |
+| `development-tool:terraform` | Terraform | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 以基础设施即代码方式规划和管理云与服务资源。 |
+| `development-tool:uv` | uv | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供独立的 Python 包、项目、工具和解释器管理能力。 |
+| `development-tool:winlibs-mingw` | WinLibs MinGW-w64 Toolchain | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 原生 GCC/MinGW-w64 编译、链接、调试和配套构建工具链。 |
+| `development-tool:yarn` | Yarn Classic | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 兼容仍使用 Yarn Classic 锁文件与命令的 Node.js 项目。 |
+| `development-tool:yq` | yq | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在脚本和终端中查询、转换与验证 YAML 数据。 |
 
 ## rule
 
@@ -37,7 +65,11 @@
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
+| `software:android-studio` | Android Studio | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Android 项目的官方 IDE、Gradle 集成、调试与设备管理入口。 |
+| `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
 | `software:feishu-desktop` | 飞书桌面客户端 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
+| `software:opencode-desktop` | OpenCode Desktop | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 OpenCode 的桌面 AI 编程与本地项目交互入口。 |
+| `software:visual-studio-community` | Visual Studio Community | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。 |
 
 ## workflow
 
@@ -48,7 +80,15 @@
 
 ## 关系
 
-暂无显式关系。
+| 来源 | 关系 | 目标 |
+|---|---|---|
+| `development-tool:claude-code` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:deepseek-harness` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:github-cli` | `uses` | `development-tool:git` |
+| `development-tool:lark-cli` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:pnpm` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:poetry` | `depends-on` | `development-tool:python` |
+| `development-tool:yarn` | `depends-on` | `development-tool:nodejs` |
 
 ## 配置档
 

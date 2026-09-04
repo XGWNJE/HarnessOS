@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:terraform"
+type = "development-tool"
+name = "Terraform"
+domain = "development"
+status = "managed"
+purpose = "以基础设施即代码方式规划和管理云与服务资源。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/terraform.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Hashicorp.Terraform；本机 1.15.8。状态文件、远端后端凭据与云端密钥不纳入 HarnessOS。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["terraform"]
+install_source = "WinGet"
+package_id = "Hashicorp.Terraform"
+version_constraint = ">=1.15.8"
+update_channel = "stable"
+environment_variables = ["PATH", "TF_PLUGIN_CACHE_DIR"]
+config_reference = "项目 Terraform 配置与远端状态逻辑引用（不保存状态文件或凭据）"
+verification_commands = ["terraform version"]

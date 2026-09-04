@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:azure-cli"
+type = "development-tool"
+name = "Azure CLI"
+domain = "development"
+status = "managed"
+purpose = "从命令行管理和自动化 Microsoft Azure 资源。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/azure-cli.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Microsoft.AzureCLI；本机 2.89.1。其私有运行时不依赖系统 Python；登录与订阅信息不纳入仓库。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["az"]
+install_source = "WinGet"
+package_id = "Microsoft.AzureCLI"
+version_constraint = ">=2.89.1"
+update_channel = "stable"
+environment_variables = ["PATH", "AZURE_CONFIG_DIR"]
+config_reference = "Azure CLI 用户级配置与操作系统凭据存储"
+verification_commands = ["az version"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:python"
+type = "development-tool"
+name = "Python"
+domain = "development"
+status = "managed"
+purpose = "提供 Python 解释器、脚本运行、自动化与包管理基础环境。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/python.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Python.Python.3.12；本机 Python 3.12.10、pip 25.0.1。Python Launcher、pip、标准库、开发库与 Tcl/Tk 属于同一安装单元，不单独登记。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["python", "py", "pip"]
+install_source = "WinGet"
+package_id = "Python.Python.3.12"
+version_constraint = ">=3.12.10,<3.13"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "Python 用户级包目录与 pip 配置（不得保存 registry 凭据）"
+verification_commands = ["python --version", "py -0p", "pip --version"]

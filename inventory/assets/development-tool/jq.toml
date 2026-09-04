@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:jq"
+type = "development-tool"
+name = "jq"
+domain = "development"
+status = "managed"
+purpose = "在脚本和终端中查询、转换与验证 JSON 数据。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/jq.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 jqlang.jq；本机 1.8.2。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["jq"]
+install_source = "WinGet"
+package_id = "jqlang.jq"
+version_constraint = ">=1.8.2"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "不适用"
+verification_commands = ["jq --version"]

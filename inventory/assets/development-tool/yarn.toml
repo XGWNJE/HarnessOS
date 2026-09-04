@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:yarn"
+type = "development-tool"
+name = "Yarn Classic"
+domain = "development"
+status = "managed"
+purpose = "兼容仍使用 Yarn Classic 锁文件与命令的 Node.js 项目。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/yarn.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "当前通过 npm 全局安装 Yarn Classic 1.22.22；不是 Node.js 自带组件。"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:nodejs"
+
+[development_tool]
+tool_kind = "package-manager"
+commands = ["yarn", "yarnpkg"]
+install_source = "npm 官方 registry"
+package_id = "yarn"
+version_constraint = ">=1.22.22,<2"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "Yarn 用户级配置（不得保存 registry token）"
+verification_commands = ["yarn --version"]

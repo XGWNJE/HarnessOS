@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:git"
+type = "development-tool"
+name = "Git for Windows"
+domain = "development"
+status = "managed"
+purpose = "提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/git.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Git.Git；本机 Git 2.55.0.windows.3。Git LFS 3.7.1、Git Bash、Git GUI、tig 2.6.1 与 scalar 作为捆绑组件，不单独登记。Codex 私有 Git 不替代本资产。"
+relationships = []
+
+[development_tool]
+tool_kind = "version-control"
+commands = ["git", "git-lfs", "tig"]
+install_source = "WinGet"
+package_id = "Git.Git"
+version_constraint = ">=2.55.0"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "用户级 Git 配置与凭据存储（仅逻辑引用，不纳入仓库）"
+verification_commands = ["git --version", "git lfs version", "tig --version"]

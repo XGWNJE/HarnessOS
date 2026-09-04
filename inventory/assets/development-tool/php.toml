@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:php"
+type = "development-tool"
+name = "PHP"
+domain = "development"
+status = "managed"
+purpose = "提供 PHP 命令行运行、调试和服务端项目开发环境。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/php.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 PHP.PHP.8.4；本机 PHP 8.4.24 ZTS x64。php-cgi、phpdbg 与 phar 工具属于同一安装单元。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["php"]
+install_source = "WinGet"
+package_id = "PHP.PHP.8.4"
+version_constraint = ">=8.4.24,<8.5"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "PHP 配置与扩展清单（仅逻辑引用）"
+verification_commands = ["php --version", "php --ini"]

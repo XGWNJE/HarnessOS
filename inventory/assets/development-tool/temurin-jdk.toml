@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:temurin-jdk"
+type = "development-tool"
+name = "Eclipse Temurin JDK"
+domain = "development"
+status = "managed"
+purpose = "提供 Java LTS 运行时、编译器、打包、诊断和调试工具。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/temurin-jdk.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 EclipseAdoptium.Temurin.21.JDK；本机 21.0.12.1 LTS。java、javac、jar、javadoc、jdb、jlink、jpackage 等均由 JDK 捆绑提供。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["java", "javac", "jar", "javadoc", "jdb", "jlink", "jpackage"]
+install_source = "WinGet"
+package_id = "EclipseAdoptium.Temurin.21.JDK"
+version_constraint = ">=21.0.12,<22"
+update_channel = "lts"
+environment_variables = ["PATH", "JAVA_HOME"]
+config_reference = "JAVA_HOME 与项目级 JVM/Gradle 配置（仅记录名称和逻辑来源）"
+verification_commands = ["java --version", "javac --version"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:google-cloud-sdk"
+type = "development-tool"
+name = "Google Cloud SDK"
+domain = "development"
+status = "managed"
+purpose = "提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/google-cloud-sdk.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Google.CloudSDK；命令报告 583.0.0，包含 gcloud、bq、gsutil 与凭据助手。这些组件及 bundled Python 不单独登记；账号与凭据不纳入仓库。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["gcloud", "bq", "gsutil"]
+install_source = "WinGet"
+package_id = "Google.CloudSDK"
+version_constraint = ">=583.0.0"
+update_channel = "stable"
+environment_variables = ["PATH", "CLOUDSDK_CONFIG"]
+config_reference = "Google Cloud SDK 用户级配置与操作系统凭据存储"
+verification_commands = ["gcloud --version"]

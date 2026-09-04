@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:visual-studio-community"
+type = "software"
+name = "Visual Studio Community"
+domain = "development"
+status = "managed"
+purpose = "提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/visual-studio-community.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "本机为 Visual Studio Community 2026 18.9.2；已核验 CoreEditor、ManagedDesktop 与 Universal workloads。MSBuild、.NET SDK 10.0.400、.NET Framework/UWP SDK 作为该安装单元的组件，不单独登记。"
+relationships = []
+
+[software]
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "18.9.2"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://visualstudio.microsoft.com/vs/community/"
+config_restore = "通过 Visual Studio Installer 恢复 Community，并按受审阅的 .vsconfig 或工作负载清单恢复组件。"
+backup_location = "unknown"
+post_restore_checks = ["Visual Studio 可启动", "vswhere 显示安装完整且可启动", "ManagedDesktop 与 Universal workloads 存在", "dotnet --version 与 MSBuild -version 可执行"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:sqlite"
+type = "development-tool"
+name = "SQLite CLI"
+domain = "development"
+status = "managed"
+purpose = "提供本地 SQLite 数据库查询、差异与分析命令。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/sqlite.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 SQLite.SQLite；本机 3.53.4，sqldiff 与 sqlite3_analyzer 为同一安装单元组件。数据库文件与业务数据不纳入本工具资产。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["sqlite3", "sqldiff", "sqlite3_analyzer"]
+install_source = "WinGet"
+package_id = "SQLite.SQLite"
+version_constraint = ">=3.53.4"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "项目数据库文件由对应项目或数据资产负责"
+verification_commands = ["sqlite3 --version"]

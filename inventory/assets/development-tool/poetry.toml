@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:poetry"
+type = "development-tool"
+name = "Poetry"
+domain = "development"
+status = "managed"
+purpose = "管理 Python 项目的依赖、虚拟环境、构建与发布元数据。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/poetry.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "本机 Poetry 2.4.2 安装在 Python 3.12 用户级包目录；virtualenv 21.7.8 是 Poetry 依赖，不单独登记。"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:python"
+
+[development_tool]
+tool_kind = "package-manager"
+commands = ["poetry"]
+install_source = "PyPI / Python 用户级安装"
+package_id = "poetry"
+version_constraint = ">=2.4.2"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "Poetry 用户级配置与缓存（不得保存 registry 凭据）"
+verification_commands = ["poetry --version", "python -m pip show poetry"]

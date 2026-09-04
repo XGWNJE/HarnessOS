@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:nodejs"
+type = "development-tool"
+name = "Node.js"
+domain = "development"
+status = "managed"
+purpose = "提供 JavaScript/TypeScript 运行时及 npm 生态的基础开发环境。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/nodejs.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "本机 Node.js 24.20.0、npm/npx 11.19.0、Corepack 0.35.0；npm、npx 与 Corepack 为捆绑组件。WinGet 当前把安装映射到 OpenJS.NodeJS.22，但实际 MSI 与命令均为 24.20.0，恢复时须实时核验正确主版本包。Codex 私有 Node 不替代系统 Node。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["node", "npm", "npx", "corepack"]
+install_source = "Node.js 官方 MSI"
+package_id = ""
+version_constraint = ">=24.20.0"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "npm 用户级配置与全局包目录（不得保存 registry token）"
+verification_commands = ["node --version", "npm --version", "npx --version", "corepack --version"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:llvm"
+type = "development-tool"
+name = "LLVM Toolchain"
+domain = "development"
+status = "managed"
+purpose = "提供 Clang/LLVM 编译、链接、调试、格式化和语言服务工具。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/llvm.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 LLVM.LLVM；卸载注册表显示 22.1.8。当前 shell 的 PATH 未解析到 clang/clangd，恢复验收必须检查 PATH，不能把当前状态表述为命令已可用。LLVM 套件内部命令不单独登记。"
+relationships = []
+
+[development_tool]
+tool_kind = "compiler"
+commands = ["clang", "clang-cl", "clangd", "lld", "lldb"]
+install_source = "WinGet"
+package_id = "LLVM.LLVM"
+version_constraint = ">=22.1.8"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "项目级 Clang/LLVM 工具链配置"
+verification_commands = ["winget list --id LLVM.LLVM --exact", "clang --version", "clangd --version"]

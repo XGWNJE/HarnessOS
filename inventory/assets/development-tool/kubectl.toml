@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:kubectl"
+type = "development-tool"
+name = "Kubernetes CLI"
+domain = "development"
+status = "managed"
+purpose = "通过 kubectl 检查和管理 Kubernetes 集群资源与清单。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/kubectl.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Kubernetes.kubectl；本机客户端 1.37.0，内置 Kustomize 5.8.1，不单独登记。kubeconfig、证书与 token 不纳入仓库。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["kubectl"]
+install_source = "WinGet"
+package_id = "Kubernetes.kubectl"
+version_constraint = ">=1.37.0"
+update_channel = "stable"
+environment_variables = ["PATH", "KUBECONFIG"]
+config_reference = "kubeconfig 的安全逻辑引用（证书和 token 不纳入仓库）"
+verification_commands = ["kubectl version --client=true"]

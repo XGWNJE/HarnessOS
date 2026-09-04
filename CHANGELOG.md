@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-04 — 本机开发环境按安装单元登记
+
+- [新增] 登记 4 项开发软件与 28 项独立开发工具：IDE、桌面 AI 工具、语言运行时、编译工具链、包管理器、云/IaC CLI 和通用数据处理命令。
+- [修订] 按真实安装单元合并捆绑组件：Visual Studio 管理 .NET SDK/MSBuild/workloads，Node.js 管理 npm/npx/Corepack，Rustup、RubyInstaller、JDK、WinLibs、Git、Google Cloud SDK、kubectl 与 SQLite 各自管理随附命令，不为这些组件建立重复资产。
+- [修订] pnpm、Yarn、Claude Code、DeepSeek Harness 与 Lark CLI 指向 Node.js 安装依赖，Poetry 指向 Python；GitHub CLI 仅以 `uses` 关系关联 Git。
+- [保留] OpenCode 旧版安装项、独立 Ninja 冗余安装、Android SDK 未配置状态及 LLVM/OpenSSL PATH 缺口只记录为现场风险，本次不卸载、不修复、不另建未经批准的资产。
+
 ## 2026-09-04 — 资产目录增加静态 HTML 快速浏览入口
 
 - [新增] `catalog.html`：从既有资产事实源生成单文件离线浏览页，提供名称/ID/用途搜索、类型/领域/状态/时效组合筛选、类型计数、零结果提示与资产详情抽屉；桌面和窄屏布局共用同一份数据。

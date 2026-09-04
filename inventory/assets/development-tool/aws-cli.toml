@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:aws-cli"
+type = "development-tool"
+name = "AWS CLI"
+domain = "development"
+status = "managed"
+purpose = "从命令行管理和自动化 Amazon Web Services 资源。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/aws-cli.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Amazon.AWSCLI；本机 AWS CLI v2 2.36.36。其私有运行时不依赖系统 Python；账号、访问密钥与会话不纳入仓库。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["aws"]
+install_source = "WinGet"
+package_id = "Amazon.AWSCLI"
+version_constraint = ">=2.36.36"
+update_channel = "stable"
+environment_variables = ["PATH", "AWS_PROFILE", "AWS_REGION"]
+config_reference = "AWS CLI 用户级配置与操作系统凭据存储"
+verification_commands = ["aws --version"]

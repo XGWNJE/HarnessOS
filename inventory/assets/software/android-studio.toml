@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:android-studio"
+type = "software"
+name = "Android Studio"
+domain = "development"
+status = "managed"
+purpose = "提供 Android 项目的官方 IDE、Gradle 集成、调试与设备管理入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/android-studio.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio。IDE 内置 JBR，不单独登记。Android SDK、ADB 与模拟器未从 ANDROID_HOME、ANDROID_SDK_ROOT 或 PATH 检出，不在本资产中宣称已配置完成。"
+relationships = []
+
+[software]
+install_form = "package-manager"
+release_channel = "stable"
+minimum_verified_version = "2025.3"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://developer.android.com/studio"
+config_restore = "重新安装 IDE；Android SDK、模拟器、账号与项目级配置另行核验，不复制完整用户配置。"
+backup_location = "unknown"
+post_restore_checks = ["Android Studio 可启动", "版本信息显示 2025.3 或兼容稳定版本", "首次使用前确认 Android SDK 与设备工具链状态"]

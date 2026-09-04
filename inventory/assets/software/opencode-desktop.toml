@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:opencode-desktop"
+type = "software"
+name = "OpenCode Desktop"
+domain = "ai-agent"
+status = "managed"
+purpose = "提供 OpenCode 的桌面 AI 编程与本地项目交互入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/opencode-desktop.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop。本机另有 1.2.25 旧安装项；该遗留项不另建资产，也未在本次登记中卸载。"
+relationships = []
+
+[software]
+install_form = "package-manager"
+release_channel = "stable"
+minimum_verified_version = "1.18.25"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://opencode.ai/"
+config_restore = "恢复规范新版安装；账号、Provider、模型配置和凭据不进入 HarnessOS。"
+backup_location = "unknown"
+post_restore_checks = ["WinGet 或卸载注册表显示 OpenCode Desktop 新版安装", "应用可启动", "确认旧版 1.2.25 是否仍需保留"]

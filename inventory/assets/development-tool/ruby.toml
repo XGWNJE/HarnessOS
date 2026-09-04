@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:ruby"
+type = "development-tool"
+name = "RubyInstaller"
+domain = "development"
+status = "managed"
+purpose = "提供 Ruby 解释器、RubyGems 与常用 Ruby 项目工具。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/ruby.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 RubyInstallerTeam.Ruby.3.4；本机 Ruby 3.4.10。RubyGems 3.6.9、Bundler 2.6.9、Rake 13.2.1 与 ridk 为该安装单元组件，不单独登记。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["ruby", "gem", "bundle", "rake", "ridk"]
+install_source = "WinGet"
+package_id = "RubyInstallerTeam.Ruby.3.4"
+version_constraint = ">=3.4.10,<3.5"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "RubyGems 与 Bundler 用户级配置（不得保存 registry 凭据）"
+verification_commands = ["ruby --version", "gem --version", "bundle --version", "rake --version"]

@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:github-cli"
+type = "development-tool"
+name = "GitHub CLI"
+domain = "development"
+status = "managed"
+purpose = "从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/github-cli.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 GitHub.cli；本机 2.98.0。GitHub API 功能可独立使用，Git 仅作为本地仓库工作流的软关系；认证状态与 token 不纳入仓库。"
+
+[[relationships]]
+type = "uses"
+target = "development-tool:git"
+
+[development_tool]
+tool_kind = "cli"
+commands = ["gh"]
+install_source = "WinGet"
+package_id = "GitHub.cli"
+version_constraint = ">=2.98.0"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "GitHub CLI 用户级配置与操作系统凭据存储"
+verification_commands = ["gh --version", "gh help"]

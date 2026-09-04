@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:cmake"
+type = "development-tool"
+name = "CMake"
+domain = "development"
+status = "managed"
+purpose = "提供跨平台原生项目配置、构建生成、测试与打包入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/cmake.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 Kitware.CMake；本机独立版本 4.4.3，PATH 优先于 WinLibs 内置副本。CTest、CPack 与 CMake GUI 作为捆绑组件。独立 Ninja 当前被 WinLibs 内置 Ninja 覆盖，因此不登记。"
+relationships = []
+
+[development_tool]
+tool_kind = "compiler"
+commands = ["cmake", "ctest", "cpack", "cmake-gui"]
+install_source = "WinGet"
+package_id = "Kitware.CMake"
+version_constraint = ">=4.4.3"
+update_channel = "stable"
+environment_variables = ["PATH", "CMAKE_GENERATOR"]
+config_reference = "项目级 CMakePresets.json 与工具链文件"
+verification_commands = ["cmake --version", "ctest --version", "cpack --version"]

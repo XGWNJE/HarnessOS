@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:openssl"
+type = "development-tool"
+name = "OpenSSL Developer Tools"
+domain = "development"
+status = "managed"
+purpose = "提供 TLS、证书、密钥格式和密码学相关的开发与诊断命令。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/openssl.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 ShiningLight.OpenSSL.Dev；卸载注册表显示 4.0.2。当前 shell 的 PATH 未解析到 openssl，恢复验收必须检查命令可用性；不记录或备份任何私钥。"
+relationships = []
+
+[development_tool]
+tool_kind = "cli"
+commands = ["openssl"]
+install_source = "WinGet"
+package_id = "ShiningLight.OpenSSL.Dev"
+version_constraint = ">=4.0.2"
+update_channel = "stable"
+environment_variables = ["PATH", "OPENSSL_CONF"]
+config_reference = "OpenSSL 公共配置位置（仅逻辑引用；私钥不纳入）"
+verification_commands = ["winget list --id ShiningLight.OpenSSL.Dev --exact", "openssl version"]

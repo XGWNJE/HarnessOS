@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:uv"
+type = "development-tool"
+name = "uv"
+domain = "development"
+status = "managed"
+purpose = "提供独立的 Python 包、项目、工具和解释器管理能力。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/uv.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "WinGet 包 astral-sh.uv；实际命令版本 0.12.8，WinGet 已安装记录显示 0.12.7，登记以可执行文件核验结果为准并保留元数据差异。uv 为独立可执行工具，不依赖系统 Python 才能安装。"
+relationships = []
+
+[development_tool]
+tool_kind = "package-manager"
+commands = ["uv", "uvx"]
+install_source = "WinGet"
+package_id = "astral-sh.uv"
+version_constraint = ">=0.12.8"
+update_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "uv 用户级缓存、工具与 Python 管理目录（仅逻辑引用）"
+verification_commands = ["uv --version", "uv tool list"]
