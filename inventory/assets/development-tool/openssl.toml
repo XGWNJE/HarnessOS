@@ -13,7 +13,7 @@ upstream_updates = true
 declared_on = "2026-09-04"
 last_verified_on = "2026-09-04"
 review_days = 90
-notes = "WinGet 包 ShiningLight.OpenSSL.Dev；卸载注册表显示 4.0.2。当前 shell 的 PATH 未解析到 openssl，恢复验收必须检查命令可用性；不记录或备份任何私钥。"
+notes = "WinGet 包 ShiningLight.OpenSSL.Dev；本机 4.0.2。独立 OpenSSL bin 已注册到 Windows 机器 PATH 并完成版本核验；Git 随附副本不替代本资产，不记录或备份任何私钥。"
 relationships = []
 
 [development_tool]

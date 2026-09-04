@@ -13,7 +13,7 @@ upstream_updates = true
 declared_on = "2026-09-04"
 last_verified_on = "2026-09-04"
 review_days = 90
-notes = "当前通过 npm 全局安装，版本 11.25.0；不是 Node.js 自带组件，可与其他 npm 全局工具合并为一次安装命令。"
+notes = "当前通过 npm 全局安装，版本 11.25.0；不是 Node.js 自带组件，可与其他 npm 全局工具合并为一次安装命令。PNPM_HOME 及 v11 全局 bin 子目录已注册到 Windows 用户 PATH。"
 
 [[relationships]]
 type = "depends-on"
@@ -26,6 +26,6 @@ install_source = "npm 官方 registry"
 package_id = "pnpm"
 version_constraint = ">=11.25.0"
 update_channel = "stable"
-environment_variables = ["PATH"]
+environment_variables = ["PATH", "PNPM_HOME"]
 config_reference = "pnpm 用户级配置与 store（仅逻辑引用）"
 verification_commands = ["pnpm --version"]

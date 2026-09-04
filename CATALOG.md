@@ -2,12 +2,13 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 49 项资产、0 个配置档。
+共 50 项资产、0 个配置档。
 
 ## development-tool
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
+| `development-tool:android-sdk` | Android SDK | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Android 平台、构建工具、ADB、模拟器与 SDK 命令行管理能力。 |
 | `development-tool:aws-cli` | AWS CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Amazon Web Services 资源。 |
 | `development-tool:azure-cli` | Azure CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Microsoft Azure 资源。 |
 | `development-tool:bun` | Bun | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供独立的 JavaScript 运行时、包管理器、测试与打包工具。 |
@@ -89,6 +90,7 @@
 | `development-tool:pnpm` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:poetry` | `depends-on` | `development-tool:python` |
 | `development-tool:yarn` | `depends-on` | `development-tool:nodejs` |
+| `software:android-studio` | `uses` | `development-tool:android-sdk` |
 
 ## 配置档
 

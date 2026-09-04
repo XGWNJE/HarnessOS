@@ -13,7 +13,7 @@ upstream_updates = true
 declared_on = "2026-09-04"
 last_verified_on = "2026-09-04"
 review_days = 90
-notes = "WinGet 包 LLVM.LLVM；卸载注册表显示 22.1.8。当前 shell 的 PATH 未解析到 clang/clangd，恢复验收必须检查 PATH，不能把当前状态表述为命令已可用。LLVM 套件内部命令不单独登记。"
+notes = "WinGet 包 LLVM.LLVM；本机 22.1.8。LLVM bin 已注册到 Windows 机器 PATH，clang 与 clangd 均完成版本核验；LLVM 套件内部命令不单独登记。"
 relationships = []
 
 [development_tool]

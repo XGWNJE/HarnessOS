@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-04 — 清理旧版并补齐开发环境变量
+
+- [废止] 使用旧版自带卸载器移除 OpenCode Desktop 1.2.25，只保留规范登记的 1.18.25；未清理新版进程或用户数据。
+- [新增] 将已安装的 Android SDK 作为一个安装单元登记，统一包含平台、build-tools、ADB、模拟器与命令行工具；Android Studio 以 `uses` 关系引用该资产。
+- [修订] 注册用户级 `ANDROID_HOME`、`ANDROID_SDK_ROOT`、`PNPM_HOME` 及其 PATH，注册机器级 LLVM/OpenSSL PATH，并完成 ADB、模拟器、SDK Manager、Clang、clangd、OpenSSL 与 pnpm 全局目录核验。
+
 ## 2026-09-04 — 本机开发环境按安装单元登记
 
 - [新增] 登记 4 项开发软件与 28 项独立开发工具：IDE、桌面 AI 工具、语言运行时、编译工具链、包管理器、云/IaC CLI 和通用数据处理命令。

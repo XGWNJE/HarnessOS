@@ -13,7 +13,7 @@ upstream_updates = true
 declared_on = "2026-09-04"
 last_verified_on = "2026-09-04"
 review_days = 90
-notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop。本机另有 1.2.25 旧安装项；该遗留项不另建资产，也未在本次登记中卸载。"
+notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop。旧版 1.2.25 已于 2026-09-04 使用其卸载器移除：旧卸载注册表项和安装目录均不存在；WinGet 因同一包 ID 曾映射两套安装，仍显示一条 1.2.25 残留检测结果，不能据此再次卸载。"
 relationships = []
 
 [software]
@@ -25,4 +25,4 @@ avoid_versions = []
 official_source = "https://opencode.ai/"
 config_restore = "恢复规范新版安装；账号、Provider、模型配置和凭据不进入 HarnessOS。"
 backup_location = "unknown"
-post_restore_checks = ["WinGet 或卸载注册表显示 OpenCode Desktop 新版安装", "应用可启动", "确认旧版 1.2.25 是否仍需保留"]
+post_restore_checks = ["卸载注册表只显示 OpenCode Desktop 新版安装", "应用可启动", "旧版安装目录与卸载项不存在"]

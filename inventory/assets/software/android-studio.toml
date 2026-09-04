@@ -13,8 +13,11 @@ upstream_updates = true
 declared_on = "2026-09-04"
 last_verified_on = "2026-09-04"
 review_days = 90
-notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio。IDE 内置 JBR，不单独登记。Android SDK、ADB 与模拟器未从 ANDROID_HOME、ANDROID_SDK_ROOT 或 PATH 检出，不在本资产中宣称已配置完成。"
-relationships = []
+notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio。IDE 内置 JBR，不单独登记；Android SDK 作为由 SDK Manager 管理的独立安装单元登记。"
+
+[[relationships]]
+type = "uses"
+target = "development-tool:android-sdk"
 
 [software]
 install_form = "package-manager"
@@ -25,4 +28,4 @@ avoid_versions = []
 official_source = "https://developer.android.com/studio"
 config_restore = "重新安装 IDE；Android SDK、模拟器、账号与项目级配置另行核验，不复制完整用户配置。"
 backup_location = "unknown"
-post_restore_checks = ["Android Studio 可启动", "版本信息显示 2025.3 或兼容稳定版本", "首次使用前确认 Android SDK 与设备工具链状态"]
+post_restore_checks = ["Android Studio 可启动", "版本信息显示 2025.3 或兼容稳定版本", "Android SDK、ADB 与模拟器命令可解析"]

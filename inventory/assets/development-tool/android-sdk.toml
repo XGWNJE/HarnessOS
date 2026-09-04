@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:android-sdk"
+type = "development-tool"
+name = "Android SDK"
+domain = "development"
+status = "managed"
+purpose = "提供 Android 平台、构建工具、ADB、模拟器与 SDK 命令行管理能力。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/android-sdk.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-04"
+last_verified_on = "2026-09-04"
+review_days = 90
+notes = "通过 Android Studio SDK Manager 管理；已核验 platform-tools 37.0.1、emulator 37.1.11、cmdline-tools 22.0，以及 Android platforms/build-tools。ADB、模拟器、SDK 命令行工具和各平台包属于同一安装单元，不逐项登记。ANDROID_HOME、ANDROID_SDK_ROOT 与所需 PATH 已注册到 Windows 用户环境。"
+relationships = []
+
+[development_tool]
+tool_kind = "runtime-sdk"
+commands = ["adb", "emulator", "sdkmanager"]
+install_source = "Android Studio SDK Manager"
+package_id = ""
+version_constraint = ">=22.0"
+update_channel = "stable"
+environment_variables = ["ANDROID_HOME", "ANDROID_SDK_ROOT", "PATH"]
+config_reference = "Android SDK Manager 包清单与用户级 AVD 配置（仅逻辑引用）"
+verification_commands = ["adb version", "emulator -version", "sdkmanager --version"]
