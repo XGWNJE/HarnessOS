@@ -14,7 +14,7 @@
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
-| `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程时代的技术栈参考与取证基线（来源索引）。「选型服务于反馈闭环」的判断基线、验收红线与长链路证据链原则已上移浓缩进 global/AGENTS.md 的「AI 协作与工程判断基线」一节。本文件仅保留推荐分层栈与证据链收敛回路作为参… |
+| `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | AI 编程技术栈选型与判断基线的参考事实来源（目标模式）。global/AGENTS.md「AI 协作与工程判断基线」给出判断句与验收红线；本 skill 保留其详细验收清单、推荐分层栈与证据链回路作为可核验参考。触发时以全局 Rules… |
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:codex-session-recovery` | codex-session-recovery | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断与恢复 Codex Desktop 历史会话。用于切换 Provider 或账号后任务列表缺失、rollout 正文缺失、SQLite 索引与文件不一致、旧会话不可见或需要从备份安全合并历史记录的场景。 |
 | `skill:electron-runtime-debugging` | electron-runtime-debugging | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断 Electron 桌面应用中类型声明与运行时不一致、IPC 重复监听或过早发送、ESM 迁移连带故障、打包遗漏运行时数据，以及 globalShortcut/RegisterHotKey 自动重复导致的交互异常。 |
