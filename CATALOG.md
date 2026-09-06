@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 50 项资产、0 个配置档。
+共 51 项资产、0 个配置档。
 
 ## development-tool
 
@@ -11,6 +11,7 @@
 | `development-tool:android-sdk` | Android SDK | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Android 平台、构建工具、ADB、模拟器与 SDK 命令行管理能力。 |
 | `development-tool:aws-cli` | AWS CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Amazon Web Services 资源。 |
 | `development-tool:azure-cli` | Azure CLI | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 从命令行管理和自动化 Microsoft Azure 资源。 |
+| `development-tool:blender-mcp` | Blender MCP | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。 |
 | `development-tool:bun` | Bun | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供独立的 JavaScript 运行时、包管理器、测试与打包工具。 |
 | `development-tool:claude-code` | Claude Code | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
 | `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
@@ -83,6 +84,7 @@
 
 | 来源 | 关系 | 目标 |
 |---|---|---|
+| `development-tool:blender-mcp` | `depends-on` | `development-tool:uv` |
 | `development-tool:claude-code` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:deepseek-harness` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:github-cli` | `uses` | `development-tool:git` |

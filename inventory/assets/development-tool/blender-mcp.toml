@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:blender-mcp"
+type = "development-tool"
+name = "Blender MCP"
+domain = "ai-agent"
+status = "managed"
+purpose = "通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/blender-mcp.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "使用 Blender 官方 Lab MCP Server v1.0.0；Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。MCP 运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:uv"
+
+[development_tool]
+tool_kind = "cli"
+commands = ["blender-mcp"]
+install_source = "Blender 官方 Projects 源码仓库，通过 uv 运行"
+package_id = "lab/blender_mcp"
+version_constraint = "==1.0.0"
+update_channel = "pinned"
+environment_variables = ["BLENDER_HOST", "BLENDER_PORT"]
+config_reference = "Codex 用户级 config.toml 中的 blender MCP 服务配置"
+verification_commands = ["blender-mcp --help", "MCP initialize", "MCP tools/list", "MCP get_objects_summary"]
