@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:genshin-impact"
+type = "software"
+name = "原神"
+domain = "entertainment"
+status = "managed"
+purpose = "提供 Windows 版原神客户端及其本地游戏资源。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/genshin-impact.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 YuanShen.exe，启动器配置显示 game_version=7.0.0。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "stable"
+minimum_verified_version = "7.0.0"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://genshin.hoyoverse.com/"
+config_restore = "通过官方启动器恢复或校验完整游戏资源；账号与云端进度按 HoYoverse 账户流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["启动器能识别原神安装文件", "启动器校验通过", "YuanShen.exe 可启动"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:mi-hoyo-launcher"
+type = "software"
+name = "米哈游启动器"
+domain = "entertainment"
+status = "managed"
+purpose = "统一管理米哈游 PC 游戏的安装、更新、修复与启动。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/mi-hoyo-launcher.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "本机安装目录为用户文档下的 miHoYo Launcher；文件产品名为米哈游启动器，版本 1.18.0.380。该目录同时承载原神与绝区零的游戏文件。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "stable"
+minimum_verified_version = "1.18.0.380"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://hoyoplay.hoyoverse.com/"
+config_restore = "恢复官方启动器并重新关联游戏安装目录；账号、登录状态和凭据按服务自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["启动器可打开", "启动器能识别原神与绝区零安装文件", "启动器版本信息可查看"]

@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 51 项资产、0 个配置档。
+共 54 项资产、0 个配置档。
 
 ## development-tool
 
@@ -70,8 +70,11 @@
 | `software:android-studio` | Android Studio | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Android 项目的官方 IDE、Gradle 集成、调试与设备管理入口。 |
 | `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
 | `software:feishu-desktop` | 飞书桌面客户端 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
+| `software:genshin-impact` | 原神 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 版原神客户端及其本地游戏资源。 |
+| `software:mi-hoyo-launcher` | 米哈游启动器 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 统一管理米哈游 PC 游戏的安装、更新、修复与启动。 |
 | `software:opencode-desktop` | OpenCode Desktop | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 OpenCode 的桌面 AI 编程与本地项目交互入口。 |
 | `software:visual-studio-community` | Visual Studio Community | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。 |
+| `software:zenless-zone-zero` | 绝区零 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 版绝区零客户端及其本地游戏资源。 |
 
 ## workflow
 
