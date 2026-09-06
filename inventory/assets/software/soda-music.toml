@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:soda-music"
+type = "software"
+name = "汽水音乐"
+domain = "entertainment"
+status = "managed"
+purpose = "提供音乐播放、发现与账号内容服务。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/soda-music.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://www.qishui.com/download"
+config_restore = "通过官方来源恢复应用；账号、播放列表和个人数据按应用自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "可完成账号登录或播放测试内容"]

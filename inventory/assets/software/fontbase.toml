@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:fontbase"
+type = "software"
+name = "FontBase"
+domain = "creative-media"
+status = "managed"
+purpose = "提供字体预览、分类与启用管理。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/fontbase.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://fontba.se/"
+config_restore = "通过官方来源恢复应用；字体文件与分类配置按应用自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "字体列表可正常加载"]

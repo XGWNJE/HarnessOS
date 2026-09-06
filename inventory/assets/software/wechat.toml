@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:wechat"
+type = "software"
+name = "微信"
+domain = "communication"
+status = "managed"
+purpose = "提供桌面即时通信、文件传输与扫码登录入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/wechat.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://weixin.qq.com/"
+config_restore = "通过官方来源恢复应用；账号、配置和个人数据按应用自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "可完成账号登录"]

@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:krita"
+type = "software"
+name = "Krita"
+domain = "creative-media"
+status = "managed"
+purpose = "提供数字绘画、图像编辑与绘画资源管理。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/krita.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://krita.org/en/download/"
+config_restore = "通过官方来源恢复应用；画笔、工作区与个人资源按应用自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "可新建并保存画布"]

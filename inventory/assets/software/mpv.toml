@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:mpv"
+type = "software"
+name = "mpv"
+domain = "entertainment"
+status = "managed"
+purpose = "提供本地音视频播放。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/mpv.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://mpv.io/"
+config_restore = "通过官方来源恢复应用；播放配置和脚本按应用自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "可播放本地媒体文件"]

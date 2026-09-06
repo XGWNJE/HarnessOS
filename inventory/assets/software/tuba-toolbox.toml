@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:tuba-toolbox"
+type = "software"
+name = "图吧工具箱"
+domain = "system-hardware"
+status = "managed"
+purpose = "提供 Windows 硬件检测、信息查看与性能测试工具集合。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/tuba-toolbox.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认，官方来源待复核。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "unknown"
+config_restore = "通过已核验来源恢复工具包；工具包内各组件按自身流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["工具箱可启动", "硬件信息可读取"]
