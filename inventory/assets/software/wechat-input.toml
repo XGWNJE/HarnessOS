@@ -13,16 +13,16 @@ upstream_updates = true
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认，官方来源待复核。"
+notes = "本机版本 2.1.3.18 已由 WinGet 清单核验；官方页面建议优先使用输入法自带更新，恢复范围未单独确认。"
 relationships = []
 
 [software]
-install_form = "unknown"
-release_channel = "unknown"
-minimum_verified_version = ""
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "2.1.3.18"
 pinned_version = ""
 avoid_versions = []
-official_source = "unknown"
+official_source = "https://z.weixin.qq.com/"
 config_restore = "通过官方来源恢复应用；输入法设置与词库按应用自身流程恢复。"
 backup_location = "unknown"
 post_restore_checks = ["输入法可启用", "可完成中文输入"]

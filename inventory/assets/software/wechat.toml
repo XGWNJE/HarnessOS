@@ -13,16 +13,16 @@ upstream_updates = true
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+notes = "本机版本 4.1.13.12 已由 WinGet 清单核验；官方稳定包当前显示 4.1.13.63，恢复范围未单独确认。"
 relationships = []
 
 [software]
-install_form = "unknown"
-release_channel = "unknown"
-minimum_verified_version = ""
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "4.1.13.12"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://weixin.qq.com/"
+official_source = "https://windows.weixin.qq.com/?lang=zh_CN"
 config_restore = "通过官方来源恢复应用；账号、配置和个人数据按应用自身流程恢复。"
 backup_location = "unknown"
 post_restore_checks = ["应用可启动", "可完成账号登录"]

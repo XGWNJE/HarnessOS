@@ -13,13 +13,13 @@ upstream_updates = true
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认。"
+notes = "本机版本 2026.5.23 已由 WinGet 清单核验；官方更新历史可追踪，配置恢复范围未单独确认。"
 relationships = []
 
 [software]
-install_form = "unknown"
-release_channel = "unknown"
-minimum_verified_version = ""
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "2026.5.23"
 pinned_version = ""
 avoid_versions = []
 official_source = "https://fontba.se/"

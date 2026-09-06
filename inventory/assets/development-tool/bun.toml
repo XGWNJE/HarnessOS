@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-04"
+last_verified_on = "2026-09-06"
 review_days = 90
-notes = "WinGet 包 Oven-sh.Bun；本机 1.4.0。Bun 是独立运行时，不依赖系统 Node.js。"
+notes = "WinGet 包 Oven-sh.Bun；本机 1.4.0，WinGet 稳定源当前提供 1.4.2。Bun 是独立运行时，不依赖系统 Node.js。"
 relationships = []
 
 [development_tool]

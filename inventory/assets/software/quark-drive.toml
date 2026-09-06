@@ -13,13 +13,13 @@ upstream_updates = true
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为本机已安装程序；具体版本、安装路径、同步范围和恢复范围未单独确认。"
+notes = "本机版本 7.1.7.791 已由 ARP 清单核验；官方 Windows 客户端可从夸克网盘下载页获取，WinGet 另有 3.24.0 版本线，二者版本号不可直接混用。"
 relationships = []
 
 [software]
-install_form = "unknown"
-release_channel = "unknown"
-minimum_verified_version = ""
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "7.1.7.791"
 pinned_version = ""
 avoid_versions = []
 official_source = "https://pan.quark.cn/"

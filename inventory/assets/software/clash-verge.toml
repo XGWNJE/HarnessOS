@@ -13,16 +13,16 @@ upstream_updates = true
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为本机已安装程序；具体版本、安装路径、配置来源和恢复范围未单独确认。"
+notes = "本机版本 2.5.2 已由 ARP 与 WinGet 清单交叉核验；官方稳定版仅通过项目 GitHub Releases 发布，配置来源和恢复范围未单独确认。"
 relationships = []
 
 [software]
-install_form = "unknown"
-release_channel = "unknown"
-minimum_verified_version = ""
+install_form = "installer"
+release_channel = "stable"
+minimum_verified_version = "2.5.2"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://github.com/clash-verge-rev/clash-verge-rev"
+official_source = "https://github.com/clash-verge-rev/clash-verge-rev/releases"
 config_restore = "通过已核验来源恢复应用；代理配置、订阅和凭据按用户授权的安全流程恢复。"
 backup_location = "unknown"
 post_restore_checks = ["应用可启动", "代理状态可按需切换"]

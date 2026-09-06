@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-04"
+last_verified_on = "2026-09-06"
 review_days = 90
-notes = "通过 Android Studio SDK Manager 管理；已核验 platform-tools 37.0.1、emulator 37.1.11、cmdline-tools 22.0，以及 Android platforms/build-tools。ADB、模拟器、SDK 命令行工具和各平台包属于同一安装单元，不逐项登记。ANDROID_HOME、ANDROID_SDK_ROOT 与所需 PATH 已注册到 Windows 用户环境。"
+notes = "通过 Android Studio SDK Manager 管理；已核验 platform-tools 37.0.1、emulator 37.1.11、cmdline-tools 22.0，以及 Android platforms/build-tools；sdkmanager 22.0 当前可用但已提示迁移到 Android CLI。ADB、模拟器、SDK 命令行工具和各平台包属于同一安装单元，不逐项登记。ANDROID_HOME、ANDROID_SDK_ROOT 与所需 PATH 已注册到 Windows 用户环境。"
 relationships = []
 
 [development_tool]

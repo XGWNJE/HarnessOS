@@ -72,21 +72,21 @@
 | `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
 | `software:feishu-desktop` | 飞书桌面客户端 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
 | `software:fontbase` | FontBase | `creative-media` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供字体预览、分类与启用管理。 |
-| `software:genshin-impact` | 原神 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 版原神客户端及其本地游戏资源。 |
+| `software:genshin-impact` | 原神 | `entertainment` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 版原神客户端及其本地游戏资源。 |
 | `software:google-chrome` | Google Chrome | `browser-web` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供网页浏览、账号登录与 Web 应用访问。 |
-| `software:krita` | Krita | `creative-media` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供数字绘画、图像编辑与绘画资源管理。 |
-| `software:mi-hoyo-launcher` | 米哈游启动器 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 统一管理米哈游 PC 游戏的安装、更新、修复与启动。 |
-| `software:mpv` | mpv | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本地音视频播放。 |
+| `software:krita` | Krita | `creative-media` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 提供数字绘画、图像编辑与绘画资源管理。 |
+| `software:mi-hoyo-launcher` | 米哈游启动器 | `entertainment` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 统一管理米哈游 PC 游戏的安装、更新、修复与启动。 |
+| `software:mpv` | mpv | `entertainment` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 提供本地音视频播放。 |
 | `software:obsidian` | Obsidian | `productivity` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本地 Markdown 知识库编辑与链接式笔记管理。 |
 | `software:opencode-desktop` | OpenCode Desktop | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 OpenCode 的桌面 AI 编程与本地项目交互入口。 |
 | `software:quark-drive` | 夸克网盘 | `storage-backup` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供云端文件存储、同步与分享。 |
 | `software:soda-music` | 汽水音乐 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供音乐播放、发现与账号内容服务。 |
-| `software:tuba-toolbox` | 图吧工具箱 | `system-hardware` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 硬件检测、信息查看与性能测试工具集合。 |
+| `software:tuba-toolbox` | 图吧工具箱 | `system-hardware` | 第三方 | 不跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 硬件检测、信息查看与性能测试工具集合。 |
 | `software:uu-remote` | UU远程 | `network-remote` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供远程桌面连接与远程控制。 |
 | `software:visual-studio-community` | Visual Studio Community | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。 |
 | `software:wechat` | 微信 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供桌面即时通信、文件传输与扫码登录入口。 |
 | `software:wechat-input` | 微信输入法 | `productivity` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供中文文字输入与词库服务。 |
-| `software:zenless-zone-zero` | 绝区零 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 版绝区零客户端及其本地游戏资源。 |
+| `software:zenless-zone-zero` | 绝区零 | `entertainment` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 版绝区零客户端及其本地游戏资源。 |
 
 ## workflow
 
@@ -115,4 +115,9 @@
 
 ## 待复核
 
-暂无。
+- `software:genshin-impact`：偏好或动态事实不完整
+- `software:krita`：偏好或动态事实不完整
+- `software:mi-hoyo-launcher`：偏好或动态事实不完整
+- `software:mpv`：偏好或动态事实不完整
+- `software:tuba-toolbox`：偏好或动态事实不完整
+- `software:zenless-zone-zero`：偏好或动态事实不完整

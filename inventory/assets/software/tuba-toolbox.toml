@@ -9,17 +9,17 @@ platforms = ["windows"]
 fact_source = "inventory/assets/software/tuba-toolbox.toml"
 preference_source = "owner-declared"
 provenance = "third-party"
-upstream_updates = true
+upstream_updates = false
 declared_on = "2026-09-06"
 last_verified_on = "2026-09-06"
 review_days = 90
-notes = "截图识别为桌面快捷方式；安装形态、版本、路径和恢复范围未单独确认，官方来源待复核。"
+notes = "本机版本 2026.01.1 已由 ARP 清单核验；搜索结果存在多个相互冲突的下载站和重构项目，当前未确认原版工具箱的可信上游来源与更新渠道，暂不据此补齐来源字段。"
 relationships = []
 
 [software]
 install_form = "unknown"
 release_channel = "unknown"
-minimum_verified_version = ""
+minimum_verified_version = "2026.01.1"
 pinned_version = ""
 avoid_versions = []
 official_source = "unknown"

@@ -591,7 +591,8 @@ class Catalog:
             return True
         if asset_type == "software":
             extension = data.get("software", {})
-            return any(not extension.get(key) for key in ("install_form", "release_channel", "official_source"))
+            critical = ("install_form", "release_channel", "official_source", "minimum_verified_version")
+            return any(not extension.get(key) or extension.get(key) == "unknown" for key in critical)
         if asset_type == "development-tool":
             extension = data.get("development_tool", {})
             return any(not extension.get(key) for key in ("tool_kind", "commands", "install_source", "version_constraint", "verification_commands"))

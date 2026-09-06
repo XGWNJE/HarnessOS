@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-04"
+last_verified_on = "2026-09-06"
 review_days = 90
-notes = "WinGet 包 astral-sh.uv；实际命令版本 0.12.8，WinGet 已安装记录显示 0.12.7，登记以可执行文件核验结果为准并保留元数据差异。uv 为独立可执行工具，不依赖系统 Python 才能安装。"
+notes = "WinGet 包 astral-sh.uv；实际命令版本 0.12.8，WinGet 已安装记录显示 0.12.7、可用 0.12.10，登记以可执行文件核验结果 0.12.8 为准并保留元数据差异。uv 为独立可执行工具，不依赖系统 Python 才能安装。"
 relationships = []
 
 [development_tool]
