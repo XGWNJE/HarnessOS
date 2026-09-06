@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:clash-verge"
+type = "software"
+name = "Clash Verge"
+domain = "network-remote"
+status = "managed"
+purpose = "提供本机网络代理配置与连接管理。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/clash-verge.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为本机已安装程序；具体版本、安装路径、配置来源和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://github.com/clash-verge-rev/clash-verge-rev"
+config_restore = "通过已核验来源恢复应用；代理配置、订阅和凭据按用户授权的安全流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "代理状态可按需切换"]

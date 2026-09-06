@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:quark-drive"
+type = "software"
+name = "夸克网盘"
+domain = "storage-backup"
+status = "managed"
+purpose = "提供云端文件存储、同步与分享。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/quark-drive.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-06"
+last_verified_on = "2026-09-06"
+review_days = 90
+notes = "截图识别为本机已安装程序；具体版本、安装路径、同步范围和恢复范围未单独确认。"
+relationships = []
+
+[software]
+install_form = "unknown"
+release_channel = "unknown"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+official_source = "https://pan.quark.cn/"
+config_restore = "通过官方来源恢复应用；账号、同步目录和云端文件按用户授权的安全流程恢复。"
+backup_location = "unknown"
+post_restore_checks = ["应用可启动", "可完成账号登录", "同步状态可查看"]

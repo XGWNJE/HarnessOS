@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 64 项资产、0 个配置档。
+共 66 项资产、0 个配置档。
 
 ## development-tool
 
@@ -68,6 +68,7 @@
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
 | `software:android-studio` | Android Studio | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Android 项目的官方 IDE、Gradle 集成、调试与设备管理入口。 |
+| `software:clash-verge` | Clash Verge | `network-remote` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本机网络代理配置与连接管理。 |
 | `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
 | `software:feishu-desktop` | 飞书桌面客户端 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
 | `software:fontbase` | FontBase | `creative-media` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供字体预览、分类与启用管理。 |
@@ -78,6 +79,7 @@
 | `software:mpv` | mpv | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本地音视频播放。 |
 | `software:obsidian` | Obsidian | `productivity` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供本地 Markdown 知识库编辑与链接式笔记管理。 |
 | `software:opencode-desktop` | OpenCode Desktop | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 OpenCode 的桌面 AI 编程与本地项目交互入口。 |
+| `software:quark-drive` | 夸克网盘 | `storage-backup` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供云端文件存储、同步与分享。 |
 | `software:soda-music` | 汽水音乐 | `entertainment` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供音乐播放、发现与账号内容服务。 |
 | `software:tuba-toolbox` | 图吧工具箱 | `system-hardware` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 硬件检测、信息查看与性能测试工具集合。 |
 | `software:uu-remote` | UU远程 | `network-remote` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供远程桌面连接与远程控制。 |
