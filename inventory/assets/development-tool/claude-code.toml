@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-07"
 review_days = 90
-notes = "当前通过 npm 全局安装 @anthropic-ai/claude-code 2.1.260；npm `latest` 为 2.1.261，`stable` 标签为 2.1.236，`next` 为 2.1.263；该包以 Node/npm 完成安装，但当前 claude.cmd 启动包内原生 claude.exe。记录 Node 依赖用于复刻当前安装形态；账号、API key 与会话不纳入仓库。"
+notes = "当前通过 npm 全局安装 @anthropic-ai/claude-code 2.1.263；npm `latest` 与 `next` 均为 2.1.263，`stable` 标签为 2.1.236；该包以 Node/npm 完成安装，但当前 claude.cmd 启动包内原生 claude.exe。记录 Node 依赖用于复刻当前安装形态；账号、API key 与会话不纳入仓库。"
 
 [[relationships]]
 type = "depends-on"
@@ -24,7 +24,7 @@ tool_kind = "cli"
 commands = ["claude"]
 install_source = "npm 官方 registry"
 package_id = "@anthropic-ai/claude-code"
-version_constraint = ">=2.1.260"
+version_constraint = ">=2.1.263"
 update_channel = "other"
 environment_variables = ["PATH"]
 config_reference = "Claude Code 用户级配置与操作系统凭据存储"
