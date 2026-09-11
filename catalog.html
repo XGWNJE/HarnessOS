@@ -164,7 +164,7 @@
       cursor: pointer;
     }
 
-    .filter:focus-visible, .reset:focus-visible, .type-button:focus-visible,
+    .filter:focus-visible, .reset:focus-visible, .domain-button:focus-visible,
     .asset-row:focus-visible, .icon-button:focus-visible, .copy-button:focus-visible {
       outline: 3px solid rgba(49, 87, 213, 0.2);
       outline-offset: 2px;
@@ -190,7 +190,7 @@
       grid-template-columns: 210px minmax(0, 1fr);
     }
 
-    .type-rail {
+    .domain-rail {
       padding: 22px 16px;
       background: var(--surface);
       border-right: 1px solid var(--border);
@@ -205,13 +205,13 @@
       text-transform: uppercase;
     }
 
-    .type-list {
+    .domain-list {
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
 
-    .type-button {
+    .domain-button {
       width: 100%;
       min-height: 40px;
       display: flex;
@@ -227,21 +227,21 @@
       cursor: pointer;
     }
 
-    .type-button:hover { background: var(--surface-subtle); color: var(--text); }
+    .domain-button:hover { background: var(--surface-subtle); color: var(--text); }
 
-    .type-button.active {
+    .domain-button.active {
       background: var(--accent-soft);
       color: var(--accent);
       font-weight: 650;
     }
 
-    .type-count {
+    .domain-count {
       color: var(--text-muted);
       font-size: 12px;
       font-variant-numeric: tabular-nums;
     }
 
-    .type-button.active .type-count { color: var(--accent); }
+    .domain-button.active .domain-count { color: var(--accent); }
 
     .content {
       min-width: 0;
@@ -570,11 +570,11 @@
       .mobile-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow: visible; }
       .mobile-filters .filter { display: block; width: 100%; min-width: 0; }
       .workspace { display: block; }
-      .type-rail { padding: 10px 16px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--border); scrollbar-width: none; }
-      .type-rail::-webkit-scrollbar { display: none; }
+      .domain-rail { padding: 10px 16px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+      .domain-rail::-webkit-scrollbar { display: none; }
       .rail-label { display: none; }
-      .type-list { flex-direction: row; width: max-content; }
-      .type-button { width: auto; min-height: 36px; gap: 8px; white-space: nowrap; }
+      .domain-list { flex-direction: row; width: max-content; }
+      .domain-button { width: auto; min-height: 36px; gap: 8px; white-space: nowrap; }
       .content { padding: 18px 16px 28px; }
       .freshness-legend { display: none; }
       th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3), th:nth-child(5), td:nth-child(5) { display: none; }
@@ -632,8 +632,6 @@
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
           </button>
         </div>
-        <select class="filter" id="type-filter" aria-label="按类型筛选"><option value="">全部类型</option></select>
-        <select class="filter" id="domain-filter" aria-label="按领域筛选"><option value="">全部领域</option></select>
         <select class="filter" id="status-filter" aria-label="按状态筛选"><option value="">全部状态</option></select>
         <select class="filter" id="freshness-filter" aria-label="按时效筛选"><option value="">全部时效</option></select>
         <button class="reset" id="reset" type="button">清除筛选</button>
@@ -643,9 +641,9 @@
     <div class="mobile-filters" id="mobile-filters" aria-label="移动端资产筛选"></div>
 
     <div class="workspace">
-      <aside class="type-rail" aria-label="资产类型">
-        <p class="rail-label">资产类型</p>
-        <nav class="type-list" id="type-list"></nav>
+      <aside class="domain-rail" aria-label="资产领域">
+        <p class="rail-label">领域</p>
+        <nav class="domain-list" id="domain-list"></nav>
       </aside>
 
       <main class="content">
@@ -706,16 +704,14 @@
         freshness: { current: "当前", stale: "已过期", incomplete: "信息不完整" }
       };
 
-      const state = { query: "", type: "", domain: "", status: "", freshness: "", selected: "" };
+      const state = { query: "", domain: "", status: "", freshness: "", selected: "" };
       const el = id => document.getElementById(id);
       const summary = el("summary");
       const search = el("search");
       const clearSearch = el("clear-search");
-      const typeFilter = el("type-filter");
-      const domainFilter = el("domain-filter");
       const statusFilter = el("status-filter");
       const freshnessFilter = el("freshness-filter");
-      const typeList = el("type-list");
+      const domainList = el("domain-list");
       const rows = el("asset-rows");
       const resultCount = el("result-count");
       const empty = el("empty");
@@ -742,21 +738,16 @@
         clone.addEventListener("change", () => {
           state[stateKey] = clone.value;
           source.value = clone.value;
-          if (stateKey === "type") renderTypeRail();
           render();
         });
         el("mobile-filters").appendChild(clone);
         return clone;
       }
 
-      appendOptions(typeFilter, "type");
-      appendOptions(domainFilter, "domain");
       appendOptions(statusFilter, "status");
       appendOptions(freshnessFilter, "freshness");
 
       const mobileFilters = {
-        type: cloneMobileFilter(typeFilter, "type"),
-        domain: cloneMobileFilter(domainFilter, "domain"),
         status: cloneMobileFilter(statusFilter, "status"),
         freshness: cloneMobileFilter(freshnessFilter, "freshness")
       };
@@ -765,42 +756,41 @@
 
       function syncFilter(key, value) {
         state[key] = value;
-        const desktop = { type: typeFilter, domain: domainFilter, status: statusFilter, freshness: freshnessFilter }[key];
+        const desktop = { status: statusFilter, freshness: freshnessFilter }[key];
         desktop.value = value;
         mobileFilters[key].value = value;
       }
 
-      function renderTypeRail() {
-        typeList.replaceChildren();
+      function renderDomainRail() {
+        domainList.replaceChildren();
         const counts = assets.reduce((map, asset) => {
-          map[asset.type] = (map[asset.type] || 0) + 1;
+          map[asset.domain] = (map[asset.domain] || 0) + 1;
           return map;
         }, {});
-        const entries = [["", "全部", assets.length], ...Object.keys(counts)
-          .sort((a, b) => label("type", a).localeCompare(label("type", b), "zh-CN"))
-          .map(type => [type, label("type", type), counts[type]])];
+        const entries = [["", "全部领域", assets.length], ...Object.keys(counts)
+          .sort((a, b) => label("domain", a).localeCompare(label("domain", b), "zh-CN"))
+          .map(domain => [domain, label("domain", domain), counts[domain]])];
         entries.forEach(([value, text, count]) => {
           const button = document.createElement("button");
           button.type = "button";
-          button.className = `type-button${state.type === value ? " active" : ""}`;
-          button.setAttribute("aria-pressed", String(state.type === value));
+          button.className = `domain-button${state.domain === value ? " active" : ""}`;
+          button.setAttribute("aria-pressed", String(state.domain === value));
           const name = document.createElement("span");
           name.textContent = text;
           const number = document.createElement("span");
-          number.className = "type-count";
+          number.className = "domain-count";
           number.textContent = count;
           button.append(name, number);
           button.addEventListener("click", () => {
-            syncFilter("type", value);
-            renderTypeRail();
+            state.domain = value;
+            renderDomainRail();
             render();
           });
-          typeList.appendChild(button);
+          domainList.appendChild(button);
         });
       }
 
       function matches(asset) {
-        if (state.type && asset.type !== state.type) return false;
         if (state.domain && asset.domain !== state.domain) return false;
         if (state.status && asset.status !== state.status) return false;
         if (state.freshness && asset.freshness !== state.freshness) return false;
@@ -1002,22 +992,21 @@
 
       search.addEventListener("input", () => { state.query = search.value.trim(); render(); });
       clearSearch.addEventListener("click", () => { search.value = ""; state.query = ""; search.focus(); render(); });
-      typeFilter.addEventListener("change", () => { syncFilter("type", typeFilter.value); renderTypeRail(); render(); });
-      domainFilter.addEventListener("change", () => { syncFilter("domain", domainFilter.value); render(); });
       statusFilter.addEventListener("change", () => { syncFilter("status", statusFilter.value); render(); });
       freshnessFilter.addEventListener("change", () => { syncFilter("freshness", freshnessFilter.value); render(); });
       el("reset").addEventListener("click", () => {
         search.value = "";
         state.query = "";
-        ["type", "domain", "status", "freshness"].forEach(key => syncFilter(key, ""));
-        renderTypeRail();
+        state.domain = "";
+        ["status", "freshness"].forEach(key => syncFilter(key, ""));
+        renderDomainRail();
         render();
       });
       el("close-drawer").addEventListener("click", closeDrawer);
       backdrop.addEventListener("click", closeDrawer);
       document.addEventListener("keydown", event => { if (event.key === "Escape") closeDrawer(); });
 
-      renderTypeRail();
+      renderDomainRail();
       render();
 
       const hashId = decodeURIComponent(location.hash.slice(1));
