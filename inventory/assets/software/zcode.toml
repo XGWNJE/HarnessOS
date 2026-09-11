@@ -1,0 +1,28 @@
+schema_version = 1
+id = "software:zcode"
+type = "software"
+name = "ZCode"
+domain = "ai-agent"
+status = "managed"
+purpose = "提供 Z.AI 官方的桌面 AI 编程、长程任务与多 Agent 协作入口。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/zcode.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-12"
+last_verified_on = "2026-09-12"
+review_days = 90
+notes = "官方 Windows x64 安装包与 WinGet 包 ZhipuAI.ZCode 已核验；当前版本 3.11.2，安装包 SHA-256 为 4DB76B6785C10FBC852DD9C9D257F574EA46F2A889D0BEB9398AE0885D716717，Authenticode 签名有效。ZCode 为专有软件，首次登录时需由用户自行审阅并接受服务条款。"
+relationships = []
+
+[software]
+install_form = "package-manager"
+release_channel = "stable"
+minimum_verified_version = "3.11.2"
+pinned_version = ""
+avoid_versions = []
+official_source = "https://zcode.z.ai/cn/docs/install"
+config_restore = "通过 WinGet 包 ZhipuAI.ZCode 恢复当前稳定版；账号、登录状态、模型配置、API Key 与项目数据不进入 HarnessOS。"
+backup_location = "unknown"
+post_restore_checks = ["WinGet 可识别 ZhipuAI.ZCode", "主程序 Authenticode 签名有效", "桌面应用可启动"]

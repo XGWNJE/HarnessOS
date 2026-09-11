@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 66 项资产、0 个配置档。
+共 67 项资产、0 个配置档。
 
 ## development-tool
 
@@ -86,6 +86,7 @@
 | `software:visual-studio-community` | Visual Studio Community | `development` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。 |
 | `software:wechat` | 微信 | `communication` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供桌面即时通信、文件传输与扫码登录入口。 |
 | `software:wechat-input` | 微信输入法 | `productivity` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供中文文字输入与词库服务。 |
+| `software:zcode` | ZCode | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | owner-declared | 提供 Z.AI 官方的桌面 AI 编程、长程任务与多 Agent 协作入口。 |
 | `software:zenless-zone-zero` | 绝区零 | `entertainment` | 第三方 | 跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 版绝区零客户端及其本地游戏资源。 |
 
 ## workflow
