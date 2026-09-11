@@ -11,17 +11,17 @@
 | `development-tool:android-sdk` | Android SDK | `development` | 第三方 | 跟踪（official-page），official-api 待切换 | `managed` | `current` | owner-declared | 提供 Android 平台、构建工具、ADB、模拟器与 SDK 命令行管理能力。 |
 | `development-tool:aws-cli` | AWS CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理和自动化 Amazon Web Services 资源。 |
 | `development-tool:azure-cli` | Azure CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理和自动化 Microsoft Azure 资源。 |
-| `development-tool:blender-mcp` | Blender MCP | `ai-agent` | 第三方 | 跟踪（渠道未确认） | `managed` | `current` | owner-declared | 通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。 |
+| `development-tool:blender-mcp` | Blender MCP | `development` | 第三方 | 跟踪（渠道未确认） | `managed` | `current` | owner-declared | 通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。 |
 | `development-tool:bun` | Bun | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供独立的 JavaScript 运行时、包管理器、测试与打包工具。 |
-| `development-tool:claude-code` | Claude Code | `ai-agent` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
+| `development-tool:claude-code` | Claude Code | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
 | `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
-| `development-tool:deepseek-harness` | DeepSeek Harness CLI | `ai-agent` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
+| `development-tool:deepseek-harness` | DeepSeek Harness CLI | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
 | `development-tool:git` | Git for Windows | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。 |
 | `development-tool:github-cli` | GitHub CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。 |
 | `development-tool:google-cloud-sdk` | Google Cloud SDK | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。 |
 | `development-tool:jq` | jq | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 在脚本和终端中查询、转换与验证 JSON 数据。 |
 | `development-tool:kubectl` | Kubernetes CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 通过 kubectl 检查和管理 Kubernetes 集群资源与清单。 |
-| `development-tool:lark-cli` | Lark/飞书 CLI | `communication` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。 |
+| `development-tool:lark-cli` | Lark/飞书 CLI | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。 |
 | `development-tool:llvm` | LLVM Toolchain | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Clang/LLVM 编译、链接、调试、格式化和语言服务工具。 |
 | `development-tool:nodejs` | Node.js | `development` | 第三方 | 跟踪（official-api） | `managed` | `current` | owner-declared | 提供 JavaScript/TypeScript 运行时及 npm 生态的基础开发环境。 |
 | `development-tool:openssl` | OpenSSL Developer Tools | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 TLS、证书、密钥格式和密码学相关的开发与诊断命令。 |

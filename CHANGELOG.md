@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-12 — 统一资产领域判定口径
+
+- [修订] 领域判定口径成文并写入 `inventory/taxonomy.toml` 注释与 `inventory/README.md`：类型按形态划分，领域按资产服务的主要场景归入唯一领域；development-tool 类型统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途。
+- [修订] 按口径微调 4 条开发工具的领域：`claude-code`、`deepseek-harness`、`blender-mcp` 由 `ai-agent`、`lark-cli` 由 `communication` 统一调整为 `development`，AI 与飞书场景信息保留在用途与备注。software 类经逐条复核全部符合场景口径，`wechat-input` 维持 `productivity`（主要场景为文字输入效率，与微信的通信场景不冲突）。
+- [修订] `CATALOG.md` 与 `catalog.html` 随领域调整重建。
+
 ## 2026-09-12 — 登记上游版本查询渠道并新增批量核验脚本
 
 - [新增] `scripts/versions.py`：按资产 `[upstream]` 登记渠道批量查询最新稳定版本（winget/npm/PyPI/GitHub Releases/Microsoft Store/官方接口），每资产至多一次请求且只读；official-page、launcher 与无渠道资产不联网。实测 51 条资产 44 条零人工出结果。

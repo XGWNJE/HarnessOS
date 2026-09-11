@@ -94,6 +94,9 @@ label = "其他"
 active = false
 native_sources = ["inventory/assets/other/*.toml"]
 
+# 领域判定口径：development-tool 类型资产统一归 development（工具形态即开发场景，场景差异
+# 记录在用途与备注）；software 及后续类型按资产服务的主要使用场景归入唯一领域，场景并列时
+# 取主用途，不按次要能力叠加。
 [[domains]]
 id = "ai-agent"
 label = "AI 与 Agent"
