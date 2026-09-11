@@ -44,14 +44,34 @@
 
 ## 平台与设备约定
 
-- Windows 原生工具使用 `D:\...` 格式的路径。
-- Git Bash 调用脚本时使用带引号的正斜杠路径。
-- 原生 CLI 的中文输入通过文件或 API 传递，不通过命令行参数，落地后逐字核对。
 - ADB 与虚拟机调试默认开启预览窗口，保持过程可见，结束后关闭。
 - UI 改动分批交付，每批由用户在真机上目检。
 - 真机锁屏或休眠后无法唤醒时，停止调试并报告，待用户解锁后继续。
 - 调试不得擅自修改设备设置以强行唤醒设备。
 - adb、emulator 等工具从 `ANDROID_HOME` 或 PATH 定位，不盲搜文件系统，不使用非 SDK 来源的同名工具。
+
+## Windows 环境通用约束
+
+- Windows 原生工具使用 `D:\...` 格式的路径。
+- Git Bash 调用脚本时使用带引号的正斜杠路径。
+- 代码、JSON 与正则中的路径用正斜杠或转义反斜杠：`\` 在字符串里是转义符。
+- Git Bash 向原生 exe 传以 `/` 开头的参数会被 MSYS 改写成 Windows 路径，需要保留时设 `MSYS_NO_PATHCONV=1` 或改用 `//` 前缀。
+- 控制台默认代码页 936（GBK）：Python 统一设 `PYTHONUTF8=1`，文件读写显式 `encoding="utf-8"`；原生 CLI 的中文输入通过文件或 API 传递，不通过命令行参数，落地后逐字核对。
+- PowerShell 5.1 的 `>` 重定向与 `Out-File` 默认输出 UTF-16，产物被其他工具读取前核对编码；含中文的 `.ps1` 须保存为带 BOM 的 UTF-8（唯一 BOM 特例，其余文件仍用 UTF-8 无 BOM）。
+- PowerShell 里 `curl`、`rm`、`ls`、`wget` 是别名，行为与原生程序不同，调用真实程序用 `curl.exe` 这类带扩展名的全名。
+- PATH 分隔符是 `;`；`setx` 写入的变量对当前会话不生效且超 1024 字符会截断，会话内用 `export` 或 `$env:`。
+- 交互式程序（python/node REPL）在 mintty 下无输出或假死时，用 `winpty` 包裹再运行。
+- 跑 POSIX 命令优先 Git Bash；PowerShell 用于 .NET、注册表、WMI 场景，cmd 只做简单调用。`.ps1` 被 ExecutionPolicy 拦截时用 `powershell -ExecutionPolicy Bypass -File`。
+- 跨平台脚本（`.sh` 等需 shebang 的文件）保持 LF；Windows 工具生成的 CRLF 脚本进 Linux/WSL 前先 `dos2unix`。
+- 跨平台仓库统一 `core.autocrlf`（推荐 input 或 false）并配置 `.gitattributes`，避免整文件假差异。
+- 文件系统大小写不敏感：不创建仅大小写不同的文件或目录，git 的大小写改名分两步提交。
+- 不使用保留名（CON、NUL、COM1 等）与结尾空格/点作文件名；超长路径报错先查 LongPathsEnabled 开关；符号链接需管理员或开发者模式，能 junction 就不用 symlink。
+- 文件被占用（编辑器、Defender、后台服务）时删除与替换会失败：先定位占用者或稍后重试，不硬删。
+- npm 安装等海量小文件 IO 慢多为 Defender 实时扫描所致，预足时长或对项目目录加排除，勿误判为卡死。
+- Windows Store 的 `python.exe` 是占位 stub，用 `py -3` 或先确认真实解释器路径。
+- node-gyp 类原生模块编译需要 VS Build Tools 与 Python，安装依赖前先确认工具链。
+- WSL 场景下项目代码放 Linux 文件系统（如 `~/projects`），不在 `/mnt/c` 下跑 IO 密集任务。
+- `wsl.exe` 在管道中的输出是 UTF-16 编码，直接解析会乱码，先转 UTF-8 再读。
 
 ## AI 协作与工程判断基线
 
