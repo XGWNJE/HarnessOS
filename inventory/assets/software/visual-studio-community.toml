@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机为 Visual Studio Community 2026 18.9.2；已核验 CoreEditor、ManagedDesktop 与 Universal workloads。MSBuild、.NET SDK 10.0.400、.NET Framework/UWP SDK 作为该安装单元的组件，不单独登记。官方 2026-09-08 发布 18.10.0，18.9 服务线最新为 18.9.3，本机 18.9.2 的升级路径待用户决定。"
 relationships = []
 
+[upstream]
+channel = "official-page"
+identifier = "https://learn.microsoft.com/en-us/visualstudio/releases/2026/release-notes"
+latest_stable = "18.10.0"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

@@ -16,6 +16,11 @@ review_days = 90
 notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop；WinGet 当前显示新版可更新至 1.18.30，同时仍列出 1.2.25 残留检测结果，旧版残留状态需人工复核，不能据此再次卸载。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "SST.OpenCodeDesktop"
+latest_stable = "1.18.30"
+
 [software]
 install_form = "package-manager"
 release_channel = "stable"

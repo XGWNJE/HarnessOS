@@ -142,6 +142,7 @@ class Taxonomy:
     software_install_forms: set[str]
     release_channels: set[str]
     development_tool_kinds: set[str]
+    upstream_channels: set[str]
     default_review_days: int
     asset_type_labels: dict[str, str] = field(default_factory=dict)
     domain_labels: dict[str, str] = field(default_factory=dict)
@@ -305,13 +306,13 @@ class Catalog:
         path = self.root / "inventory" / "taxonomy.toml"
         if not path.is_file():
             self.problem(path, "缺少 taxonomy.toml")
-            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), 90)
+            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), set(), 90)
             return
         try:
             data = _read_toml(path)
         except CatalogError as exc:
             self.problem(path, str(exc))
-            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), 90)
+            self.taxonomy = Taxonomy(set(), set(), STATUSES, RELATION_TYPES, PROFILE_TIERS, set(), set(), PROVENANCE_TYPES, set(), set(), set(), set(), 90)
             return
         if data.get("schema_version") != 1:
             self.problem(path, "schema_version 必须为 1")
@@ -332,6 +333,7 @@ class Catalog:
             set(_string_list(data.get("software_install_forms"))),
             set(_string_list(data.get("release_channels"))),
             set(_string_list(data.get("development_tool_kinds"))),
+            set(_string_list(data.get("upstream_channels"))),
             days,
             asset_type_labels=_taxonomy_labels(data.get("asset_types")),
             domain_labels=_taxonomy_labels(data.get("domains")),
@@ -350,6 +352,8 @@ class Catalog:
             self.problem(path, "profile_tiers 必须且只能包含 required、standard、optional")
         if self.taxonomy.provenance_types != PROVENANCE_TYPES:
             self.problem(path, "provenance_types 必须且只能包含 owner-produced、third-party")
+        if not self.taxonomy.upstream_channels:
+            self.problem(path, "upstream_channels 不能为空")
 
     def _validate_taxonomy_tables(self, path: Path, data: dict[str, Any]) -> None:
         for key in ("asset_types", "domains"):
@@ -480,6 +484,7 @@ class Catalog:
             self.problem(path, f"文件名必须与资产 slug 一致: {asset_id.split(':', 1)[-1]}")
         self._validate_common(path, data)
         self._validate_extensions(path, data, asset_type)
+        self._validate_upstream(path, data)
         self._validate_sensitive(path, data)
         incomplete = self._is_incomplete(data, asset_type)
         asset = Asset(
@@ -580,6 +585,40 @@ class Catalog:
             tool_kind = extension.get("tool_kind")
             if tool_kind and self.taxonomy and self.taxonomy.development_tool_kinds and tool_kind not in self.taxonomy.development_tool_kinds:
                 self.problem(path, f"未知 development_tool.tool_kind: {tool_kind}")
+
+    def _validate_upstream(self, path: Path, data: dict[str, Any]) -> None:
+        upstream = data.get("upstream")
+        if upstream is None:
+            return
+        if not isinstance(upstream, dict):
+            self.problem(path, "upstream 必须是表")
+            return
+        if data.get("upstream_updates") is not True:
+            self.problem(path, "只有跟踪上游更新的资产才能包含 [upstream]")
+            return
+        allowed = self.taxonomy.upstream_channels if self.taxonomy else set()
+        channel = _text(upstream.get("channel"))
+        if not channel:
+            self.problem(path, "[upstream] 缺少 channel")
+        elif allowed and channel not in allowed:
+            self.problem(path, f"未知 upstream.channel: {channel}")
+        identifier = _text(upstream.get("identifier"))
+        latest = _text(upstream.get("latest_stable"))
+        if channel == "unavailable":
+            if identifier or latest:
+                self.problem(path, "upstream.channel 为 unavailable 时不得填写 identifier 或 latest_stable")
+        elif channel and not identifier:
+            self.problem(path, f"[upstream] channel={channel} 缺少 identifier")
+        pending = _text(upstream.get("pending_channel"))
+        if pending:
+            if allowed and pending not in allowed:
+                self.problem(path, f"未知 upstream.pending_channel: {pending}")
+            if pending == channel:
+                self.problem(path, "upstream.pending_channel 不能与 channel 相同")
+            if pending != "unavailable" and not _text(upstream.get("pending_identifier")):
+                self.problem(path, "[upstream] 存在 pending_channel 时缺少 pending_identifier")
+            if not _text(upstream.get("pending_note")):
+                self.problem(path, "[upstream] 待切换渠道必须写明 pending_note 生效条件")
 
     def _is_incomplete(self, data: dict[str, Any], asset_type: str) -> bool:
         common = ("fact_source", "preference_source", "provenance", "declared_on", "last_verified_on")
@@ -823,6 +862,13 @@ class Catalog:
             review_days = data.get("review_days")
             add_detail("复核周期", f"{review_days} 天" if review_days else "")
             add_detail("备注", data.get("notes"))
+            upstream = data.get("upstream") or {}
+            add_detail("上游渠道", upstream.get("channel"))
+            add_detail("渠道定位符", upstream.get("identifier"), "code")
+            add_detail("渠道最新稳定版", upstream.get("latest_stable"), "code")
+            add_detail("待切换渠道", upstream.get("pending_channel"))
+            add_detail("待切换定位符", upstream.get("pending_identifier"), "code")
+            add_detail("切换生效条件", upstream.get("pending_note"))
             if asset.relationships:
                 add_detail(
                     "关系",
@@ -996,7 +1042,20 @@ def _provenance_label(asset: Asset) -> str:
 def _upstream_label(asset: Asset) -> str:
     if asset.provenance == "owner-produced":
         return "不适用"
-    return "跟踪" if asset.upstream_updates else "不跟踪"
+    if not asset.upstream_updates:
+        return "不跟踪"
+    upstream = (asset.data or {}).get("upstream") or {}
+    channel = _text(upstream.get("channel"))
+    if channel == "unavailable":
+        label = "跟踪（渠道未确认）"
+    elif channel:
+        label = f"跟踪（{channel}）"
+    else:
+        label = "跟踪"
+    pending = _text(upstream.get("pending_channel"))
+    if pending:
+        label += f"，{pending} 待切换"
+    return label
 
 
 def _configure_output_encoding() -> None:

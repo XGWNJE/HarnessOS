@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Git.Git；本机 Git 2.55.0.windows.3。Git LFS 3.7.1、Git Bash、Git GUI、tig 2.6.1 与 scalar 作为捆绑组件，不单独登记。Codex 私有 Git 不替代本资产。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Git.Git"
+latest_stable = "2.55.0.3"
+
 [development_tool]
 tool_kind = "version-control"
 commands = ["git", "git-lfs", "tig"]

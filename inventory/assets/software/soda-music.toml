@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 3.5.1 已由 WinGet 清单核验；官方稳定包当前显示 3.8.0，应用内更新与官方 PC 下载页为上游渠道，恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "ByteDance.SodaMusic"
+latest_stable = "3.8.0"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

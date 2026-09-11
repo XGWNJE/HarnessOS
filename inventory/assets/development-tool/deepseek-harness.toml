@@ -15,6 +15,11 @@ last_verified_on = "2026-09-12"
 review_days = 30
 notes = "已核验 dsh 版本 0.1.1-rc.2，当前通过 npm 全局安装 @deepseek-ai/dsh；npm `latest` 为 0.1.5-rc.1（`next` 为 0.1.5-rc.2），未提供 stable 标签，属于预发布版本并直接依赖 Node.js。用户级 .dsh 目录存在；配置、Provider 凭据、本地会话与附件不纳入仓库。"
 
+[upstream]
+channel = "npm"
+identifier = "@deepseek-ai/dsh"
+latest_stable = "0.1.5-rc.1"
+
 [[relationships]]
 type = "depends-on"
 target = "development-tool:nodejs"

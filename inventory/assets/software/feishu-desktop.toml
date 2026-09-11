@@ -16,6 +16,11 @@ review_days = 90
 notes = "使用 WinGet 稳定源中的 ByteDance.Feishu；本机 7.75.18，稳定源当前提供 7.76.21。中国区飞书客户端，不使用 Lark 国际版或企业批量部署工具。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "ByteDance.Feishu"
+latest_stable = "7.76.21"
+
 [software]
 install_form = "package-manager"
 release_channel = "stable"

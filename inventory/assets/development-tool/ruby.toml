@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 RubyInstallerTeam.Ruby.3.4；本机 Ruby 3.4.10。RubyGems 3.6.9、Bundler 2.6.9、Rake 13.2.1 与 ridk 为该安装单元组件，不单独登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "RubyInstallerTeam.Ruby.3.4"
+latest_stable = "3.4.10-1"
+
 [development_tool]
 tool_kind = "runtime-sdk"
 commands = ["ruby", "gem", "bundle", "rake", "ridk"]

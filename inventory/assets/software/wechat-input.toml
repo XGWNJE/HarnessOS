@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 2.1.3.18 已由 WinGet 清单核验；官方页面建议优先使用输入法自带更新，WinGet 稳定源当前提供 2.1.4.5，恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Tencent.WeType"
+latest_stable = "2.1.4.5"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

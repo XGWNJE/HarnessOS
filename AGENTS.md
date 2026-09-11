@@ -11,6 +11,7 @@
 - 只有用户明确要求登记、纳管或更新某项资产时，才能探索并写入对应记录；不得主动扫描已安装软件、枚举整机环境、从普通对话推断个人偏好或设置后台巡检。
 - 软件安装形态、版本通道、主要用途和恢复范围等偏好由用户确认；动态事实在真实迁移前重新核验官方来源、兼容性、支持版本与许可条件。
 - 每项受管资产区分用户自产与第三方，并声明是否跟踪外部上游更新；用户自产资产没有上游更新，目录显示“不适用”，其仓库内修订仍正常版本化。
+- 跟踪上游更新的资产用 `[upstream]` 登记查询渠道、定位符与最近核验版本；找不到可核验渠道的资产标为 `unavailable` 并说明原因，渠道切换先登记 `pending_*` 与生效条件、核验一致后于下次版本更新生效。
 - 新资产类型先登记到 `inventory/taxonomy.toml`，再按 `inventory/README.md` 的公共字段和类型扩展字段创建事实源；未来类型仍复用统一资产 ID、关系、生命周期、目录和配置档，不另建平行管理体系。
 
 ## 目录与发布
@@ -21,6 +22,7 @@
 | 从事实源重建 HTML 与 Markdown 目录 | `python scripts/catalog.py render` |
 | 查询受管资产 | `python scripts/catalog.py list` |
 | 生成配置档恢复清单 | `python scripts/catalog.py plan <profile> [--satisfied <asset-id>]` |
+| 批量核验上游渠道最新稳定版本（只读） | `python scripts/versions.py` |
 | 重建目录并发布 Rules 与 Skills | `python scripts/sync.py` |
 | 只检查目录与发布漂移 | `python scripts/sync.py --check` |
 | 单独发布全局 Rules | `python scripts/publish_global.py` |

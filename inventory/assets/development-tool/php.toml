@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 PHP.PHP.8.4；本机 PHP 8.4.24 ZTS x64。php-cgi、phpdbg 与 phar 工具属于同一安装单元。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "PHP.PHP.8.4"
+latest_stable = "8.4.24"
+
 [development_tool]
 tool_kind = "runtime-sdk"
 commands = ["php"]

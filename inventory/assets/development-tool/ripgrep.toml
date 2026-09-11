@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 BurntSushi.ripgrep.MSVC；本机 15.2.0。系统 WinGet 版本优先于 Codex 私有副本，私有副本不单独登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "BurntSushi.ripgrep.MSVC"
+latest_stable = "15.2.0"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["rg"]

@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 安装 Rustlang.Rustup 1.29.0，稳定源当前提供 1.29.1；当前 stable MSVC toolchain 提供 rustc/cargo 1.98.0，并安装 Clippy、rustfmt、标准库与文档组件。这些组件由 rustup 统一管理，不单独登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Rustlang.Rustup"
+latest_stable = "1.29.1"
+
 [development_tool]
 tool_kind = "compiler"
 commands = ["rustup", "rustc", "cargo", "cargo-clippy", "cargo-fmt", "rust-analyzer"]

@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 EclipseAdoptium.Temurin.21.JDK；本机 21.0.12.1 LTS。java、javac、jar、javadoc、jdb、jlink、jpackage 等均由 JDK 捆绑提供。官方 Adoptium API 确认 21 线最新 GA 为 21.0.12+1，与本机一致。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "EclipseAdoptium.Temurin.21.JDK"
+latest_stable = "21.0.12.101"
+
 [development_tool]
 tool_kind = "runtime-sdk"
 commands = ["java", "javac", "jar", "javadoc", "jdb", "jlink", "jpackage"]

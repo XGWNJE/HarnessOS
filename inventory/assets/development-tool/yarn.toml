@@ -15,6 +15,11 @@ last_verified_on = "2026-09-12"
 review_days = 90
 notes = "当前通过 npm 全局安装 Yarn Classic 1.22.22；不是 Node.js 自带组件。"
 
+[upstream]
+channel = "npm"
+identifier = "yarn"
+latest_stable = "1.22.22"
+
 [[relationships]]
 type = "depends-on"
 target = "development-tool:nodejs"

@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Oven-sh.Bun；本机 1.4.0，WinGet 稳定源当前提供 1.4.2。Bun 是独立运行时，不依赖系统 Node.js。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Oven-sh.Bun"
+latest_stable = "1.4.2"
+
 [development_tool]
 tool_kind = "runtime-sdk"
 commands = ["bun"]

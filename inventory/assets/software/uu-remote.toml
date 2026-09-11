@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 4.38.3.9325 已由 WinGet 清单核验；官方来源为网易游戏远程站点，WinGet 稳定包当前为 4.40.0.1780，恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "NetEase.UURemote"
+latest_stable = "4.40.0.1780"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

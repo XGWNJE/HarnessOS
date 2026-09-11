@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 4.1.13.65 已由 ARP 清单核验；官方下载页当前提供 4.1.13（64 位）版本线，WinGet 包停留在 3.9.12.57 旧版本线、不作上游依据，恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "official-page"
+identifier = "https://windows.weixin.qq.com/?lang=zh_CN"
+latest_stable = "4.1.13"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 jqlang.jq；本机 1.8.2。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "jqlang.jq"
+latest_stable = "1.8.2"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["jq"]

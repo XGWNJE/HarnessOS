@@ -92,6 +92,27 @@ verification_commands = ["tool --version"]
 
 环境变量只记录名称和取值来源提示，不记录值。配置引用不能包含私有 registry token、认证信息或完整机器配置。依赖统一写在公共 `relationships` 中，不在扩展表重复维护。
 
+## 上游更新渠道
+
+跟踪上游更新的资产用 `[upstream]` 登记查询渠道，供 `python scripts/versions.py` 批量核验：
+
+```toml
+[upstream]
+channel = "winget"          # taxonomy.toml 的 upstream_channels 枚举
+identifier = "Git.Git"      # 包 ID / 包名 / owner-repo / 商店产品 ID / 官方 URL / 逻辑引用
+latest_stable = "2.55.0.3"  # 上次核验时该渠道返回的最新稳定版本
+
+# 已批准的渠道切换先登记为待生效，不改变当前查询渠道：
+pending_channel = "official-api"
+pending_identifier = "https://dl.google.com/android/repository/repository2-3.xml"
+pending_note = "下次版本更新时先核验新渠道口径与现渠道一致后生效"
+```
+
+- `channel` 与 `pending_channel` 取 `taxonomy.toml` 的 `upstream_channels` 枚举。`unavailable` 表示未找到可核验的上游更新渠道，此时不填 `identifier` 与 `latest_stable`，并在 notes 说明原因；`launcher` 表示版本由本机启动器或应用内更新托管，以本机配置为版本证据。
+- 渠道切换流程：先登记 `pending_channel`、`pending_identifier` 与 `pending_note` 生效条件；`versions.py` 或人工核验新渠道口径一致后，在下一次版本更新时把 `pending_channel` 提升为 `channel` 并清空 pending 字段。不得用未核验的渠道值覆盖版本事实。
+- 低算力维护顺序：先运行 `python scripts/versions.py`（每资产至多一次请求，只读）；winget/npm/PyPI/GitHub Releases/Store/官方接口渠道零人工完成，`official-page` 渠道才需人工查看网页，`launcher` 以本机启动器配置为准，`unavailable` 等待渠道决策。核验后同步更新 `latest_stable` 与 notes，并刷新 `last_verified_on`。
+- `latest_stable` 只记录渠道口径的版本号；渠道显示格式与上游命名不同（如 winget 包版本、商店包版本）时以渠道实际返回为准，在 notes 说明对应关系。
+
 ## 配置档与关系
 
 Profile 描述目标环境，不是软件清单副本：

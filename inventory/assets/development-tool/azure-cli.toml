@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Microsoft.AzureCLI；本机 2.89.1，WinGet 稳定源当前提供 2.90.0。其私有运行时不依赖系统 Python；登录与订阅信息不纳入仓库。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Microsoft.AzureCLI"
+latest_stable = "2.90.0"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["az"]

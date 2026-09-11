@@ -16,6 +16,11 @@ review_days = 90
 notes = "Microsoft Store 产品 ID 为 9PLM9XGG6VKS，Store 显示名为 ChatGPT，AppX identity 为 OpenAI.Codex；本机包版本 26.903.8094.0；Microsoft Store 目录当前提供 26.903.9818.0。随桌面端提供的 Codex CLI 0.153.0 与私有 Node/Git/ripgrep/PowerShell 属于内部组件，不单独登记，也不替代系统工具链。"
 relationships = []
 
+[upstream]
+channel = "store"
+identifier = "9PLM9XGG6VKS"
+latest_stable = "26.903.9818.0"
+
 [software]
 install_form = "store"
 release_channel = "stable"

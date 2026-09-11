@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Hashicorp.Terraform；本机 1.15.8。WinGet 稳定源当前提供 1.16.2。状态文件、远端后端凭据与云端密钥不纳入 HarnessOS。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Hashicorp.Terraform"
+latest_stable = "1.16.2"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["terraform"]

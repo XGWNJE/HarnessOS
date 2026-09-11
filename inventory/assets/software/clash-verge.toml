@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 2.5.2 已由 ARP 与 WinGet 清单交叉核验；官方稳定版仅通过项目 GitHub Releases 发布，配置来源和恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "github-releases"
+identifier = "clash-verge-rev/clash-verge-rev"
+latest_stable = "2.5.2"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

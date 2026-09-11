@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 YuanShen.exe，启动器配置显示 game_version=7.0.0；官方当前正式版本为 7.0（2026-08-12 上线），与本机一致。"
 relationships = []
 
+[upstream]
+channel = "launcher"
+identifier = "本机米哈游启动器自动更新，以 games 配置 game_version 为准"
+latest_stable = "7.0.0"
+
 [software]
 install_form = "unknown"
 release_channel = "stable"

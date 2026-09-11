@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 SQLite.SQLite；本机 3.53.4，sqldiff 与 sqlite3_analyzer 为同一安装单元组件。数据库文件与业务数据不纳入本工具资产。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "SQLite.SQLite"
+latest_stable = "3.53.4"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["sqlite3", "sqldiff", "sqlite3_analyzer"]

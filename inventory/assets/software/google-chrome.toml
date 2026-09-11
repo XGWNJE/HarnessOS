@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 153.0.8010.36 已由主程序文件版本核验；WinGet 官方稳定包显示 153.0.8010.37，本机另有 Chrome Beta 通道安装、不属于本资产登记范围，配置恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Google.Chrome"
+latest_stable = "153.0.8010.37"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

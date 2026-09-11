@@ -16,6 +16,11 @@ review_days = 90
 notes = "上游最新正式版 0.41.0 已核验；Windows 官方说明主要提供第三方构建与 GitHub CI 开发构建，当前本机版本和具体构建来源未出现在已登记证据中。"
 relationships = []
 
+[upstream]
+channel = "github-releases"
+identifier = "mpv-player/mpv"
+latest_stable = "0.41.0"
+
 [software]
 install_form = "unknown"
 release_channel = "other"

@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Google.CloudSDK；命令报告 583.0.0，包含 gcloud、bq、gsutil 与凭据助手。WinGet 稳定源当前提供 584.0.0。这些组件及 bundled Python 不单独登记；账号与凭据不纳入仓库。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Google.CloudSDK"
+latest_stable = "584.0.0"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["gcloud", "bq", "gsutil"]

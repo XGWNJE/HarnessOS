@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-12 — 登记上游版本查询渠道并新增批量核验脚本
+
+- [新增] `scripts/versions.py`：按资产 `[upstream]` 登记渠道批量查询最新稳定版本（winget/npm/PyPI/GitHub Releases/Microsoft Store/官方接口），每资产至多一次请求且只读；official-page、launcher 与无渠道资产不联网。实测 51 条资产 44 条零人工出结果。
+- [新增] `inventory/taxonomy.toml` 增加 `upstream_channels` 渠道枚举；51 条跟踪上游的资产登记 `[upstream]` 渠道、定位符与最近核验版本。
+- [修订] `catalog.py` 校验 `[upstream]` 字段并在 CATALOG.md 与 catalog.html 渲染渠道、渠道未确认与待切换标记；README 与项目规则登记渠道字段、低算力核验顺序与切换流程。
+- [修订] `development-tool:blender-mcp`、`software:mi-hoyo-launcher`、`software:quark-drive` 标注渠道未确认（官方 Projects 仓库访问受限 / 官方页不公布版本号且商店候选未通过 displaycatalog 核验）；`development-tool:android-sdk` 登记待切换官方仓库清单接口，本次不生效，下次版本更新核验一致后切换；Visual Studio 的 winget 包与夸克商店候选经查证不存在或不可核验，不登记未经验证的切换。
+
 ## 2026-09-12 — 全量复核上游最新稳定版本并更新第三方 Skill
 
 - [修订] 复核 51 条软件与开发工具记录：刷新本机版本、上游可用版本与复核日期；Chrome、微信、Codex 桌面端与绝区零本机版本随自动更新通道前移，Android Studio、Visual Studio、Node.js、Terraform、uv、gcloud、飞书、UU远程、微信输入法等登记上游新版本，夸克网盘与米哈游启动器确认官方渠道不公布可核验版本号并保留缺口表述。

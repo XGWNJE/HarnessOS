@@ -16,6 +16,11 @@ review_days = 90
 notes = "官方稳定版 5.3.3 已核验；当前本机版本未出现在 WinGet 或已登记的安装证据中，故不把上游版本冒充本机版本，安装形态和恢复范围待补证。"
 relationships = []
 
+[upstream]
+channel = "official-page"
+identifier = "https://krita.org/en/download/"
+latest_stable = "5.3.3"
+
 [software]
 install_form = "unknown"
 release_channel = "stable"

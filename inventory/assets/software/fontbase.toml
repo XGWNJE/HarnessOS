@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 2026.5.23 已由 WinGet 清单核验；官方更新页最新版本仍为 2026.5.23（2026-07-20），与本机一致，配置恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Levitsky.FontBase"
+latest_stable = "2026.5.23"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

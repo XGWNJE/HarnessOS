@@ -15,6 +15,11 @@ last_verified_on = "2026-09-12"
 review_days = 90
 notes = "当前通过 npm 全局安装，版本 11.25.0；npm v11 维护线标签为 11.26.0，跨大版本 latest 为 12.4.1；不是 Node.js 自带组件，可与其他 npm 全局工具合并为一次安装命令。PNPM_HOME 及 v11 全局 bin 子目录已注册到 Windows 用户 PATH。"
 
+[upstream]
+channel = "npm"
+identifier = "pnpm@latest-11"
+latest_stable = "11.26.0"
+
 [[relationships]]
 type = "depends-on"
 target = "development-tool:nodejs"

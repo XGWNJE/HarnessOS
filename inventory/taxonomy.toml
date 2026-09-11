@@ -12,6 +12,7 @@ provenance_types = ["owner-produced", "third-party"]
 software_install_forms = ["portable", "installer", "package-manager", "store", "web", "other", "unknown"]
 release_channels = ["lts", "stable", "beta", "nightly", "pinned", "other", "unknown"]
 development_tool_kinds = ["version-control", "package-manager", "compiler", "runtime-sdk", "cli", "other"]
+upstream_channels = ["winget", "npm", "pypi", "github-releases", "store", "official-api", "official-page", "launcher", "unavailable"]
 
 [[asset_types]]
 id = "rule"

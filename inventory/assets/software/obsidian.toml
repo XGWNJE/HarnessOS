@@ -16,6 +16,11 @@ review_days = 90
 notes = "本机版本 1.13.7 已由 WinGet 清单核验；官方桌面端支持检查更新，安装器更新仍需从官方下载页获取，恢复范围未单独确认。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Obsidian.Obsidian"
+latest_stable = "1.13.7"
+
 [software]
 install_form = "installer"
 release_channel = "stable"

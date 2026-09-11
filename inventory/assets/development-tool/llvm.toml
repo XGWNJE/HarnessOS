@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 LLVM.LLVM；本机 22.1.8。LLVM bin 已注册到 Windows 机器 PATH，clang 与 clangd 均完成版本核验；LLVM 套件内部命令不单独登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "LLVM.LLVM"
+latest_stable = "22.1.8"
+
 [development_tool]
 tool_kind = "compiler"
 commands = ["clang", "clang-cl", "clangd", "lld", "lldb"]

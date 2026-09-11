@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Python.Python.3.12；本机 Python 3.12.10、pip 25.0.1。Python Launcher、pip、标准库、开发库与 Tcl/Tk 属于同一安装单元，不单独登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Python.Python.3.12"
+latest_stable = "3.12.10"
+
 [development_tool]
 tool_kind = "runtime-sdk"
 commands = ["python", "py", "pip"]

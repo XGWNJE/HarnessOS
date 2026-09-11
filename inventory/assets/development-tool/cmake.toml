@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 Kitware.CMake；本机独立版本 4.4.3，PATH 优先于 WinLibs 内置副本。CTest、CPack 与 CMake GUI 作为捆绑组件。独立 Ninja 当前被 WinLibs 内置 Ninja 覆盖，因此不登记。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "Kitware.CMake"
+latest_stable = "4.4.3"
+
 [development_tool]
 tool_kind = "compiler"
 commands = ["cmake", "ctest", "cpack", "cmake-gui"]

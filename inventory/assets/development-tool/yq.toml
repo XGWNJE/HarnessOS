@@ -16,6 +16,11 @@ review_days = 90
 notes = "WinGet 包 MikeFarah.yq；本机 4.53.6。"
 relationships = []
 
+[upstream]
+channel = "winget"
+identifier = "MikeFarah.yq"
+latest_stable = "4.53.6"
+
 [development_tool]
 tool_kind = "cli"
 commands = ["yq"]
