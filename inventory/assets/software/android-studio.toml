@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio。IDE 内置 JBR，不单独登记；Android SDK 作为由 SDK Manager 管理的独立安装单元登记。"
+notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio；官方稳定版已发布 2026.1.4（Quail 4，构建 2026.1.4.7）。IDE 内置 JBR，不单独登记；Android SDK 作为由 SDK Manager 管理的独立安装单元登记。"
 
 [[relationships]]
 type = "uses"

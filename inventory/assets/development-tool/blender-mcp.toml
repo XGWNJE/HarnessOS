@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "使用 Blender 官方 Lab MCP Server v1.0.0；Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。MCP 通过 uvx 按 1.0.0 固定版本运行，直接命令不在 PATH 中；MCP 运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。"
+notes = "使用 Blender 官方 Lab MCP Server v1.0.0；Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。MCP 通过 uvx 按 1.0.0 固定版本运行，直接命令不在 PATH 中；MCP 运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。本次复核官方 Projects 仓库访问受限，未能核验到官方新版本；PyPI 同名 blender-mcp 包为社区项目，不作为本资产上游依据，仍按 1.0.0 固定运行。"
 
 [[relationships]]
 type = "depends-on"

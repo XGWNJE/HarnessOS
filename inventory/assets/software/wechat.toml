@@ -11,15 +11,15 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机版本 4.1.13.12 已由 WinGet 清单核验；官方稳定包当前显示 4.1.13.63，恢复范围未单独确认。"
+notes = "本机版本 4.1.13.65 已由 ARP 清单核验；官方下载页当前提供 4.1.13（64 位）版本线，WinGet 包停留在 3.9.12.57 旧版本线、不作上游依据，恢复范围未单独确认。"
 relationships = []
 
 [software]
 install_form = "installer"
 release_channel = "stable"
-minimum_verified_version = "4.1.13.12"
+minimum_verified_version = "4.1.13.65"
 pinned_version = ""
 avoid_versions = []
 official_source = "https://windows.weixin.qq.com/?lang=zh_CN"

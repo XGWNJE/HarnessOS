@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-12 — 全量复核上游最新稳定版本并更新第三方 Skill
+
+- [修订] 复核 51 条软件与开发工具记录：刷新本机版本、上游可用版本与复核日期；Chrome、微信、Codex 桌面端与绝区零本机版本随自动更新通道前移，Android Studio、Visual Studio、Node.js、Terraform、uv、gcloud、飞书、UU远程、微信输入法等登记上游新版本，夸克网盘与米哈游启动器确认官方渠道不公布可核验版本号并保留缺口表述。
+- [修订] `vendor/vibehub` 整目录更新至上游 oil-oil/vibe-hub-skill@8d77154（2026-09-10）：上游重构后 SKILL.md 不再引用 references/ 与 assets/，旧目录随之移除。
+- [修订] `vendor/archify` 整目录更新至上游 tt-a1i/archify@c1443b3（2026-09-11，SKILL metadata 2.16 → 2.17），随上游新增 THIRD_PARTY_NOTICES.md 与 JetBrains Mono 字体许可文件。
+- [保留] `vendor/kimi-webbridge`（1.11.3）与 `vendor/quarkclouddrive`（1.0.15）复核后无可用上游版本证据，维持现状；`vendor/` 其余登记不变。
+
 ## 2026-09-04 — 精简全局规则并归拢结构
 
 - [修订] `global/AGENTS.md`：统一目标与验收表述，归拢平台及文档边界；按 owner 指定的物理行删除文件头版本/来源标记、范围受控、碰壁快速止损、中转站真机验证兜底、复杂任务交叉验证、技术选型红线和长链路证据链等内容，规则 28 → 22 条；移除规则正文中的 `owner-declared` 括号标记。

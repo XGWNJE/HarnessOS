@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "WinGet 包 EclipseAdoptium.Temurin.21.JDK；本机 21.0.12.1 LTS。java、javac、jar、javadoc、jdb、jlink、jpackage 等均由 JDK 捆绑提供。"
+notes = "WinGet 包 EclipseAdoptium.Temurin.21.JDK；本机 21.0.12.1 LTS。java、javac、jar、javadoc、jdb、jlink、jpackage 等均由 JDK 捆绑提供。官方 Adoptium API 确认 21 线最新 GA 为 21.0.12+1，与本机一致。"
 relationships = []
 
 [development_tool]

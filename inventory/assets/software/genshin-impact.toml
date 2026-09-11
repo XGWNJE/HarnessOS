@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 YuanShen.exe，启动器配置显示 game_version=7.0.0。"
+notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 YuanShen.exe，启动器配置显示 game_version=7.0.0；官方当前正式版本为 7.0（2026-08-12 上线），与本机一致。"
 relationships = []
 
 [software]

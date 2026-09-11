@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "WinGet 包 Google.CloudSDK；命令报告 583.0.0，包含 gcloud、bq、gsutil 与凭据助手。这些组件及 bundled Python 不单独登记；账号与凭据不纳入仓库。"
+notes = "WinGet 包 Google.CloudSDK；命令报告 583.0.0，包含 gcloud、bq、gsutil 与凭据助手。WinGet 稳定源当前提供 584.0.0。这些组件及 bundled Python 不单独登记；账号与凭据不纳入仓库。"
 relationships = []
 
 [development_tool]

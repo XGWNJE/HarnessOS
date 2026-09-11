@@ -1,4 +1,7 @@
 interface:
   display_name: "VibeHub"
-  short_description: "看懂 Agent 术语，找到学习起点，并结合当前项目学会使用"
-  default_prompt: "使用 $vibehub 帮我看懂 Agent 回复里的术语，或根据当前处境找到下一步学习起点。"
+  short_description: "持续识别 Vibe Coding 补充需求中的准确术语并提供内链"
+  default_prompt: "使用 $vibehub 持续检查这段 Vibe Coding 对话，在完成每轮开发任务时主动指出用户没有说出的准确术语、解释和 VibeHub 内链。"
+
+policy:
+  allow_implicit_invocation: true

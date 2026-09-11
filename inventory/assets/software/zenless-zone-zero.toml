@@ -11,15 +11,15 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 ZenlessZoneZero.exe，启动器配置显示 game_version=3.1.0。"
+notes = "本机游戏目录位于用户文档下的 miHoYo Launcher/games；可执行文件为 ZenlessZoneZero.exe，启动器配置显示 game_version=3.2.0；官方 3.2「Their Secret Histories」于 2026-09-09 上线，与本机一致。"
 relationships = []
 
 [software]
 install_form = "unknown"
 release_channel = "stable"
-minimum_verified_version = "3.1.0"
+minimum_verified_version = "3.2.0"
 pinned_version = ""
 avoid_versions = []
 official_source = "https://zenless.hoyoverse.com/"

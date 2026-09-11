@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机版本 4.38.3.9325 已由 WinGet 清单核验；官方来源为网易游戏远程站点，WinGet 稳定包当前为 4.39.2.1561，恢复范围未单独确认。"
+notes = "本机版本 4.38.3.9325 已由 WinGet 清单核验；官方来源为网易游戏远程站点，WinGet 稳定包当前为 4.40.0.1780，恢复范围未单独确认。"
 relationships = []
 
 [software]

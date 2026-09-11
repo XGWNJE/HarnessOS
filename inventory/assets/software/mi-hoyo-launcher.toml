@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机安装目录为用户文档下的 miHoYo Launcher；文件产品名为米哈游启动器，版本 1.18.0.380。该目录同时承载原神与绝区零的游戏文件。"
+notes = "本机安装目录为用户文档下的 miHoYo Launcher；文件产品名为米哈游启动器，版本 1.18.0.380。该目录同时承载原神与绝区零的游戏文件。本次复核：官方渠道不公布启动器版本号，第三方收录（2026-04 的 1.10.1.283）明显滞后于本机，不作上游依据，本机 1.18.0.380 以安装目录证据维持。"
 relationships = []
 
 [software]

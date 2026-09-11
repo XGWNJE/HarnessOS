@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "WinGet 包 ShiningLight.OpenSSL.Dev；本机 4.0.2。独立 OpenSSL bin 已注册到 Windows 机器 PATH 并完成版本核验；Git 随附副本不替代本资产，不记录或备份任何私钥。"
+notes = "WinGet 包 ShiningLight.OpenSSL.Dev；本机 4.0.2。独立 OpenSSL bin 已注册到 Windows 机器 PATH 并完成版本核验；Git 随附副本不替代本资产，不记录或备份任何私钥。Git Bash 会话内 PATH 会先解析 Git 随附副本，完整路径核验为 4.0.2。"
 relationships = []
 
 [development_tool]

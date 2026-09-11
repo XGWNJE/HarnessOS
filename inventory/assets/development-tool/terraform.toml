@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "WinGet 包 Hashicorp.Terraform；本机 1.15.8。状态文件、远端后端凭据与云端密钥不纳入 HarnessOS。"
+notes = "WinGet 包 Hashicorp.Terraform；本机 1.15.8。WinGet 稳定源当前提供 1.16.2。状态文件、远端后端凭据与云端密钥不纳入 HarnessOS。"
 relationships = []
 
 [development_tool]

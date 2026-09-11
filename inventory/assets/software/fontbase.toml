@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机版本 2026.5.23 已由 WinGet 清单核验；官方更新历史可追踪，配置恢复范围未单独确认。"
+notes = "本机版本 2026.5.23 已由 WinGet 清单核验；官方更新页最新版本仍为 2026.5.23（2026-07-20），与本机一致，配置恢复范围未单独确认。"
 relationships = []
 
 [software]

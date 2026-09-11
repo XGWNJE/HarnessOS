@@ -11,15 +11,15 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机版本 152.0.7977.76 已由 ARP 清单核验；WinGet 官方稳定包显示 152.0.7977.83，配置恢复范围未单独确认。"
+notes = "本机版本 153.0.8010.36 已由主程序文件版本核验；WinGet 官方稳定包显示 153.0.8010.37，本机另有 Chrome Beta 通道安装、不属于本资产登记范围，配置恢复范围未单独确认。"
 relationships = []
 
 [software]
 install_form = "installer"
 release_channel = "stable"
-minimum_verified_version = "152.0.7977.76"
+minimum_verified_version = "153.0.8010.36"
 pinned_version = ""
 avoid_versions = []
 official_source = "https://www.google.com/chrome/"

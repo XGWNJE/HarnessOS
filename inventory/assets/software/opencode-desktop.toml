@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop；WinGet 当前显示新版可更新至 1.18.29，同时仍列出 1.2.25 残留检测结果，旧版残留状态需人工复核，不能据此再次卸载。"
+notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop；WinGet 当前显示新版可更新至 1.18.30，同时仍列出 1.2.25 残留检测结果，旧版残留状态需人工复核，不能据此再次卸载。"
 relationships = []
 
 [software]

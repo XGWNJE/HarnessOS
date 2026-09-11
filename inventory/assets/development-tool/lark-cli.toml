@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "官方仓库为 larksuite/cli；当前 npm 安装形态先由 Node.js 启动包内运行器，再调用原生 CLI。应用创建、账号登录、Skills 安装与 OAuth 授权需由用户另行确认，不纳入恢复步骤。"
+notes = "官方仓库为 larksuite/cli，npm `latest` 当前为 1.0.95；当前 npm 安装形态先由 Node.js 启动包内运行器，再调用原生 CLI。应用创建、账号登录、Skills 安装与 OAuth 授权需由用户另行确认，不纳入恢复步骤。"
 
 [[relationships]]
 type = "depends-on"

@@ -59,7 +59,7 @@
 | `skill:kimi-webbridge` | kimi-webbridge | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Kimi WebBridge lets AI control the user's real browser — navigate, click, type, read, screenshot, and interact with any… |
 | `skill:mini-vault` | mini-vault | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 中转站（get.xgwnje.cn / mini-vault）文件上传与下载核验。当需要把构建产物（APK/安装包/截图/日志等）传到中转站供用户自行下载到真机测试，或核验中转站可用性时使用。目标：上传前已获用户明确同意（问过才传，不擅自… |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、网盘文件搜索、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户需要操作夸克网盘文件或进行身份验证时使用。 |
-| `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 帮助人们获取并学习 Vibe Coding 相关知识，包括 UI、网页、软件、Git、AI Agent 与设计概念。适用于用户明确调用 VibeHub、在 Vibe Coding 过程中看不懂 Agent 回复里的术语并要求通俗解释、描述… |
+| `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 在任何 Vibe Coding 编程任务及其后续补充中持续识别准确术语。用户即使已经让 Agent 完成了一部分代码、正在追加修改，或只用口语描述效果、交互、状态和问题（如“鼠标放上去有个小提示”“点完变一下颜色”“内容太长省略”），也必… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | VPS 服务器连接信息（IP/端口/SSH/部署路径）。当项目需要 SSH 连接 VPS、部署 server、查询服务器配置时使用，目标是安全、准确地完成 VPS 相关操作。 |
 | `skill:webbridge-acceptance` | webbridge-acceptance | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | Kimi WebBridge（浏览器控制）可用性验收。当需要在新环境/新机器验收 WebBridge 是否可用、或验收类操作后清理现场时使用。验收目标：守护进程连通、navigate、snapshot、evaluate、screensho… |
 

@@ -11,7 +11,7 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 GitHub.cli；本机 2.98.0，WinGet 稳定源当前提供 2.100.0。GitHub API 功能可独立使用，Git 仅作为本地仓库工作流的软关系；认证状态与 token 不纳入仓库。"
 

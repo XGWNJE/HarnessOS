@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-06"
+last_verified_on = "2026-09-12"
 review_days = 90
-notes = "本机版本 7.1.7.791 已由 ARP 清单核验；官方 Windows 客户端可从夸克网盘下载页获取，WinGet 另有 3.24.0 版本线，二者版本号不可直接混用。"
+notes = "本机版本 7.1.7.791 已由 ARP 清单核验；官方 Windows 客户端可从夸克网盘下载页获取但页面不展示版本号，第三方收录（7.0.6.771）滞后低于本机，WinGet 另有 3.24.0 版本线，二者版本号不可直接混用。"
 relationships = []
 
 [software]
