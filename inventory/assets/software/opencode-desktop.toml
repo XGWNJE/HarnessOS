@@ -1,7 +1,7 @@
 schema_version = 1
 id = "software:opencode-desktop"
 type = "software"
-name = "OpenCode Desktop"
+name = "OpenCode 桌面端"
 domain = "ai-agent"
 status = "managed"
 purpose = "提供 OpenCode 的桌面 AI 编程与本地项目交互入口。"
@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "规范资产以新版 1.18.25 为准，WinGet 包 ID 为 SST.OpenCodeDesktop；WinGet 当前显示新版可更新至 1.18.30，同时仍列出 1.2.25 残留检测结果，旧版残留状态需人工复核，不能据此再次卸载。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "SST.OpenCodeDesktop"
-latest_stable = "1.18.30"
-
-[software]
+tool_kind = ""
 install_form = "package-manager"
+commands = []
+install_source = ""
+official_source = "https://opencode.ai/"
+package_id = ""
+version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = "1.18.25"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://opencode.ai/"
-config_restore = "恢复规范新版安装；账号、Provider、模型配置和凭据不进入 HarnessOS。"
+environment_variables = []
+config_reference = "恢复规范新版安装；账号、Provider、模型配置和凭据不进入 HarnessOS。"
 backup_location = "unknown"
+verification_commands = []
 post_restore_checks = ["卸载注册表只显示 OpenCode Desktop 新版安装", "应用可启动", "旧版安装目录与卸载项不存在"]
+upstream_channel = "winget"
+upstream_identifier = "SST.OpenCodeDesktop"
+upstream_latest_stable = "1.18.30"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

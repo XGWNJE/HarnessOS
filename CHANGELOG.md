@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-12 — 统一资产词条模板并统一命名
+
+- [修订] 结构化资产取消按类型另设的字段集：`[software]`、`[development_tool]` 与 `[upstream]` 扩展表全部并入统一词条模板，52 条记录扁平化重写；不适用字段留空，类型必填字段缺失时目录仍标 incomplete。`update_channel` 并入 `release_channel`，`config_restore` 并入 `config_reference`，上游渠道字段改名为 `upstream_*` 顶层字段；taxonomy 移除 extension_table 声明，catalog.py 与 versions.py 改按统一字段校验和读取，目录详情对所有类型渲染同一套词条。
+- [修订] 资产命名统一为产品官方名加统一中文形态后缀：Kubernetes CLI→kubectl、SQLite CLI→SQLite、OpenSSL Developer Tools→OpenSSL、LLVM Toolchain→LLVM、Rust Toolchain→Rust、WinLibs MinGW-w64 Toolchain→WinLibs MinGW-w64、Lark/飞书 CLI→飞书 CLI、DeepSeek Harness CLI→DeepSeek Harness、OpenCode Desktop→OpenCode 桌面端、飞书桌面客户端→飞书桌面端；资产 ID 与 slug 不变。
+- [修订] `inventory/README.md` 字段文档合并为“统一词条模板 + 上游查询渠道”两节；项目规则同步措辞。
+
 ## 2026-09-12 — 统一资产领域判定口径
 
 - [修订] 领域判定口径成文并写入 `inventory/taxonomy.toml` 注释与 `inventory/README.md`：类型按形态划分，领域按资产服务的主要场景归入唯一领域；development-tool 类型统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途。

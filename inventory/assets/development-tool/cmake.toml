@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Kitware.CMake；本机独立版本 4.4.3，PATH 优先于 WinLibs 内置副本。CTest、CPack 与 CMake GUI 作为捆绑组件。独立 Ninja 当前被 WinLibs 内置 Ninja 覆盖，因此不登记。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Kitware.CMake"
-latest_stable = "4.4.3"
-
-[development_tool]
 tool_kind = "compiler"
+install_form = ""
 commands = ["cmake", "ctest", "cpack", "cmake-gui"]
 install_source = "WinGet"
+official_source = ""
 package_id = "Kitware.CMake"
 version_constraint = ">=4.4.3"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "CMAKE_GENERATOR"]
 config_reference = "项目级 CMakePresets.json 与工具链文件"
+backup_location = ""
 verification_commands = ["cmake --version", "ctest --version", "cpack --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Kitware.CMake"
+upstream_latest_stable = "4.4.3"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

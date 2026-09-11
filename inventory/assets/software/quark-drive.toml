@@ -14,18 +14,26 @@ declared_on = "2026-09-06"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "本机版本 7.1.7.791 已由 ARP 清单核验；官方 Windows 客户端可从夸克网盘下载页获取但页面不展示版本号，第三方收录（7.0.6.771）滞后低于本机，WinGet 另有 3.24.0 版本线，二者版本号不可直接混用。渠道标注未确认：微软商店候选产品未能通过 displaycatalog 核验，下次版本更新时再评估商店渠道或客户端自更新接口，核验发布者与版本线一致后才登记为正式渠道。"
-relationships = []
-
-[upstream]
-channel = "unavailable"
-
-[software]
+tool_kind = ""
 install_form = "installer"
+commands = []
+install_source = ""
+official_source = "https://pan.quark.cn/"
+package_id = ""
+version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = "7.1.7.791"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://pan.quark.cn/"
-config_restore = "通过官方来源恢复应用；账号、同步目录和云端文件按用户授权的安全流程恢复。"
+environment_variables = []
+config_reference = "通过官方来源恢复应用；账号、同步目录和云端文件按用户授权的安全流程恢复。"
 backup_location = "unknown"
+verification_commands = []
 post_restore_checks = ["应用可启动", "可完成账号登录", "同步状态可查看"]
+upstream_channel = "unavailable"
+upstream_identifier = ""
+upstream_latest_stable = ""
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

@@ -14,23 +14,29 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 GitHub.cli；本机 2.98.0，WinGet 稳定源当前提供 2.100.0。GitHub API 功能可独立使用，Git 仅作为本地仓库工作流的软关系；认证状态与 token 不纳入仓库。"
-
-[upstream]
-channel = "winget"
-identifier = "GitHub.cli"
-latest_stable = "2.100.0"
+tool_kind = "cli"
+install_form = ""
+commands = ["gh"]
+install_source = "WinGet"
+official_source = ""
+package_id = "GitHub.cli"
+version_constraint = ">=2.98.0"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+environment_variables = ["PATH"]
+config_reference = "GitHub CLI 用户级配置与操作系统凭据存储"
+backup_location = ""
+verification_commands = ["gh --version", "gh help"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "GitHub.cli"
+upstream_latest_stable = "2.100.0"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
 
 [[relationships]]
 type = "uses"
 target = "development-tool:git"
-
-[development_tool]
-tool_kind = "cli"
-commands = ["gh"]
-install_source = "WinGet"
-package_id = "GitHub.cli"
-version_constraint = ">=2.98.0"
-update_channel = "stable"
-environment_variables = ["PATH"]
-config_reference = "GitHub CLI 用户级配置与操作系统凭据存储"
-verification_commands = ["gh --version", "gh help"]

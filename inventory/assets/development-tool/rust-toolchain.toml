@@ -1,7 +1,7 @@
 schema_version = 1
 id = "development-tool:rust-toolchain"
 type = "development-tool"
-name = "Rust Toolchain"
+name = "Rust"
 domain = "development"
 status = "managed"
 purpose = "提供 Rust 编译、包管理、格式化、静态检查和语言服务工具链。"
@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 安装 Rustlang.Rustup 1.29.0，稳定源当前提供 1.29.1；当前 stable MSVC toolchain 提供 rustc/cargo 1.98.0，并安装 Clippy、rustfmt、标准库与文档组件。这些组件由 rustup 统一管理，不单独登记。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Rustlang.Rustup"
-latest_stable = "1.29.1"
-
-[development_tool]
 tool_kind = "compiler"
+install_form = ""
 commands = ["rustup", "rustc", "cargo", "cargo-clippy", "cargo-fmt", "rust-analyzer"]
 install_source = "WinGet + rustup stable toolchain"
+official_source = ""
 package_id = "Rustlang.Rustup"
 version_constraint = ">=1.98.0"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "RUSTUP_HOME", "CARGO_HOME"]
 config_reference = "rustup 与 Cargo 用户级配置（不得保存 registry token）"
+backup_location = ""
 verification_commands = ["rustup --version", "rustup toolchain list", "rustup component list --installed", "rustc --version", "cargo --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Rustlang.Rustup"
+upstream_latest_stable = "1.29.1"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

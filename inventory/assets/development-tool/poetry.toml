@@ -14,23 +14,29 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "本机 Poetry 2.4.2 安装在 Python 3.12 用户级包目录，PyPI 当前提供 2.4.3；virtualenv 21.7.8 是 Poetry 依赖，不单独登记。"
-
-[upstream]
-channel = "pypi"
-identifier = "poetry"
-latest_stable = "2.4.3"
+tool_kind = "package-manager"
+install_form = ""
+commands = ["poetry"]
+install_source = "PyPI / Python 用户级安装"
+official_source = ""
+package_id = "poetry"
+version_constraint = ">=2.4.2"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
+environment_variables = ["PATH"]
+config_reference = "Poetry 用户级配置与缓存（不得保存 registry 凭据）"
+backup_location = ""
+verification_commands = ["poetry --version", "python -m pip show poetry"]
+post_restore_checks = []
+upstream_channel = "pypi"
+upstream_identifier = "poetry"
+upstream_latest_stable = "2.4.3"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
 
 [[relationships]]
 type = "depends-on"
 target = "development-tool:python"
-
-[development_tool]
-tool_kind = "package-manager"
-commands = ["poetry"]
-install_source = "PyPI / Python 用户级安装"
-package_id = "poetry"
-version_constraint = ">=2.4.2"
-update_channel = "stable"
-environment_variables = ["PATH"]
-config_reference = "Poetry 用户级配置与缓存（不得保存 registry 凭据）"
-verification_commands = ["poetry --version", "python -m pip show poetry"]

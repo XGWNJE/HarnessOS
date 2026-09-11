@@ -14,18 +14,26 @@ declared_on = "2026-09-06"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "本机安装目录为用户文档下的 miHoYo Launcher；文件产品名为米哈游启动器，版本 1.18.0.380。该目录同时承载原神与绝区零的游戏文件。本次复核：官方渠道不公布启动器版本号，第三方收录（2026-04 的 1.10.1.283）明显滞后于本机，不作上游依据，本机 1.18.0.380 以安装目录证据维持。"
-relationships = []
-
-[upstream]
-channel = "unavailable"
-
-[software]
+tool_kind = ""
 install_form = "unknown"
+commands = []
+install_source = ""
+official_source = "https://hoyoplay.hoyoverse.com/"
+package_id = ""
+version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = "1.18.0.380"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://hoyoplay.hoyoverse.com/"
-config_restore = "恢复官方启动器并重新关联游戏安装目录；账号、登录状态和凭据按服务自身流程恢复。"
+environment_variables = []
+config_reference = "恢复官方启动器并重新关联游戏安装目录；账号、登录状态和凭据按服务自身流程恢复。"
 backup_location = "unknown"
+verification_commands = []
 post_restore_checks = ["启动器可打开", "启动器能识别原神与绝区零安装文件", "启动器版本信息可查看"]
+upstream_channel = "unavailable"
+upstream_identifier = ""
+upstream_latest_stable = ""
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

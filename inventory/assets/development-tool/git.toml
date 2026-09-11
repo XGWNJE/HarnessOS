@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Git.Git；本机 Git 2.55.0.windows.3。Git LFS 3.7.1、Git Bash、Git GUI、tig 2.6.1 与 scalar 作为捆绑组件，不单独登记。Codex 私有 Git 不替代本资产。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Git.Git"
-latest_stable = "2.55.0.3"
-
-[development_tool]
 tool_kind = "version-control"
+install_form = ""
 commands = ["git", "git-lfs", "tig"]
 install_source = "WinGet"
+official_source = ""
 package_id = "Git.Git"
 version_constraint = ">=2.55.0"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH"]
 config_reference = "用户级 Git 配置与凭据存储（仅逻辑引用，不纳入仓库）"
+backup_location = ""
 verification_commands = ["git --version", "git lfs version", "tig --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Git.Git"
+upstream_latest_stable = "2.55.0.3"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

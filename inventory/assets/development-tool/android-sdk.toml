@@ -14,23 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "通过 Android Studio SDK Manager 管理；已核验 platform-tools 37.0.1、emulator 37.1.11、cmdline-tools 22.0，以及 Android platforms/build-tools；sdkmanager 22.0 当前可用但已提示迁移到 Android CLI；官方 platform-tools 最新稳定版 37.0.1（2026-07）与本机一致。ADB、模拟器、SDK 命令行工具和各平台包属于同一安装单元，不逐项登记。ANDROID_HOME、ANDROID_SDK_ROOT 与所需 PATH 已注册到 Windows 用户环境。"
-relationships = []
-
-[upstream]
-channel = "official-page"
-identifier = "https://developer.android.com/tools/releases/platform-tools"
-latest_stable = "37.0.1"
-pending_channel = "official-api"
-pending_identifier = "https://dl.google.com/android/repository/repository2-3.xml"
-pending_note = "下次版本更新时先核验官方仓库清单 platform-tools 版本与发布页一致后生效"
-
-[development_tool]
 tool_kind = "runtime-sdk"
+install_form = ""
 commands = ["adb", "emulator", "sdkmanager"]
 install_source = "Android Studio SDK Manager"
+official_source = ""
 package_id = ""
 version_constraint = ">=22.0"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["ANDROID_HOME", "ANDROID_SDK_ROOT", "PATH"]
 config_reference = "Android SDK Manager 包清单与用户级 AVD 配置（仅逻辑引用）"
+backup_location = ""
 verification_commands = ["adb version", "emulator -version", "sdkmanager --version"]
+post_restore_checks = []
+upstream_channel = "official-page"
+upstream_identifier = "https://developer.android.com/tools/releases/platform-tools"
+upstream_latest_stable = "37.0.1"
+upstream_pending_channel = "official-api"
+upstream_pending_identifier = "https://dl.google.com/android/repository/repository2-3.xml"
+upstream_pending_note = "下次版本更新时先核验官方仓库清单 platform-tools 版本与发布页一致后生效"
+relationships = []

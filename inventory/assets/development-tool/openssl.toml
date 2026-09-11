@@ -1,7 +1,7 @@
 schema_version = 1
 id = "development-tool:openssl"
 type = "development-tool"
-name = "OpenSSL Developer Tools"
+name = "OpenSSL"
 domain = "development"
 status = "managed"
 purpose = "提供 TLS、证书、密钥格式和密码学相关的开发与诊断命令。"
@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 ShiningLight.OpenSSL.Dev；本机 4.0.2。独立 OpenSSL bin 已注册到 Windows 机器 PATH 并完成版本核验；Git 随附副本不替代本资产，不记录或备份任何私钥。Git Bash 会话内 PATH 会先解析 Git 随附副本，完整路径核验为 4.0.2。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "ShiningLight.OpenSSL.Dev"
-latest_stable = "4.0.2"
-
-[development_tool]
 tool_kind = "cli"
+install_form = ""
 commands = ["openssl"]
 install_source = "WinGet"
+official_source = ""
 package_id = "ShiningLight.OpenSSL.Dev"
 version_constraint = ">=4.0.2"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "OPENSSL_CONF"]
 config_reference = "OpenSSL 公共配置位置（仅逻辑引用；私钥不纳入）"
+backup_location = ""
 verification_commands = ["winget list --id ShiningLight.OpenSSL.Dev --exact", "openssl version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "ShiningLight.OpenSSL.Dev"
+upstream_latest_stable = "4.0.2"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

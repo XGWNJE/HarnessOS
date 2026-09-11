@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Amazon.AWSCLI；本机 AWS CLI v2 2.36.36，WinGet 稳定源当前提供 2.36.43。其私有运行时不依赖系统 Python；账号、访问密钥与会话不纳入仓库。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Amazon.AWSCLI"
-latest_stable = "2.36.43"
-
-[development_tool]
 tool_kind = "cli"
+install_form = ""
 commands = ["aws"]
 install_source = "WinGet"
+official_source = ""
 package_id = "Amazon.AWSCLI"
 version_constraint = ">=2.36.36"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "AWS_PROFILE", "AWS_REGION"]
 config_reference = "AWS CLI 用户级配置与操作系统凭据存储"
+backup_location = ""
 verification_commands = ["aws --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Amazon.AWSCLI"
+upstream_latest_stable = "2.36.43"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

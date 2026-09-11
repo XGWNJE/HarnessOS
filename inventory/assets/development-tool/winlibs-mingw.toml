@@ -1,7 +1,7 @@
 schema_version = 1
 id = "development-tool:winlibs-mingw"
 type = "development-tool"
-name = "WinLibs MinGW-w64 Toolchain"
+name = "WinLibs MinGW-w64"
 domain = "development"
 status = "managed"
 purpose = "提供 Windows 原生 GCC/MinGW-w64 编译、链接、调试和配套构建工具链。"
@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 BrechtSanders.WinLibs.POSIX.UCRT 16.1.0-14.0.0-r4。GCC/G++ 16.1.0、GDB 17.2、GNU Make 4.4.1、Ninja 1.13.2、NASM 3.01、Cppcheck 2.21.0、Doxygen 1.17.0、ccache 4.13.6 与 binutils 为同一安装单元，不单独登记。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "BrechtSanders.WinLibs.POSIX.UCRT"
-latest_stable = "16.1.0-14.0.0-r4"
-
-[development_tool]
 tool_kind = "compiler"
+install_form = ""
 commands = ["gcc", "g++", "gdb", "mingw32-make", "ninja", "nasm", "cppcheck", "doxygen", "ccache"]
 install_source = "WinGet"
+official_source = ""
 package_id = "BrechtSanders.WinLibs.POSIX.UCRT"
 version_constraint = ">=16.1.0"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH"]
 config_reference = "项目级编译器与 CMake 工具链选择"
+backup_location = ""
 verification_commands = ["gcc --version", "g++ --version", "gdb --version", "mingw32-make --version", "ninja --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "BrechtSanders.WinLibs.POSIX.UCRT"
+upstream_latest_stable = "16.1.0-14.0.0-r4"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

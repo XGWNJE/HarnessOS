@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Microsoft.AzureCLI；本机 2.89.1，WinGet 稳定源当前提供 2.90.0。其私有运行时不依赖系统 Python；登录与订阅信息不纳入仓库。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Microsoft.AzureCLI"
-latest_stable = "2.90.0"
-
-[development_tool]
 tool_kind = "cli"
+install_form = ""
 commands = ["az"]
 install_source = "WinGet"
+official_source = ""
 package_id = "Microsoft.AzureCLI"
 version_constraint = ">=2.89.1"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "AZURE_CONFIG_DIR"]
 config_reference = "Azure CLI 用户级配置与操作系统凭据存储"
+backup_location = ""
 verification_commands = ["az version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Microsoft.AzureCLI"
+upstream_latest_stable = "2.90.0"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

@@ -14,20 +14,26 @@ declared_on = "2026-09-06"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "官方稳定版 5.3.3 已核验；当前本机版本未出现在 WinGet 或已登记的安装证据中，故不把上游版本冒充本机版本，安装形态和恢复范围待补证。"
-relationships = []
-
-[upstream]
-channel = "official-page"
-identifier = "https://krita.org/en/download/"
-latest_stable = "5.3.3"
-
-[software]
+tool_kind = ""
 install_form = "unknown"
+commands = []
+install_source = ""
+official_source = "https://krita.org/en/download/"
+package_id = ""
+version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = ""
 pinned_version = ""
 avoid_versions = []
-official_source = "https://krita.org/en/download/"
-config_restore = "通过官方来源恢复应用；画笔、工作区与个人资源按应用自身流程恢复。"
+environment_variables = []
+config_reference = "通过官方来源恢复应用；画笔、工作区与个人资源按应用自身流程恢复。"
 backup_location = "unknown"
+verification_commands = []
 post_restore_checks = ["应用可启动", "可新建并保存画布"]
+upstream_channel = "official-page"
+upstream_identifier = "https://krita.org/en/download/"
+upstream_latest_stable = "5.3.3"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

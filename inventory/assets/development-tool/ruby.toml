@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 RubyInstallerTeam.Ruby.3.4；本机 Ruby 3.4.10。RubyGems 3.6.9、Bundler 2.6.9、Rake 13.2.1 与 ridk 为该安装单元组件，不单独登记。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "RubyInstallerTeam.Ruby.3.4"
-latest_stable = "3.4.10-1"
-
-[development_tool]
 tool_kind = "runtime-sdk"
+install_form = ""
 commands = ["ruby", "gem", "bundle", "rake", "ridk"]
 install_source = "WinGet"
+official_source = ""
 package_id = "RubyInstallerTeam.Ruby.3.4"
 version_constraint = ">=3.4.10,<3.5"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH"]
 config_reference = "RubyGems 与 Bundler 用户级配置（不得保存 registry 凭据）"
+backup_location = ""
 verification_commands = ["ruby --version", "gem --version", "bundle --version", "rake --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "RubyInstallerTeam.Ruby.3.4"
+upstream_latest_stable = "3.4.10-1"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

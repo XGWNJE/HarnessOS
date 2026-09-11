@@ -483,7 +483,7 @@ class Catalog:
         if asset_id and path.stem != asset_id.split(":", 1)[-1]:
             self.problem(path, f"文件名必须与资产 slug 一致: {asset_id.split(':', 1)[-1]}")
         self._validate_common(path, data)
-        self._validate_extensions(path, data, asset_type)
+        self._validate_fields(path, data)
         self._validate_upstream(path, data)
         self._validate_sensitive(path, data)
         incomplete = self._is_incomplete(data, asset_type)
@@ -559,66 +559,55 @@ class Catalog:
             if not ID_RE.fullmatch(target):
                 self.problem(path, f"关系目标不是有效资产 ID: {target or '<empty>'}")
 
-    def _validate_extensions(self, path: Path, data: dict[str, Any], asset_type: str) -> None:
-        if asset_type == "software":
-            extension = data.get("software")
-            if not isinstance(extension, dict):
-                self.problem(path, "software 资产必须包含 [software]")
-                return
-            for key in ("post_restore_checks", "avoid_versions"):
-                if key in extension and not isinstance(extension[key], list):
-                    self.problem(path, f"software.{key} 必须是数组")
-            install_form = extension.get("install_form")
-            release_channel = extension.get("release_channel")
-            if install_form and self.taxonomy and self.taxonomy.software_install_forms and install_form not in self.taxonomy.software_install_forms:
-                self.problem(path, f"未知 software.install_form: {install_form}")
-            if release_channel and self.taxonomy and self.taxonomy.release_channels and release_channel not in self.taxonomy.release_channels:
-                self.problem(path, f"未知 software.release_channel: {release_channel}")
-        elif asset_type == "development-tool":
-            extension = data.get("development_tool")
-            if not isinstance(extension, dict):
-                self.problem(path, "development-tool 资产必须包含 [development_tool]")
-                return
-            for key in ("commands", "environment_variables", "verification_commands"):
-                if key in extension and not isinstance(extension[key], list):
-                    self.problem(path, f"development_tool.{key} 必须是数组")
-            tool_kind = extension.get("tool_kind")
-            if tool_kind and self.taxonomy and self.taxonomy.development_tool_kinds and tool_kind not in self.taxonomy.development_tool_kinds:
-                self.problem(path, f"未知 development_tool.tool_kind: {tool_kind}")
+    def _validate_fields(self, path: Path, data: dict[str, Any]) -> None:
+        for legacy in ("software", "development_tool", "upstream"):
+            if legacy in data:
+                self.problem(path, f"扩展表 [{legacy}] 已并入统一词条模板")
+        for key in ("commands", "avoid_versions", "environment_variables", "verification_commands", "post_restore_checks"):
+            if key in data and not isinstance(data[key], list):
+                self.problem(path, f"{key} 必须是数组")
+        taxonomy = self.taxonomy
+        if taxonomy is None:
+            return
+        tool_kind = data.get("tool_kind")
+        if tool_kind and taxonomy.development_tool_kinds and tool_kind not in taxonomy.development_tool_kinds:
+            self.problem(path, f"未知 tool_kind: {tool_kind}")
+        install_form = data.get("install_form")
+        if install_form and taxonomy.software_install_forms and install_form not in taxonomy.software_install_forms:
+            self.problem(path, f"未知 install_form: {install_form}")
+        release_channel = data.get("release_channel")
+        if release_channel and taxonomy.release_channels and release_channel not in taxonomy.release_channels:
+            self.problem(path, f"未知 release_channel: {release_channel}")
 
     def _validate_upstream(self, path: Path, data: dict[str, Any]) -> None:
-        upstream = data.get("upstream")
-        if upstream is None:
-            return
-        if not isinstance(upstream, dict):
-            self.problem(path, "upstream 必须是表")
+        channel = _text(data.get("upstream_channel"))
+        if not channel:
+            if any(_text(data.get(key)) for key in ("upstream_identifier", "upstream_latest_stable", "upstream_pending_channel")):
+                self.problem(path, "未登记 upstream_channel 时不得填写其余 upstream_* 渠道字段")
             return
         if data.get("upstream_updates") is not True:
-            self.problem(path, "只有跟踪上游更新的资产才能包含 [upstream]")
+            self.problem(path, "只有跟踪上游更新的资产才能登记 upstream_* 渠道字段")
             return
         allowed = self.taxonomy.upstream_channels if self.taxonomy else set()
-        channel = _text(upstream.get("channel"))
-        if not channel:
-            self.problem(path, "[upstream] 缺少 channel")
-        elif allowed and channel not in allowed:
-            self.problem(path, f"未知 upstream.channel: {channel}")
-        identifier = _text(upstream.get("identifier"))
-        latest = _text(upstream.get("latest_stable"))
+        if allowed and channel not in allowed:
+            self.problem(path, f"未知 upstream_channel: {channel}")
+        identifier = _text(data.get("upstream_identifier"))
+        latest = _text(data.get("upstream_latest_stable"))
         if channel == "unavailable":
             if identifier or latest:
-                self.problem(path, "upstream.channel 为 unavailable 时不得填写 identifier 或 latest_stable")
-        elif channel and not identifier:
-            self.problem(path, f"[upstream] channel={channel} 缺少 identifier")
-        pending = _text(upstream.get("pending_channel"))
+                self.problem(path, "upstream_channel 为 unavailable 时不得填写 identifier 或 latest_stable")
+        elif not identifier:
+            self.problem(path, f"upstream_channel={channel} 缺少 upstream_identifier")
+        pending = _text(data.get("upstream_pending_channel"))
         if pending:
             if allowed and pending not in allowed:
-                self.problem(path, f"未知 upstream.pending_channel: {pending}")
+                self.problem(path, f"未知 upstream_pending_channel: {pending}")
             if pending == channel:
-                self.problem(path, "upstream.pending_channel 不能与 channel 相同")
-            if pending != "unavailable" and not _text(upstream.get("pending_identifier")):
-                self.problem(path, "[upstream] 存在 pending_channel 时缺少 pending_identifier")
-            if not _text(upstream.get("pending_note")):
-                self.problem(path, "[upstream] 待切换渠道必须写明 pending_note 生效条件")
+                self.problem(path, "upstream_pending_channel 不能与 upstream_channel 相同")
+            if pending != "unavailable" and not _text(data.get("upstream_pending_identifier")):
+                self.problem(path, "存在 upstream_pending_channel 时缺少 upstream_pending_identifier")
+            if not _text(data.get("upstream_pending_note")):
+                self.problem(path, "待切换渠道必须写明 upstream_pending_note 生效条件")
 
     def _is_incomplete(self, data: dict[str, Any], asset_type: str) -> bool:
         common = ("fact_source", "preference_source", "provenance", "declared_on", "last_verified_on")
@@ -629,12 +618,10 @@ class Catalog:
         if data.get("preference_source") == "unknown":
             return True
         if asset_type == "software":
-            extension = data.get("software", {})
             critical = ("install_form", "release_channel", "official_source", "minimum_verified_version")
-            return any(not extension.get(key) or extension.get(key) == "unknown" for key in critical)
+            return any(not data.get(key) or data.get(key) == "unknown" for key in critical)
         if asset_type == "development-tool":
-            extension = data.get("development_tool", {})
-            return any(not extension.get(key) for key in ("tool_kind", "commands", "install_source", "version_constraint", "verification_commands"))
+            return any(not data.get(key) for key in ("tool_kind", "commands", "install_source", "version_constraint", "verification_commands"))
         return False
 
     def _validate_sensitive(self, path: Path, value: Any, keys: tuple[str, ...] = ()) -> None:
@@ -862,42 +849,33 @@ class Catalog:
             review_days = data.get("review_days")
             add_detail("复核周期", f"{review_days} 天" if review_days else "")
             add_detail("备注", data.get("notes"))
-            upstream = data.get("upstream") or {}
-            add_detail("上游渠道", upstream.get("channel"))
-            add_detail("渠道定位符", upstream.get("identifier"), "code")
-            add_detail("渠道最新稳定版", upstream.get("latest_stable"), "code")
-            add_detail("待切换渠道", upstream.get("pending_channel"))
-            add_detail("待切换定位符", upstream.get("pending_identifier"), "code")
-            add_detail("切换生效条件", upstream.get("pending_note"))
+            add_detail("工具类型", data.get("tool_kind"))
+            add_detail("安装形态", data.get("install_form"))
+            add_detail("命令", data.get("commands"), "codes")
+            add_detail("安装来源", data.get("install_source"))
+            add_detail("官方来源", data.get("official_source"), "url")
+            add_detail("包 ID", data.get("package_id"), "code")
+            add_detail("版本约束", data.get("version_constraint"), "code")
+            add_detail("发行渠道", data.get("release_channel"))
+            add_detail("最低验证版本", data.get("minimum_verified_version"))
+            add_detail("固定版本", data.get("pinned_version"))
+            add_detail("避开版本", data.get("avoid_versions"), "list")
+            add_detail("环境变量", data.get("environment_variables"), "codes")
+            add_detail("配置恢复", data.get("config_reference"))
+            add_detail("备份位置", data.get("backup_location"))
+            add_detail("验证命令", data.get("verification_commands"), "codes")
+            add_detail("恢复后检查", data.get("post_restore_checks"), "list")
+            add_detail("上游渠道", data.get("upstream_channel"))
+            add_detail("渠道定位符", data.get("upstream_identifier"), "code")
+            add_detail("渠道最新稳定版", data.get("upstream_latest_stable"), "code")
+            add_detail("待切换渠道", data.get("upstream_pending_channel"))
+            add_detail("待切换定位符", data.get("upstream_pending_identifier"), "code")
+            add_detail("切换生效条件", data.get("upstream_pending_note"))
             if asset.relationships:
-                add_detail(
-                    "关系",
+                add_detail("关系",
                     [f"{relation} → {target}" for relation, target in asset.relationships],
                     "list",
                 )
-
-            if asset.type == "software":
-                extension = data.get("software", {})
-                add_detail("安装形态", extension.get("install_form"))
-                add_detail("发布通道", extension.get("release_channel"))
-                add_detail("最低验证版本", extension.get("minimum_verified_version"))
-                add_detail("固定版本", extension.get("pinned_version"))
-                add_detail("避开版本", extension.get("avoid_versions"), "list")
-                add_detail("官方来源", extension.get("official_source"), "url")
-                add_detail("配置恢复", extension.get("config_restore"))
-                add_detail("备份位置", extension.get("backup_location"))
-                add_detail("恢复后检查", extension.get("post_restore_checks"), "list")
-            elif asset.type == "development-tool":
-                extension = data.get("development_tool", {})
-                add_detail("工具类型", extension.get("tool_kind"))
-                add_detail("命令", extension.get("commands"), "codes")
-                add_detail("安装来源", extension.get("install_source"))
-                add_detail("包 ID", extension.get("package_id"), "code")
-                add_detail("版本约束", extension.get("version_constraint"), "code")
-                add_detail("更新通道", extension.get("update_channel"))
-                add_detail("环境变量", extension.get("environment_variables"), "codes")
-                add_detail("配置引用", extension.get("config_reference"))
-                add_detail("验证命令", extension.get("verification_commands"), "codes")
 
             freshness = "stale" if asset.stale else "incomplete" if asset.incomplete else "current"
             assets.append({
@@ -1044,15 +1022,15 @@ def _upstream_label(asset: Asset) -> str:
         return "不适用"
     if not asset.upstream_updates:
         return "不跟踪"
-    upstream = (asset.data or {}).get("upstream") or {}
-    channel = _text(upstream.get("channel"))
+    upstream = asset.data or {}
+    channel = _text(upstream.get("upstream_channel"))
     if channel == "unavailable":
         label = "跟踪（渠道未确认）"
     elif channel:
         label = f"跟踪（{channel}）"
     else:
         label = "跟踪"
-    pending = _text(upstream.get("pending_channel"))
+    pending = _text(upstream.get("upstream_pending_channel"))
     if pending:
         label += f"，{pending} 待切换"
     return label

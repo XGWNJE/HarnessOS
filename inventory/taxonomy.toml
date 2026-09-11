@@ -37,14 +37,12 @@ id = "software"
 label = "软件"
 active = true
 native_sources = ["inventory/assets/software/*.toml"]
-extension_table = "software"
 
 [[asset_types]]
 id = "development-tool"
 label = "开发环境工具"
 active = true
 native_sources = ["inventory/assets/development-tool/*.toml"]
-extension_table = "development_tool"
 
 [[asset_types]]
 id = "hardware"

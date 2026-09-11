@@ -14,20 +14,26 @@ declared_on = "2026-09-06"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "本机版本 3.5.1 已由 WinGet 清单核验；官方稳定包当前显示 3.8.0，应用内更新与官方 PC 下载页为上游渠道，恢复范围未单独确认。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "ByteDance.SodaMusic"
-latest_stable = "3.8.0"
-
-[software]
+tool_kind = ""
 install_form = "installer"
+commands = []
+install_source = ""
+official_source = "https://www.qishui.com/"
+package_id = ""
+version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = "3.5.1"
 pinned_version = ""
 avoid_versions = []
-official_source = "https://www.qishui.com/"
-config_restore = "通过官方来源恢复应用；账号、播放列表和个人数据按应用自身流程恢复。"
+environment_variables = []
+config_reference = "通过官方来源恢复应用；账号、播放列表和个人数据按应用自身流程恢复。"
 backup_location = "unknown"
+verification_commands = []
 post_restore_checks = ["应用可启动", "可完成账号登录或播放测试内容"]
+upstream_channel = "winget"
+upstream_identifier = "ByteDance.SodaMusic"
+upstream_latest_stable = "3.8.0"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

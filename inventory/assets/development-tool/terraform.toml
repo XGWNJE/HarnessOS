@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Hashicorp.Terraform；本机 1.15.8。WinGet 稳定源当前提供 1.16.2。状态文件、远端后端凭据与云端密钥不纳入 HarnessOS。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "Hashicorp.Terraform"
-latest_stable = "1.16.2"
-
-[development_tool]
 tool_kind = "cli"
+install_form = ""
 commands = ["terraform"]
 install_source = "WinGet"
+official_source = ""
 package_id = "Hashicorp.Terraform"
 version_constraint = ">=1.15.8"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "TF_PLUGIN_CACHE_DIR"]
 config_reference = "项目 Terraform 配置与远端状态逻辑引用（不保存状态文件或凭据）"
+backup_location = ""
 verification_commands = ["terraform version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "Hashicorp.Terraform"
+upstream_latest_stable = "1.16.2"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

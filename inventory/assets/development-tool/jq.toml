@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 jqlang.jq；本机 1.8.2。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "jqlang.jq"
-latest_stable = "1.8.2"
-
-[development_tool]
 tool_kind = "cli"
+install_form = ""
 commands = ["jq"]
 install_source = "WinGet"
+official_source = ""
 package_id = "jqlang.jq"
 version_constraint = ">=1.8.2"
-update_channel = "stable"
+release_channel = "stable"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH"]
 config_reference = "不适用"
+backup_location = ""
 verification_commands = ["jq --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "jqlang.jq"
+upstream_latest_stable = "1.8.2"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

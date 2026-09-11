@@ -14,20 +14,26 @@ declared_on = "2026-09-04"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 EclipseAdoptium.Temurin.21.JDK；本机 21.0.12.1 LTS。java、javac、jar、javadoc、jdb、jlink、jpackage 等均由 JDK 捆绑提供。官方 Adoptium API 确认 21 线最新 GA 为 21.0.12+1，与本机一致。"
-relationships = []
-
-[upstream]
-channel = "winget"
-identifier = "EclipseAdoptium.Temurin.21.JDK"
-latest_stable = "21.0.12.101"
-
-[development_tool]
 tool_kind = "runtime-sdk"
+install_form = ""
 commands = ["java", "javac", "jar", "javadoc", "jdb", "jlink", "jpackage"]
 install_source = "WinGet"
+official_source = ""
 package_id = "EclipseAdoptium.Temurin.21.JDK"
 version_constraint = ">=21.0.12,<22"
-update_channel = "lts"
+release_channel = "lts"
+minimum_verified_version = ""
+pinned_version = ""
+avoid_versions = []
 environment_variables = ["PATH", "JAVA_HOME"]
 config_reference = "JAVA_HOME 与项目级 JVM/Gradle 配置（仅记录名称和逻辑来源）"
+backup_location = ""
 verification_commands = ["java --version", "javac --version"]
+post_restore_checks = []
+upstream_channel = "winget"
+upstream_identifier = "EclipseAdoptium.Temurin.21.JDK"
+upstream_latest_stable = "21.0.12.101"
+upstream_pending_channel = ""
+upstream_pending_identifier = ""
+upstream_pending_note = ""
+relationships = []

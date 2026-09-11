@@ -132,12 +132,14 @@ def main() -> int:
         return 1
     rows: list[tuple[str, str, str, str, str]] = []
     for asset in sorted(catalog.assets.values(), key=lambda item: item.id):
-        upstream = (asset.data or {}).get("upstream")
-        if not isinstance(upstream, dict) or not asset.upstream_updates:
+        data = asset.data or {}
+        if not asset.upstream_updates:
             continue
-        channel = str(upstream.get("channel", ""))
-        identifier = str(upstream.get("identifier", ""))
-        registered = str(upstream.get("latest_stable", ""))
+        channel = str(data.get("upstream_channel", ""))
+        identifier = str(data.get("upstream_identifier", ""))
+        registered = str(data.get("upstream_latest_stable", ""))
+        if not channel:
+            continue
         if channel in SKIP_STATUS:
             rows.append((asset.id, channel, registered or "—", "—", SKIP_STATUS[channel]))
             continue
