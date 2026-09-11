@@ -40,7 +40,7 @@ native_sources = ["inventory/assets/software/*.toml"]
 
 [[asset_types]]
 id = "development-tool"
-label = "开发环境工具"
+label = "开发工具"
 active = true
 native_sources = ["inventory/assets/development-tool/*.toml"]
 
@@ -97,7 +97,7 @@ native_sources = ["inventory/assets/other/*.toml"]
 # 取主用途，不按次要能力叠加。
 [[domains]]
 id = "ai-agent"
-label = "AI 与 Agent"
+label = "AI"
 
 [[domains]]
 id = "development"
@@ -105,11 +105,11 @@ label = "开发"
 
 [[domains]]
 id = "creative-media"
-label = "创意与媒体"
+label = "创作"
 
 [[domains]]
 id = "productivity"
-label = "效率办公"
+label = "效率"
 
 [[domains]]
 id = "communication"
@@ -117,19 +117,19 @@ label = "通信"
 
 [[domains]]
 id = "browser-web"
-label = "浏览器与 Web"
+label = "浏览器"
 
 [[domains]]
 id = "storage-backup"
-label = "存储与备份"
+label = "存储"
 
 [[domains]]
 id = "system-hardware"
-label = "系统与硬件"
+label = "系统"
 
 [[domains]]
 id = "network-remote"
-label = "网络与远程"
+label = "网络"
 
 [[domains]]
 id = "entertainment"

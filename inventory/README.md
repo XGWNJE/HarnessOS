@@ -7,7 +7,7 @@
 - Rule 正文的唯一事实源是 `global/AGENTS.md`。
 - Skill 正文及来源的唯一事实源是 `skills/` 与 `vendor/`。
 - Workflow 的唯一事实源是 `workflows/<slug>.md`，使用 TOML frontmatter 携带公共字段。
-- Software、Development Tool 及后续类型的唯一事实源是 `inventory/assets/<type>/<slug>.toml`。
+- 软件、开发工具及后续类型的唯一事实源是 `inventory/assets/<type>/<slug>.toml`。
 - Profile 位于 `inventory/profiles/<slug>.toml`，只组合资产，不复制资产事实。
 - `inventory/taxonomy.toml` 是类型、领域、状态、关系和配置档层级枚举的唯一事实源。
 
