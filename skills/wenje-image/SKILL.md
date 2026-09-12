@@ -89,4 +89,5 @@ CLI 与 MCP 用同一套分类，便于按类处置：
 - 选型、价格、比例与路由规则：[references/providers.md](references/providers.md)
 - 端点、字段、响应结构与实测校准：[references/grsai-api-docs.md](references/grsai-api-docs.md)
 - MCP 注册与故障排查：[references/mcp.md](references/mcp.md)
+- 架构图（给人看的独立 HTML，用浏览器打开，含可切换视图）：[references/architecture.html](references/architecture.html)
 - 本地自检（不产生费用）：`python <本skill目录>/tests/local_check.py`

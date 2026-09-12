@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "wenje-image 出图技能架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "architecture.html",
+    "views": [
+      { "id": "two-entries", "label": "两条入口，一个引擎", "focus": ["agent", "mcp", "cli", "engine"], "note": "MCP 工具为首选入口，CLI 为兜底入口，两者进入同一个引擎。" },
+      { "id": "credential-path", "label": "密钥路径", "focus": ["setup", "config", "engine"], "note": "密钥由浏览器设置页写入本机配置，引擎只读取，不经过对话与命令。" },
+      { "id": "paid-call", "label": "付费调用与产物", "focus": ["engine", "grsai", "output"], "note": "引擎提交并轮询付费接口，把结果下载落盘。" }
+    ]
+  },
+  "layout": { "mode": "grid", "cols": 4, "cellW": 210, "cellH": 108, "gapX": 66, "gapY": 66, "origin": [60, 92] },
+  "components": [
+    { "id": "agent", "type": "external", "label": "Agent", "sublabel": "ZCode / Codex / Claude", "col": 0, "row": 1 },
+    { "id": "setup", "type": "security", "label": "本地设置页", "sublabel": "127.0.0.1 · 一次性页面", "col": 1, "row": 0 },
+    { "id": "mcp", "type": "backend", "label": "MCP server", "sublabel": "wenje_mcp.py", "tag": "generate_image", "col": 1, "row": 1 },
+    { "id": "cli", "type": "backend", "label": "CLI", "sublabel": "同文件的命令行入口", "tag": "generate / status / install", "col": 1, "row": 2 },
+    { "id": "config", "type": "database", "label": "本机凭据", "sublabel": "~/.wenje-image/", "col": 2, "row": 0 },
+    { "id": "engine", "type": "backend", "label": "引擎", "sublabel": "wenje_image.py · 仅标准库", "tag": "提交 · 轮询 · 下载", "col": 2, "row": 1 },
+    { "id": "output", "type": "database", "label": "落盘产物", "sublabel": "~/Pictures/wenje-image", "col": 2, "row": 2 },
+    { "id": "grsai", "type": "cloud", "label": "Grsai API", "sublabel": "聚合中转 · 按张计费", "col": 3, "row": 1 }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "本机运行环境 · 密钥与产物不出本机", "wraps": ["agent", "setup", "mcp", "cli", "config", "engine", "output"] },
+    { "kind": "security-group", "label": "密钥明文只在这里流转", "wraps": ["setup", "config"] }
+  ],
+  "connections": [
+    { "id": "agent-mcp", "from": "agent", "to": "mcp", "label": "首选入口", "variant": "emphasis" },
+    { "id": "agent-cli", "from": "agent", "to": "cli", "label": "兜底入口" },
+    { "id": "mcp-engine", "from": "mcp", "to": "engine" },
+    { "id": "cli-engine", "from": "cli", "to": "engine" },
+    { "id": "engine-grsai", "from": "engine", "to": "grsai", "label": "提交 / 轮询 · 按张付费", "variant": "emphasis" },
+    { "id": "setup-config", "from": "setup", "to": "config", "label": "浏览器填入密钥", "variant": "security" },
+    { "id": "config-engine", "from": "config", "to": "engine", "label": "读密钥与默认档位", "labelDy": 24 },
+    { "id": "engine-output", "from": "engine", "to": "output", "label": "下载落盘", "labelDy": 24 }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "两条入口，一个引擎", "items": ["MCP 工具优先：提示词是结构化参数，不经 shell 转义", "CLI 兜底：MCP 不可用时能力不降级"] },
+    { "dot": "violet", "title": "密钥零暴露", "items": ["浏览器设置页录入，不进对话、命令与日志", "只写本机 config.json，报错信息先脱敏"] },
+    { "dot": "amber", "title": "失败可定性", "items": ["上游含糊响应被翻译成统一退出码 0–9", "每次调用向 usage.jsonl 追加一行用量"] }
+  ]
+}

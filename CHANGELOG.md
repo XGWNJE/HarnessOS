@@ -14,7 +14,8 @@
 - [修订] `SKILL.md` 由 55 行改为薄入口：明确"MCP 工具优先、CLI 兜底"两条入口与各自调用方式；目标验收保留密钥零暴露、付费意图确认、参考图不越权、内容合规与成本路由等红线；失效模式表按实测语义重写。
 - [发布] `~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池已发布 v2.0.0；`catalog.py check`、`sync.py --check`、`git diff --check` 均通过。
 - [注册] MCP server 注册到本机三个 Agent 配置（`~/.zcode/cli/config.json` 的 `mcp.servers`、`~/.claude.json` 的 `mcpServers`、`~/.codex/config.toml` 的 `[mcp_servers]`），指向发布池路径 `~/.agents/skills/wenje-image/scripts/wenje_mcp.py` 与本机 Python 绝对路径。写入前各自留 `.wenje-backup-<时间戳>` 备份，写入后回读解析校验、失败即回滚；三家原有 MCP 条目（blender/context7/pencil/node_repl 等）经解析核对均未变动。需重启 Agent 才会出现 `generate_image` 工具。
-- 边界与存疑：①参考图上传（`--ref`/`reference_images`）按文档实现为 data URI，未实拍验证——需要一次真实付费调用，等 owner 授权后再补；②provider 层只实现了 Grsai 一个，配置里的 `provider` 字段是预留切换点，未实现的服务不会被静默回退；③MCP 注册属每台机器的本地动作，不在本仓库发布流水线内，换机恢复时要重跑 `install`；④ZCode 若在退出时重写 `config.json`，注册条目可能被覆盖，届时按 `references/mcp.md` 重跑即可。
+- [新增] `skills/wenje-image/references/architecture.html` 与其源规格 `architecture.json`：用 `vendor/archify` 生成的技能架构图（architecture 类型、showcase 档、zh-CN）。图为「Agent →（MCP 工具 / CLI 两条入口）→ 引擎 → Grsai API」主链路，外加本机凭据、本地设置页、落盘产物三个附属节点，并用「本机运行环境」与「密钥明文只在这里流转」两个边界框标出信任边界。交付回执：spec sha256 `f3dc886d…`（3692 B）、artifact sha256 `493a5546…`（809719 B），9 项产物检查全过、组合质量 0 错误 0 警告；`visual-check` 在 1440×900 / 1600×1000 / 1920×1080 / 2048×1320 四个视口均无溢出，最小节点文字投影 7.12px（阈值 6px）；感知层由本会话目视复核（主链路与边界框表意清晰、无重叠）。SKILL.md「按需参考」已挂链接。`references/` 下 visual-check 的 PNG/JSON 证据文件用时生成、用后已删，不入库。
+- 边界与存疑：①参考图上传（`--ref`/`reference_images`）按文档实现为 data URI，未实拍验证——需要一次真实付费调用，等 owner 授权后再补；②provider 层只实现了 Grsai 一个，配置里的 `provider` 字段是预留切换点，未实现的服务不会被静默回退；③MCP 注册属每台机器的本地动作，不在本仓库发布流水线内，换机恢复时要重跑 `install`；④ZCode 若在退出时重写 `config.json`，注册条目可能被覆盖，届时按 `references/mcp.md` 重跑即可；⑤架构图与规格合计 796KB，会随技能发布链镜像到四个读取池（与 `vendor/quarkclouddrive` 约 650KB 的既有体量同量级）；若认为不值得占这份体积，可把二者移出技能目录另置。
 
 ## 2026-09-13 — grsai-image-gen 更名为 wenje-image
 
