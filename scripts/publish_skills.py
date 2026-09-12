@@ -12,7 +12,8 @@
     ~/.dsh/skills/<name>/      DSH 池（$DSH_HOME/skills，DSH user-dsh 根，rank 400 优先于共享池）
 Kimi Code CLI 无独立 skills 目录（config 有 merge_all_available_skills，推测读取共享池），不单独发布。
 
-发布以目录为单位做整目录镜像（源多余文件全拷、目标多余文件删除）。
+发布以目录为单位做整目录镜像（源多余文件全拷、目标多余文件删除）。目标中的
+node_modules 视为按锁文件生成的本地运行依赖缓存，不参与发布漂移比较。
 目标被视为发布产物：与源不一致时直接覆盖。
 
 退役残留检测：池中存在、源中不存在的 skill 目录 = 退役时未清理的残留（如
@@ -41,6 +42,7 @@ def publishable_skills() -> list[tuple[str, Path]]:
 
 POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills", HOME / ".dsh" / "skills"]
 EXTRA_RESIDUE_POOLS = [HOME / ".config" / "opencode" / "skills"]
+IGNORED_TREE_NAMES = [".git", "__pycache__", "node_modules"]
 
 
 def exempted_names() -> set[str]:
@@ -82,7 +84,7 @@ def residue_dirs() -> list[tuple[str, Path]]:
 def dir_same(a: Path, b: Path) -> bool:
     if not b.is_dir():
         return False
-    cmp = filecmp.dircmp(a, b)
+    cmp = filecmp.dircmp(a, b, ignore=IGNORED_TREE_NAMES)
     if cmp.left_only or cmp.right_only or cmp.diff_files or cmp.funny_files:
         return False
     return all(dir_same(a / s, b / s) for s in cmp.common_dirs)
@@ -93,7 +95,7 @@ def mirror(src: Path, dst: Path) -> None:
         dst.unlink()
     elif dst.exists():
         shutil.rmtree(dst)
-    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(*IGNORED_TREE_NAMES))
 
 
 def main() -> None:
