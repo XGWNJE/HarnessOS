@@ -1,5 +1,5 @@
 ---
-version: 2.2.0
+version: 2.3.0
 name: wenje-image
 description: 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。
 ---
@@ -44,6 +44,7 @@ python <本skill目录>/scripts/wenje_image.py setup
 - **可用模型只有 5 个**，不引入表外模型：`gpt-image-2.5`（￥0.03，仅 1K）、`gpt-image-2.5-flare`（￥0.10，1K/2K/4K）、`gpt-image-2.5-sunburst`（￥0.12，1K/2K/4K）、`nano-banana-2`（￥0.06，1K/2K/4K，唯一支持极端比例）、`nano-banana-pro-4k-vip`（￥0.90，仅 4K）。
 - `--model` 点名模型；没点名时按 `--tier draft|standard|premium` 依任务挑（默认 standard → `gpt-image-2.5-flare`）。
 - `--size 1K|2K|4K` 按模型原生能力落地：模型没有的档位**不会被硬塞**——要 4K 而该模型只有 1K 就用 1K，要 1K 而该模型只有 4K 就用 4K；改动写进 `size_note`，照实告诉用户。
+- **没点名模型时先按风格倾向选系，再按档位定价位**：要自然写实、扩展像素增加细节（放大补细节、外扩画面、真实材质质感）→ 优先 **Banana 系**（`nano-banana-2`；同时要最高质量且接受 ￥0.90 才用 `nano-banana-pro-4k-vip`）；要创意、更强的编辑能力与效果（改图、特效、风格化、局部改动）→ 优先 **Image 2.5 系**（按 `--tier` 落 `gpt-image-2.5` / `-flare` / `-sunburst`）。用户点名或提出与倾向相反的要求时一律以用户为准。
 - `--ratio`、`--scene` 定比例；`--ref <路径>` 传参考图（可重复）。
 - 提示词长、含换行或引号时写进文件用 `--prompt-file`，不要在命令行里做转义。
 - `--dry-run` 只打印将发送的请求与预估价格，不调用 API——用它自查成本，不要靠猜。
