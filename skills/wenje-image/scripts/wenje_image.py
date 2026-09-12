@@ -33,7 +33,7 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2.1.0"
+VERSION = "2.2.0"
 SKILL_NAME = "wenje-image"
 
 CONFIG_DIR = Path(os.environ.get("WENJE_IMAGE_HOME") or (Path.home() / ".wenje-image"))
@@ -66,7 +66,6 @@ EXIT_SERVER = 9
 #   pixels: aspectRatio 需换算成像素串（非比例串）
 RATIO_STANDARD = ["auto", "1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "5:4", "4:5", "21:9"]
 RATIO_EXTREME = ["1:4", "4:1", "1:8", "8:1"]
-RATIO_GPT2 = ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "5:4", "4:5", "21:9", "9:21", "1:2", "2:1"]
 
 # gpt-image-2-vip 只接受像素串，按文档的比例表换算
 VIP_PIXELS = {
@@ -87,24 +86,44 @@ VIP_PIXELS = {
     "1:2": {"1K": "768x1536", "2K": "1536x3072", "4K": "1920x3840"},
 }
 
+# 限定模型集：只有下列 5 个模型可用，其余一律拒绝。
+#   sizes  该模型**实际支持**的 imageSize 档位——不是可选项，是能力事实。
+#          用户要了模型不支持的档位时，按这张表落到最接近的受支持档位，绝不硬塞。
+#   prices 取自 Grsai 控制台模型页（2026-09-13 核验），易变，成本决策前重新核验。
 MODELS = {
-    "nano-banana": {"credits": 440, "price": "￥0.022~0.044", "ratios": RATIO_STANDARD, "sizes": True},
-    "nano-banana-fast": {"credits": 440, "price": "￥0.022~0.044", "ratios": RATIO_STANDARD, "sizes": True},
-    "gpt-image-2": {"credits": 600, "price": "￥0.03~0.06", "ratios": RATIO_GPT2, "sizes": False},
-    "nano-banana-2": {"credits": 1200, "price": "￥0.06~0.12", "ratios": RATIO_STANDARD + RATIO_EXTREME, "sizes": True},
-    "gpt-image-2-vip": {"credits": 1300, "price": "￥0.065~0.13", "ratios": sorted(VIP_PIXELS), "sizes": True, "pixels": True},
-    "nano-banana-pro": {"credits": 1800, "price": "￥0.09~0.18", "ratios": RATIO_STANDARD, "sizes": True},
-    "nano-banana-2-cl": {"credits": 1600, "price": "￥0.08~0.16", "ratios": RATIO_STANDARD + RATIO_EXTREME, "sizes": True},
-    "nano-banana-2-2k-cl": {"credits": 1600, "price": "见控制台", "ratios": RATIO_STANDARD + RATIO_EXTREME, "sizes": True},
-    "nano-banana-2-4k-cl": {"credits": 3000, "price": "￥0.15~0.30", "ratios": RATIO_STANDARD + RATIO_EXTREME, "sizes": True},
-    "nano-banana-pro-cl": {"credits": 6000, "price": "￥0.30~0.60", "ratios": RATIO_STANDARD + RATIO_EXTREME, "sizes": True},
-    "nano-banana-pro-vt": {"credits": 1800, "price": "见控制台", "ratios": RATIO_STANDARD, "sizes": True},
-    "nano-banana-pro-vip": {"credits": 10000, "price": "￥0.50~1.00", "ratios": RATIO_STANDARD, "sizes": True},
-    "nano-banana-pro-4k-vip": {"credits": 16000, "price": "￥0.80~1.60", "ratios": RATIO_STANDARD, "sizes": True},
+    "gpt-image-2.5": {
+        "credits": 600, "price": "￥0.03", "sizes": ["1K"],
+        "ratios": sorted(VIP_PIXELS) + ["auto"], "pixels": True,
+    },
+    "gpt-image-2.5-flare": {
+        "credits": 2000, "price": "￥0.10", "sizes": ["1K", "2K", "4K"],
+        "ratios": sorted(VIP_PIXELS) + ["auto"], "pixels": True,
+    },
+    "gpt-image-2.5-sunburst": {
+        "credits": 2400, "price": "￥0.12", "sizes": ["1K", "2K", "4K"],
+        "ratios": sorted(VIP_PIXELS) + ["auto"], "pixels": True,
+    },
+    "nano-banana-2": {
+        "credits": 1200, "price": "￥0.06", "sizes": ["1K", "2K", "4K"],
+        "ratios": RATIO_STANDARD + RATIO_EXTREME,
+    },
+    "nano-banana-pro-4k-vip": {
+        "credits": 18000, "price": "￥0.90", "sizes": ["4K"],
+        "ratios": RATIO_STANDARD,
+    },
 }
 
-# 档位 → 默认模型：调用方按意图挑档，而不是背模型名
-TIER_MODEL = {"draft": "nano-banana-fast", "standard": "gpt-image-2", "premium": "nano-banana-pro"}
+# 用户没点名模型时，按任务档位挑：draft 最便宜、standard 日常、premium 质量优先。
+TIER_MODEL = {
+    "draft": "gpt-image-2.5",
+    "standard": "gpt-image-2.5-flare",
+    "premium": "gpt-image-2.5-sunburst",
+}
+
+# 极端比例只有 nano-banana-2 支持；未点名模型时改用它，不报错。
+EXTREME_MODEL = "nano-banana-2"
+
+SIZE_RANK = {"1K": 1, "2K": 2, "4K": 3}
 
 # 常见场景的比例与尺寸默认值
 SCENE_PRESETS = {
@@ -316,38 +335,58 @@ def encode_reference(path: str) -> str:
 
 
 def resolve_model(tier: str | None, model: str | None, ratio: str) -> str:
+    """用户点名就用它；没点名按档位挑；比例不被该档模型支持时改走支持它的模型。"""
     if model:
         if model not in MODELS:
-            raise WenjeError(f"未知模型：{model}。可用：{', '.join(sorted(MODELS))}", EXIT_PARAM)
+            raise WenjeError(
+                f"模型不在可用集内：{model}。可用：{', '.join(MODELS)}", EXIT_PARAM)
         return model
     chosen = TIER_MODEL.get((tier or "standard").lower())
     if not chosen:
         raise WenjeError(f"未知档位：{tier}。可用：{', '.join(TIER_MODEL)}", EXIT_PARAM)
-    if ratio in RATIO_EXTREME and ratio not in MODELS[chosen]["ratios"]:
-        return "nano-banana-2-cl"  # 极端比例只有 -cl 通道支持
+    if ratio not in MODELS[chosen]["ratios"]:
+        for name, spec in MODELS.items():
+            if ratio in spec["ratios"]:
+                return name
     return chosen
+
+
+def resolve_size(model: str, size: str | None) -> tuple[str, str]:
+    """按模型能力决定规格档位，返回 (档位, 变更说明)。
+
+    模型原生没有的档位不会被硬塞进去——要 4K 但模型最高 2K 就落到 2K，要 1K 但模型
+    只有 4K 就落到 4K。说明非空时由调用方展示，让规格变化可见，不做静默替换。
+    """
+    sizes = MODELS[model]["sizes"]
+    want = (size or "1K").upper()
+    if want in sizes:
+        return want, ""
+    if want not in SIZE_RANK:
+        raise WenjeError(f"未知尺寸：{size}。可用：1K / 2K / 4K", EXIT_PARAM)
+    chosen = min(sizes, key=lambda s: (abs(SIZE_RANK[s] - SIZE_RANK[want]), SIZE_RANK[s]))
+    return chosen, f"请求 {want}，但 {model} 只支持 {'/'.join(sizes)}；已按模型能力改用 {chosen}。"
 
 
 def build_payload(model: str, prompt: str, ratio: str, size: str, refs: list[str]) -> dict:
     spec = MODELS[model]
     ratio = ratio or "1:1"
-    size = (size or "1K").upper()
-    if ratio not in spec["ratios"]:
+    if ratio != "auto" and ratio not in spec["ratios"]:
         raise WenjeError(
             f"模型 {model} 不支持比例 {ratio}。支持：{', '.join(spec['ratios'])}", EXIT_PARAM)
     payload = {"model": model, "prompt": prompt, "images": refs, "replyType": "async"}
     if spec.get("pixels"):
-        table = VIP_PIXELS.get(ratio, {})
-        pixels = table.get(size)
-        if not pixels:
-            raise WenjeError(
-                f"模型 {model} 的 {ratio} 不支持 {size}。可选：{', '.join(table) or '无'}", EXIT_PARAM)
-        payload["aspectRatio"] = pixels
-    elif spec["sizes"]:
-        payload["aspectRatio"] = ratio
-        payload["imageSize"] = size
+        # GPT-Image 系在 Grsai 上用像素串表达规格；auto 交给服务端决定，不传该字段。
+        # 像素串是比值串更宽的写法：gpt-image-2 两种都收，像素专用的通道只收像素串。
+        if ratio != "auto":
+            table = VIP_PIXELS.get(ratio, {})
+            pixels = table.get(size)
+            if not pixels:
+                raise WenjeError(
+                    f"模型 {model} 的 {ratio} 不支持 {size}。可选：{', '.join(table) or '无'}", EXIT_PARAM)
+            payload["aspectRatio"] = pixels
     else:
         payload["aspectRatio"] = ratio
+        payload["imageSize"] = size
     return payload
 
 
@@ -450,6 +489,7 @@ def run_generation(args, cfg: dict, on_tick=None) -> dict:
     ratio = ratio or cfg.get("default_ratio") or "1:1"
     size = (size or cfg.get("default_size") or "1K").upper()
     model = resolve_model(getattr(args, "tier", None) or cfg.get("default_tier"), args.model, ratio)
+    size, size_note = resolve_size(model, size)
 
     refs = [encode_reference(p) for p in (args.ref or [])]
     payload = build_payload(model, args.prompt, ratio, size, refs)
@@ -460,7 +500,7 @@ def run_generation(args, cfg: dict, on_tick=None) -> dict:
         preview["images"] = [f"<{len(r)} chars data uri>" for r in refs]
         return {"dry_run": True, "endpoint": endpoint, "key_source": key_source,
                 "model": model, "credits": estimate, "estimated_price": MODELS[model].get("price"),
-                "payload": preview}
+                "sizes_supported": MODELS[model]["sizes"], "size_note": size_note, "payload": preview}
 
     task_id = submit(endpoint, key, payload, args.timeout)
     result = poll(endpoint, key, task_id, args.timeout, args.poll_interval, on_tick)
@@ -490,7 +530,7 @@ def run_generation(args, cfg: dict, on_tick=None) -> dict:
               "path": str(path) if path else ""}
     log_usage(record)
     return {"task": task_id, "status": state, "model": model, "ratio": ratio, "size": size,
-            "url": url, "path": str(path) if path else "", "credits": estimate,
+            "size_note": size_note, "url": url, "path": str(path) if path else "", "credits": estimate,
             "estimated_price": MODELS[model].get("price"), "kind": "video" if path and is_video(path) else "image"}
 
 
@@ -498,7 +538,9 @@ def render_result(result: dict) -> str:
     """给人看的输出：本机文件用绝对路径 Markdown 直接渲染，视频不假装成图片。"""
     path = result.get("path") or ""
     posix = Path(path).as_posix() if path else ""
-    lines = [f"模型 {result['model']} · {result['ratio']} · {result['size']} · 约 {result.get('estimated_price') or '见控制台'}/张"]
+    lines = [f"模型 {result['model']} · {result['ratio']} · {result['size']} · {result.get('estimated_price') or '见控制台'}/张"]
+    if result.get("size_note"):
+        lines.append(f"规格变更：{result['size_note']}")
     if path and result.get("kind") == "video":
         lines.append(f"[生成结果]({posix})")
     elif path:
@@ -935,10 +977,10 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("generate", help="生成或编辑图片")
     s.add_argument("--prompt", "-p", help="提示词")
     s.add_argument("--prompt-file", help="从文件读提示词，避免 shell 转义；与 --prompt 二选一")
-    s.add_argument("--tier", choices=sorted(TIER_MODEL), help="draft/standard/premium")
-    s.add_argument("--model", help="直接指定模型，覆盖 --tier")
+    s.add_argument("--tier", choices=sorted(TIER_MODEL), help="draft/standard/premium，仅在未点名模型时生效")
+    s.add_argument("--model", choices=sorted(MODELS), help="点名模型，覆盖 --tier")
     s.add_argument("--ratio", help="比例，如 16:9；省略则用配置默认")
-    s.add_argument("--size", help="1K/2K/4K")
+    s.add_argument("--size", choices=sorted(SIZE_RANK), help="1K/2K/4K；模型不支持时按能力落到最接近的档位")
     s.add_argument("--scene", choices=sorted(SCENE_PRESETS), help="场景预设，自动定比例与尺寸")
     s.add_argument("--ref", action="append", help="参考图路径，可重复；仅上传调用方明确给出的图")
     s.add_argument("--out", help="输出目录")

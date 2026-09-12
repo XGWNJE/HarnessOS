@@ -31,10 +31,10 @@ def check(label: str, ok: bool, detail: str = "") -> None:
         failures.append(label)
 
 
-def mcp_session(messages: list[dict], timeout: int = 60) -> list[dict]:
+def mcp_session(messages: list[dict], timeout: int = 60, env: dict | None = None) -> list[dict]:
     payload = "".join(json.dumps(m, ensure_ascii=False) + "\n" for m in messages)
     proc = subprocess.run([sys.executable, str(MCP)], input=payload.encode("utf-8"),
-                          capture_output=True, timeout=timeout)
+                          capture_output=True, timeout=timeout, env=env)
     out = []
     for line in proc.stdout.decode("utf-8", errors="replace").splitlines():
         line = line.strip()
@@ -43,6 +43,19 @@ def mcp_session(messages: list[dict], timeout: int = 60) -> list[dict]:
     if not out and proc.stderr:
         print(proc.stderr.decode("utf-8", errors="replace")[:1000])
     return out
+
+
+def isolated_env(**extra: str) -> dict:
+    """自检必须离线且不碰真实凭据：剥离继承了密钥来源的环境，再把配置目录指向临时位置。
+
+    先剥继承值、后叠加显式传入的 extra，否则测试自己给的假密钥也会被剥掉。
+    """
+    env = {k: v for k, v in os.environ.items()
+           if k not in ("GRSAI_API_KEY", "WENJE_IMAGE_API_KEY", "GRSAI_ENDPOINT")}
+    env["PYTHONUTF8"] = "1"
+    env["WENJE_IMAGE_HOME"] = tempfile.mkdtemp(prefix="wenje-cfg-")
+    env.update(extra)
+    return env
 
 
 def test_mcp() -> None:
@@ -58,7 +71,7 @@ def test_mcp() -> None:
          "params": {"name": "generate_image", "arguments": {"prompt": "", "dry_run": True}}},
         {"jsonrpc": "2.0", "id": 5, "method": "tools/call",
          "params": {"name": "no_such_tool", "arguments": {}}},
-    ])
+    ], env=isolated_env())
     by_id = {r.get("id"): r for r in responses}
 
     init = by_id.get(1, {}).get("result", {})
@@ -83,7 +96,7 @@ def test_mcp() -> None:
 
 
 def test_mcp_dry_run() -> None:
-    env = dict(os.environ, GRSAI_API_KEY="sk-local-check-not-a-real-key")
+    env = isolated_env(GRSAI_API_KEY="sk-local-check-not-a-real-key")
     payload = json.dumps({"jsonrpc": "2.0", "id": 1, "method": "tools/call",
                           "params": {"name": "generate_image",
                                      "arguments": {"prompt": "窗台上的橘猫", "tier": "premium",
@@ -93,18 +106,55 @@ def test_mcp_dry_run() -> None:
                           capture_output=True, timeout=60, env=env)
     line = proc.stdout.decode("utf-8", errors="replace").strip().splitlines()[-1]
     text = json.loads(line)["result"]["content"][0]["text"]
-    check("generate_image dry_run 走通且不落请求", "dry_run" in text and "nano-banana-pro" in text,
+    check("generate_image dry_run 走通且不落请求",
+          "dry_run" in text and "gpt-image-2.5-sunburst" in text,
           text.splitlines()[1] if "\n" in text else text[:80])
+
+
+def test_size_capability() -> None:
+    """规格按模型原生能力决定：不支持的档位落到最近的受支持档位，并给出说明。"""
+    env = isolated_env(GRSAI_API_KEY="sk-local-check-not-a-real-key")
+
+    def dry_run(*extra: str) -> dict:
+        proc = subprocess.run([sys.executable, str(ENGINE), "generate", "-p", "t", "--dry-run", *extra],
+                              capture_output=True, timeout=60, env=env)
+        out = proc.stdout.decode("utf-8", errors="replace").strip()
+        if not out:
+            raise AssertionError(
+                f"dry-run 无输出，exit={proc.returncode}：{proc.stderr.decode('utf-8', errors='replace')[:300]}")
+        return json.loads(out)
+
+    d = dry_run("--model", "gpt-image-2.5", "--size", "4K", "--ratio", "16:9")
+    check("1K-only 模型被要求 4K 时落到 1K 而非硬塞 4K",
+          d["payload"].get("aspectRatio") == "1280x720" and "1K" in d["size_note"], d["size_note"])
+
+    d = dry_run("--model", "nano-banana-pro-4k-vip", "--size", "1K")
+    check("4K-only 模型被要求 1K 时落到 4K 并说明",
+          d["payload"].get("imageSize") == "4K" and "4K" in d["size_note"], d["size_note"])
+
+    d = dry_run("--size", "4K")
+    check("未点名模型时 4K 由支持它的档位模型承接",
+          d["model"] == "gpt-image-2.5-flare" and d["size_note"] == "", f"{d['model']} {d['size_note']}")
+
+    d = dry_run("--ratio", "1:8")
+    check("未点名模型时极端比例改走唯一支持它的模型",
+          d["model"] == "nano-banana-2", d["model"])
+
+    proc = subprocess.run([sys.executable, str(ENGINE), "generate", "-p", "t", "--model",
+                           "nano-banana-fast", "--dry-run"], capture_output=True, timeout=60, env=env)
+    check("已下架模型名被拒绝", proc.returncode != 0, f"exit={proc.returncode}")
+
+    proc = subprocess.run([sys.executable, str(ENGINE), "generate", "-p", "t", "--model",
+                           "gpt-image-2.5-flare", "--ratio", "1:8", "--dry-run"],
+                          capture_output=True, timeout=60, env=env)
+    check("点名模型不支持该比例时明确报错，不静默换模型",
+          proc.returncode == 2 and "不支持比例" in proc.stderr.decode("utf-8", errors="replace")[:400])
 
 
 def test_setup_page() -> None:
     """起设置页 → 模拟浏览器 POST → 校验密钥已写入临时配置 → 页面自行退出。"""
     tmp = Path(tempfile.mkdtemp(prefix="wenje-check-"))
-    env = dict(os.environ, HOME=str(tmp), USERPROFILE=str(tmp), HOMEDRIVE=tmp.drive or "C:",
-               HOMEPATH=str(tmp)[2:] if len(str(tmp)) > 2 else "", PYTHONUTF8="1")
-    env.pop("GRSAI_API_KEY", None)
-    env.pop("WENJE_IMAGE_API_KEY", None)
-    env["WENJE_IMAGE_HOME"] = str(tmp / ".wenje-image")
+    env = isolated_env(WENJE_IMAGE_HOME=str(tmp / ".wenje-image"))
     proc = subprocess.Popen([sys.executable, str(ENGINE), "setup", "--port", "0",
                              "--timeout", "40", "--no-browser", "--skip-verify"],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
@@ -165,6 +215,7 @@ def main() -> int:
     print(f"引擎：{ENGINE}")
     test_mcp()
     test_mcp_dry_run()
+    test_size_capability()
     test_setup_page()
     test_key_redaction()
     print()

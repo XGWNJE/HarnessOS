@@ -2,6 +2,27 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — wenje-image 限定 5 个模型，规格按模型原生能力落地
+
+- [修订] 自有 Skill `wenje-image` v2.1.0 → v2.2.0：按 owner 指示把可用模型**限定为 5 个**，表外模型一律拒绝（`--model` 收 `choices`、MCP 的 `model` 参数收 `enum`，传旧模型名直接报错而非静默替换）。限定集与能力取自 **Grsai 控制台模型页**（2026-09-13 实时核验，非 AI 推测）：
+
+  | 模型 | 参考价/张 | imageSize | 定位 |
+  |---|---|---|---|
+  | `gpt-image-2.5` | ￥0.03 | **仅 1K** | 最便宜的草稿档 |
+  | `gpt-image-2.5-flare` | ￥0.10 | 1K/2K/4K | 日常默认 |
+  | `gpt-image-2.5-sunburst` | ￥0.12 | 1K/2K/4K | 质量优先 |
+  | `nano-banana-2` | ￥0.06 | 1K/2K/4K | 唯一支持极端比例 |
+  | `nano-banana-pro-4k-vip` | ￥0.90 | **仅 4K** | 4K 专用，只在点名时用 |
+
+- [新增] 规格按模型原生能力落地（owner 明确要求「模型原生不支持 4K 就不要强行转成 4K」）：新增 `resolve_size()`，模型支持的档位是 `MODELS[model]["sizes"]` 这张能力表，请求档位不在表内时落到**最近的受支持档位**并按差值说明。两个方向都成立——`gpt-image-2.5` 被要求 4K 落到 1K；`nano-banana-pro-4k-vip` 被要求 1K 落到 4K。改动写进结果的 `size_note` 字段并在人读输出里显式打印，不做静默替换。
+- [修订] 模型路由随之调整：档位映射改为 draft → `gpt-image-2.5`、standard → `gpt-image-2.5-flare`、premium → `gpt-image-2.5-sunburst`；极端比例 `1:4`/`4:1`/`1:8`/`8:1` 在未点名模型时改走 `nano-banana-2`（原先是改走已下架的 `nano-banana-2-cl`）。用户点名模型时不做任何改选，比例冲突直接报错并列出可选值。
+- [修订] `gpt-image-2.5` 家族按 `aspectRatio` **像素串**下发（复用文档的比率换算表），`auto` 时不下发该字段交给服务端决定。**这一项是推断而非实测**：同家族 `gpt-image-2-vip` 文档明确只收像素串、`gpt-image-2` 两种都收，像素串是兼容性更宽的写法。已在 `references/providers.md` 标注为待验证项。
+- [修订] `tests/local_check.py` 由 14 项扩到 20 项并改为**离线隔离**：新增 `isolated_env()` 剥离继承的密钥来源并把配置目录指向临时位置（此前会读到 owner 的真实密钥并发起真实鉴权探测），新增 6 项规格能力回归（1K-only 模型被要求 4K 落到 1K、4K-only 模型被要求 1K 落到 4K、未点名时 4K 由 flare 承接、未点名时极端比例走 `nano-banana-2`、旧模型名被拒、点名模型比例冲突明确报错）。
+- [修订] `SKILL.md`、`references/providers.md`、`generate_image` 工具描述与 `model`/`image_size`/`aspect_ratio` 参数说明同步更新为限定集与能力落档语义。
+- 观测：owner 已在本机完成密钥配置并有一次真实成功生成（`usage.jsonl` 2026-09-13T01:30:14，`nano-banana-pro` @ 4K 1:1，产出 9.5MB PNG）——上一轮记录中"密钥未配置"的存疑项就此关闭；该次用的是旧模型集，v2.2.0 起 `nano-banana-pro` 已不在可用集内。
+- 验证：`tests/local_check.py` 20 项全过（离线）；`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+- 待验证（需一次付费调用，等 owner 授权）：①`gpt-image-2.5` 家族的像素串下发形式；②参考图 data URI 形式。
+
 ## 2026-09-13 — wenje-image 改为「用户声明优先，未声明由 Agent 决定」
 
 - [修订] 自有 Skill `wenje-image` v2.0.0 → v2.1.0：按 owner 指示调整选型与规格的决策归属——用户在请求里点名的模型、档位、比例、尺寸一律原样采用，不替换成"更便宜"或"更保险"的选项；用户没点名的部分由 Agent 按默认路由直接决定，不再反问。

@@ -139,20 +139,27 @@ def tool_setup(args: dict) -> tuple[str, list[dict], bool]:
 TOOLS = [
     {
         "name": "generate_image",
-        "description": ("用 Grsai 生成或编辑图片，返回落盘绝对路径与预览图。"
+        "description": ("用 Grsai 生成或编辑图片，返回落盘绝对路径与预览图。可用模型只有 5 个："
+                        "gpt-image-2.5（￥0.03，仅 1K）、gpt-image-2.5-flare（￥0.10，1K/2K/4K，日常默认）、"
+                        "gpt-image-2.5-sunburst（￥0.12，1K/2K/4K，质量优先）、"
+                        "nano-banana-2（￥0.06，1K/2K/4K，唯一支持极端比例）、"
+                        "nano-banana-pro-4k-vip（￥0.90，仅 4K）。"
                         "用户在请求里点名的模型、档位、比例、尺寸按原样使用，不要替换成更便宜或更保险的选项；"
-                        "用户没点名的部分由你直接按默认路由决定，不要为此反问用户；"
-                        "两项声明互相冲突时（如点名的模型不支持该比例）在同模型内改选最接近的受支持取值，"
-                        "并在回复里说明改了什么。reference_images 只上传用户为本次任务提供或确认使用的图。"),
+                        "用户没点名的部分由你按任务情况直接决定，不要为此反问用户。"
+                        "分辨率按模型原生能力决定：要 4K 而该模型不支持时不要硬塞 4K，落到它支持的最近档位；"
+                        "这种改动会写进返回的 size_note，向用户说明即可。"
+                        "reference_images 只上传用户为本次任务提供或确认使用的图。"),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "prompt": {"type": "string", "description": "英文或中文视觉描述，含主体、风格、光照、构图"},
                 "tier": {"type": "string", "enum": ["draft", "standard", "premium"],
-                         "description": "成本档位，默认 standard（gpt-image-2）；用户以档位表述时用它"},
-                "model": {"type": "string", "description": "直接指定模型，覆盖 tier；用户点名模型时用它"},
-                "aspect_ratio": {"type": "string", "description": "比例，如 1:1 / 16:9 / 9:16 / 21:9"},
-                "image_size": {"type": "string", "enum": ["1K", "2K", "4K"], "description": "分辨率档"},
+                         "description": "成本档位，仅在用户没点名模型时生效；默认 standard（gpt-image-2.5-flare）"},
+                "model": {"type": "string", "enum": sorted(core.MODELS),
+                          "description": "用户点名的模型；只有这 5 个可用"},
+                "aspect_ratio": {"type": "string", "description": "比例，如 1:1 / 16:9 / 9:16 / 21:9；极端比例如 1:8 只有 nano-banana-2 支持"},
+                "image_size": {"type": "string", "enum": ["1K", "2K", "4K"],
+                               "description": "分辨率档。模型原生不支持的档位不会被硬塞：gpt-image-2.5 只有 1K，nano-banana-pro-4k-vip 只有 4K，落到最接近的受支持档位并在 size_note 里说明"},
                 "scene": {"type": "string", "enum": sorted(core.SCENE_PRESETS),
                           "description": "场景预设，自动决定比例与尺寸"},
                 "reference_images": {"type": "array", "items": {"type": "string"},
