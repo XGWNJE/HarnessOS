@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — grsai-image-gen 更名为 wenje-image
+
+- [修订] 自有 Skill `grsai-image-gen` v1.3.1 → `wenje-image` v1.4.0：按 owner 指示以昵称加 image 命名，属身份变更故递增次版本号。目录 `skills/grsai-image-gen/` 改用 `git mv` 迁移为 `skills/wenje-image/`（保留文件历史），frontmatter 的 `name` 与 `agents/openai.yaml` 的调用引用（`$grsai-image-gen` → `$wenje-image`）同步更新。`catalog.py` 校验 skill 目录名必须与 frontmatter `name` 一致，两处必须同改。
+- [保留] 技能中文标题「Grsai 图片生成」、界面 `display_name`、description、正文与 `references/` 未改：这些描述的是调用的付费对象（Grsai API）而非技能身份，供应商事实与重命名无关。若希望标题也改为昵称风格，可再单独调整。
+- [发布] `~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池已撤出旧名副本并发布 `wenje-image`，`sync.py --check` 无残留；改名前后核对过引用面，仓库其他资产、workflows 与本机 Agent 配置（含 Codex `config.toml`）均未引用旧名。
+
 ## 2026-09-13 — 退役 image-understand 与 mini-vault
 
 - [废止] 自有 Skill `image-understand`（v1.0.1）退役并删除：owner 说明当前主流模型已具备视觉推理能力，不需要另设视觉 API 提取链路。`skills/image-understand/`（含 `references/runtime-guide.md`）整目录删除。

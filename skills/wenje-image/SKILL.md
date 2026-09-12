@@ -1,6 +1,6 @@
 ---
-version: 1.3.1
-name: grsai-image-gen
+version: 1.4.0
+name: wenje-image
 description: 默认模型不能原生出图时，通过付费 Grsai API 生成或编辑图片；调用前需确认付费意图。
 ---
 
