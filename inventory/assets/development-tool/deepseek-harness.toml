@@ -15,27 +15,17 @@ last_verified_on = "2026-09-12"
 review_days = 30
 notes = "已核验 dsh 版本 0.1.1-rc.2，当前通过 npm 全局安装 @deepseek-ai/dsh；npm `latest` 为 0.1.5-rc.1（`next` 为 0.1.5-rc.2），未提供 stable 标签，属于预发布版本并直接依赖 Node.js。用户级 .dsh 目录存在；配置、Provider 凭据、本地会话与附件不纳入仓库。"
 tool_kind = "cli"
-install_form = ""
 commands = ["dsh"]
 install_source = "npm 官方 registry"
-official_source = ""
 package_id = "@deepseek-ai/dsh"
 version_constraint = "=0.1.1-rc.2"
 release_channel = "other"
-minimum_verified_version = ""
-pinned_version = ""
-avoid_versions = []
 environment_variables = ["PATH"]
 config_reference = "DeepSeek Harness 用户级配置与凭据存储"
-backup_location = ""
 verification_commands = ["dsh --version", "npm ls -g @deepseek-ai/dsh --depth=0"]
-post_restore_checks = []
 upstream_channel = "npm"
 upstream_identifier = "@deepseek-ai/dsh"
 upstream_latest_stable = "0.1.5-rc.1"
-upstream_pending_channel = ""
-upstream_pending_identifier = ""
-upstream_pending_note = ""
 
 [[relationships]]
 type = "depends-on"

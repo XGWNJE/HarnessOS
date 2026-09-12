@@ -14,26 +14,13 @@ declared_on = "2026-09-06"
 last_verified_on = "2026-09-12"
 review_days = 90
 notes = "本机版本 4.1.13.65 已由 ARP 清单核验；官方下载页当前提供 4.1.13（64 位）版本线，WinGet 包停留在 3.9.12.57 旧版本线、不作上游依据，恢复范围未单独确认。"
-tool_kind = ""
 install_form = "installer"
-commands = []
-install_source = ""
 official_source = "https://windows.weixin.qq.com/?lang=zh_CN"
-package_id = ""
-version_constraint = ""
 release_channel = "stable"
 minimum_verified_version = "4.1.13.65"
-pinned_version = ""
-avoid_versions = []
-environment_variables = []
 config_reference = "通过官方来源恢复应用；账号、配置和个人数据按应用自身流程恢复。"
 backup_location = "unknown"
-verification_commands = []
 post_restore_checks = ["应用可启动", "可完成账号登录"]
 upstream_channel = "official-page"
 upstream_identifier = "https://windows.weixin.qq.com/?lang=zh_CN"
 upstream_latest_stable = "4.1.13"
-upstream_pending_channel = ""
-upstream_pending_identifier = ""
-upstream_pending_note = ""
-relationships = []

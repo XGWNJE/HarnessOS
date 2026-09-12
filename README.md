@@ -39,5 +39,3 @@ flowchart LR
     C --> P[工作台配置档]
     P --> RP[恢复计划]
 ```
-
-查看完整的交互版：[HarnessOS 受管资产架构图](architecture.html)。

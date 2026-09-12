@@ -1,7 +1,7 @@
 ---
 name: electron-runtime-debugging
-version: 1.0.0
-description: 诊断 Electron 桌面应用中类型声明与运行时不一致、IPC 重复监听或过早发送、ESM 迁移连带故障、打包遗漏运行时数据，以及 globalShortcut/RegisterHotKey 自动重复导致的交互异常。
+version: 1.0.1
+description: 诊断 Electron 的运行时契约、IPC 生命周期、模块迁移、打包资源或全局快捷键异常。
 ---
 
 # Electron 运行时调试

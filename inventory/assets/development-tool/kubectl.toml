@@ -15,25 +15,14 @@ last_verified_on = "2026-09-12"
 review_days = 90
 notes = "WinGet 包 Kubernetes.kubectl；本机客户端 1.37.0，内置 Kustomize 5.8.1，不单独登记。kubeconfig、证书与 token 不纳入仓库。"
 tool_kind = "cli"
-install_form = ""
 commands = ["kubectl"]
 install_source = "WinGet"
-official_source = ""
 package_id = "Kubernetes.kubectl"
 version_constraint = ">=1.37.0"
 release_channel = "stable"
-minimum_verified_version = ""
-pinned_version = ""
-avoid_versions = []
 environment_variables = ["PATH", "KUBECONFIG"]
 config_reference = "kubeconfig 的安全逻辑引用（证书和 token 不纳入仓库）"
-backup_location = ""
 verification_commands = ["kubectl version --client=true"]
-post_restore_checks = []
 upstream_channel = "winget"
 upstream_identifier = "Kubernetes.kubectl"
 upstream_latest_stable = "1.37.0"
-upstream_pending_channel = ""
-upstream_pending_identifier = ""
-upstream_pending_note = ""
-relationships = []

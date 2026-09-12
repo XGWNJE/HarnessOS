@@ -15,27 +15,17 @@ last_verified_on = "2026-09-12"
 review_days = 90
 notes = "当前通过 npm 全局安装，版本 11.25.0；npm v11 维护线标签为 11.26.0，跨大版本 latest 为 12.4.1；不是 Node.js 自带组件，可与其他 npm 全局工具合并为一次安装命令。PNPM_HOME 及 v11 全局 bin 子目录已注册到 Windows 用户 PATH。"
 tool_kind = "package-manager"
-install_form = ""
 commands = ["pnpm", "pnpx"]
 install_source = "npm 官方 registry"
-official_source = ""
 package_id = "pnpm"
 version_constraint = ">=11.25.0"
 release_channel = "stable"
-minimum_verified_version = ""
-pinned_version = ""
-avoid_versions = []
 environment_variables = ["PATH", "PNPM_HOME"]
 config_reference = "pnpm 用户级配置与 store（仅逻辑引用）"
-backup_location = ""
 verification_commands = ["pnpm --version"]
-post_restore_checks = []
 upstream_channel = "npm"
 upstream_identifier = "pnpm@latest-11"
 upstream_latest_stable = "11.26.0"
-upstream_pending_channel = ""
-upstream_pending_identifier = ""
-upstream_pending_note = ""
 
 [[relationships]]
 type = "depends-on"

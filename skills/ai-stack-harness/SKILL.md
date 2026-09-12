@@ -1,7 +1,7 @@
 ---
 name: ai-stack-harness
-version: 2.1.0
-description: AI 编程技术栈选型与判断基线的参考事实来源（目标模式）。global/AGENTS.md「AI 协作与工程判断基线」给出判断句与验收红线；本 skill 保留其详细验收清单、推荐分层栈与证据链回路作为可核验参考。触发时以全局 Rules 为准。
+version: 2.1.1
+description: 评估 AI 编程技术栈的反馈闭环、生态与失败代价；用于技术选型或重写底座判断。
 ---
 
 # AI 编程技术栈选型参考

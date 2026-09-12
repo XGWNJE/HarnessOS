@@ -19,7 +19,7 @@ Rule 与 Skill 由目录生成器通过原生来源适配为统一索引：路�
 
 ## 公共字段
 
-非 Rule/Skill 资产统一使用以下词条模板，不再为每种类型另设字段集；某字段对当前类型不适用时留空（字符串填 `""`、列表填 `[]`），不在记录里出现也不视为缺字段：
+非 Rule/Skill 资产统一使用以下词条模板，不再为每种类型另设字段集；字段不适用时省略，缺少可选字段不视为错误：
 
 ```toml
 schema_version = 1
@@ -76,7 +76,7 @@ target = "另一资产的完整 ID"
 
 - `domain` 判定口径：类型按形态划分（命令行工具、SDK 与运行时归 development-tool，桌面应用与游戏归 software）；领域按资产服务的主要场景归入唯一领域——development-tool 统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途，不按次要能力叠加。
 - `tool_kind`、`install_form`、`release_channel` 取 `taxonomy.toml` 枚举；`release_channel` 统一承载原 software 发行通道与 development-tool 更新通道语义。
-- 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`。其余字段按适用性填写，不适用留空。
+- 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`。其余字段按适用性填写，不适用时省略。
 - 空版本只表示用户明确不固定版本；实际版本未知时记录不完整，不能用空值代替核验；用户尚未决定的个人偏好才可使用 `unknown`，不得自行猜测。
 - `status` 只取 `managed`、`excluded`、`retired`。后两者保留决策历史，但不进入恢复清单。
 - `preference_source` 只描述偏好依据：用户明确声明、已核验的公开事实或未知。公开事实不能代替个人偏好。
@@ -84,7 +84,7 @@ target = "另一资产的完整 ID"
 - `upstream_updates` 表示是否跟踪外部上游更新。用户自产资产没有外部上游，必须为 `false`，目录显示“不适用”；这不妨碍它在 Git 中继续修订和版本化。第三方资产可按实际维护策略填写 `true` 或 `false`。
 - `current`、`stale`、`incomplete` 是根据日期和字段计算的展示状态，不写回源文件。
 - `review_days` 默认 90 天，可按资产覆盖；执行真实迁移时即使记录仍新鲜，也要实时核验易变的版本、兼容性、来源和许可条件。
-配置引用不能包含私有 registry token、认证信息或完整机器配置。
+- 配置引用不能包含私有 registry token、认证信息或完整机器配置。
 - 关系只引用资产 ID，不复制对方事实。`depends-on` 不得形成循环；目标不存在时校验失败。
 - `fact_source`、配置引用和备份位置必须使用仓库相对路径或人能理解的逻辑位置，不保存机器绝对路径。
 - 逻辑引用不能是 URL；公开官网放在对应类型的官方来源字段，私有分享链接不入库。

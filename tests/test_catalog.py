@@ -32,6 +32,7 @@ provenance_types = ["owner-produced", "third-party"]
 software_install_forms = ["portable", "installer", "unknown"]
 release_channels = ["lts", "stable", "beta", "unknown"]
 development_tool_kinds = ["version-control", "package-manager", "cli"]
+upstream_channels = ["winget", "npm", "unavailable"]
 
 [[asset_types]]
 id = "rule"
@@ -135,14 +136,13 @@ class FixtureRepo:
             "software:design-app", "software", "Design App", "creative-media", status=status, preference=preference
         ) + f"""
             relationships = []
-            [software]
             install_form = "portable"
             release_channel = "lts"
             minimum_verified_version = "4.0"
             pinned_version = ""
             avoid_versions = []
             official_source = "https://example.test/download"
-            config_restore = "Import preferences manually"
+            config_reference = "Import preferences manually"
             backup_location = "{backup}"
             post_restore_checks = ["Open a fixture"]
             """)
@@ -155,13 +155,12 @@ class FixtureRepo:
             "development-tool:version-tool", "development-tool", "Version Tool", "development", verified=verified
         ) + f"""
             {relation}
-            [development_tool]
             tool_kind = "version-control"
             commands = ["vcs"]
             install_source = "official installer"
             package_id = "Vendor.Tool"
             version_constraint = ">=2"
-            update_channel = "stable"
+            release_channel = "stable"
             environment_variables = ["PATH"]
             config_reference = "Cloud / Workbench / Version Tool"
             verification_commands = ["vcs --version"]
@@ -260,7 +259,7 @@ class CatalogTests(unittest.TestCase):
         self.repo.dev_tool(relation_target="software:design-app")
         catalog = self.load()
         self.assert_valid(catalog)
-        self.assertEqual("portable", catalog.assets["software:design-app"].data["software"]["install_form"])
+        self.assertEqual("portable", catalog.assets["software:design-app"].data["install_form"])
         self.assertEqual([("depends-on", "software:design-app")], catalog.assets["development-tool:version-tool"].relationships)
 
     def test_cross_type_dangling_relation_and_dependency_cycle_fail(self) -> None:
@@ -364,7 +363,7 @@ class CatalogTests(unittest.TestCase):
         path.unlink()
         catalog = self.load()
         messages = "\n".join(problem.message for problem in catalog.problems)
-        self.assertIn("未知 software.install_form", messages)
+        self.assertIn("未知 install_form", messages)
         self.assertIn("文件名必须与资产 slug 一致", messages)
 
     def test_render_and_check_are_deterministic(self) -> None:

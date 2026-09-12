@@ -1,7 +1,7 @@
 ---
-version: 1.2.1
+version: 1.2.2
 name: webbridge-acceptance
-description: Kimi WebBridge（浏览器控制）可用性验收。当需要在新环境/新机器验收 WebBridge 是否可用、或验收类操作后清理现场时使用。验收目标：守护进程连通、navigate、snapshot、evaluate、screenshot、list_tabs 六项全部实际通过才算可用；截图内容经过目检；临时文件不残留。
+description: 在新环境验收 Kimi WebBridge 的浏览器控制能力，并清理验收现场。
 ---
 
 # WebBridge 验收目标与标准

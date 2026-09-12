@@ -1,7 +1,7 @@
 ---
 name: codex-session-recovery
-version: 1.0.0
-description: 诊断与恢复 Codex Desktop 历史会话。用于切换 Provider 或账号后任务列表缺失、rollout 正文缺失、SQLite 索引与文件不一致、旧会话不可见或需要从备份安全合并历史记录的场景。
+version: 1.0.1
+description: 诊断并安全恢复 Codex Desktop 中缺失、不可见或索引不一致的历史会话。
 ---
 
 # Codex 历史会话恢复
