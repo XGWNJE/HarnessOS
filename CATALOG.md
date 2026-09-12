@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 68 项资产、0 个配置档。
+共 67 项资产、0 个配置档。
 
 ## development-tool
 
@@ -52,7 +52,6 @@
 |---|---|---|---|---|---|---|---|---|
 | `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 评估 AI 编程技术栈的反馈闭环、生态与失败代价；用于技术选型或重写底座判断。 |
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
-| `skill:codex-deepseek-subagent` | codex-deepseek-subagent | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 配置和维护 Codex 桌面应用中的 DeepSeek 原生子 Agent，支持模型选择、路由验证、修复、停用和卸载。仅在用户要求配置或管理该集成时使用；普通 API 问题与配置后的日常编码任务不触发。 |
 | `skill:codex-session-recovery` | codex-session-recovery | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断并安全恢复 Codex Desktop 中缺失、不可见或索引不一致的历史会话。 |
 | `skill:electron-runtime-debugging` | electron-runtime-debugging | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断 Electron 的运行时契约、IPC 生命周期、模块迁移、打包资源或全局快捷键异常。 |
 | `skill:grsai-image-gen` | grsai-image-gen | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能原生出图时，通过付费 Grsai API 生成或编辑图片；调用前需确认付费意图。 |

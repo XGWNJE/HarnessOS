@@ -2,6 +2,12 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — 退役 Codex DeepSeek 子 Agent 集成
+
+- [废止] `vendor/codex-deepseek-subagent`（上游 oil-oil/codex-deepseek-subagent@978b079）退役：实时验收确认 Codex Desktop 0.154.0-alpha.6.2 会把自定义 Provider 的原生子线程按 ChatGPT 账户端点派发并返回 400，集成在该版本不可用，用户指示移除最近登记的 DeepSeek 子代理。源目录整目录删除，`vendor/SOURCES.md` 登记移除；需要恢复时从上游重新引入并按原补丁记录重放本地差异（本地补丁依据仍可从本仓库 Git 历史检索）。
+- [废止] Codex 侧受管配置用 Skill 自带 `uninstall` 按 manifest 回退：删除 DeepSeek Provider 标记块、`model_catalog_json` 顶层键与 `models-with-deepseek.json` 目录文件、`agents/DeepSeek.toml` 角色文件，并把 `features.multi_agent_v2` 恢复到配置前状态；`$CODEX_HOME/codex-deepseek-subagent/` 保留操作备份与锁文件作为回滚入口。DeepSeek API Key 按 Skill 契约保留在系统凭据库 `codex-deepseek-api-key`，未随卸载删除。
+- [废止] `~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池中的 skill 副本全部撤出，`python scripts/sync.py --check` 无退役残留；仓库资产目录由 68 项重建为 67 项。
+
 ## 2026-09-12 — 仓库全局瘦身与 Skill 渐进式披露
 
 - [修订] 全局规则由 77 行收敛为 44 行：合并重复的判断、验证与文档规则，修正过宽的 Git 初始化要求和全局规则发布边界，删除 Defender 排除等不宜常驻的排障建议，同时保留授权、安全、编码、设备与可机器验证的完成标准。
