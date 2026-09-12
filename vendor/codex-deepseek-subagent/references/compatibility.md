@@ -7,7 +7,7 @@
 - Python 3.11+
 - ChatGPT/Codex 桌面应用至少启动过一次
 - DeepSeek 官方 Responses API
-- `deepseek-v4-flash`
+- `deepseek-flash`（DeepSeek-V4.1-Flash；旧 ID `deepseek-v4-flash` 与 `deepseek-v4-flash-vision-exp` 已下线，仅保留服务端兼容路由，本 Skill 不再写入）
 - `deepseek-v4-pro`（包含 DeepSeek 官方在 8·13 更新的当前服务版本，API slug 不变）
 - 思考程度 `high`
 
@@ -45,7 +45,7 @@ spawn_agent(agent_type="DeepSeek", fork_turns="none", ...)
 
    ```text
    model_provider = deepseek
-   model = deepseek-v4-flash 或 deepseek-v4-pro
+   model = deepseek-flash 或 deepseek-v4-pro
    reasoning_effort = high
    agent_role = DeepSeek
    ```
@@ -68,11 +68,11 @@ API Key 可由用户在聊天中提供。管理程序从标准输入读取，不
 
 ## 视觉输入
 
-DeepSeek V4 Flash 与 V4 Pro 当前都只接受文本。父 Agent 必须先检查图片、视频和截图，把必要事实写成文字任务包；子 Agent 不应声称自己看过视觉材料。
+DeepSeek 官方目录声明 `deepseek-flash` 支持文本与图片输入；`deepseek-v4-pro` 仍为文本输入。当前 Codex 原生子 Agent 工具只接收文本任务，因此父 Agent 仍须先检查图片、视频和截图，把必要事实写成文字任务包；这是子 Agent 传输边界，不是 Flash 模型能力限制。
 
 ## 模型选择
 
-- `deepseek-v4-flash`：响应更快、成本更低，适合日常编码和高频任务。
+- `deepseek-flash`：响应更快、成本更低，适合日常编码和高频任务。
 - `deepseek-v4-pro`：能力更强，适合复杂编码、架构分析和高难度 Agent 任务。
 
 首次配置必须明确选择模型。模型目录同时注册两个官方模型，Agent 文件只绑定当前选择。切换模型时管理程序会更新 Agent 文件并重新执行直连与原生派发验收。DeepSeek 官方对 V4 Pro 的服务端版本升级不改变 API slug，仍使用 `deepseek-v4-pro`。
