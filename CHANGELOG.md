@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — wenje-image 付费实测：像素串与参考图两项待验证项关闭
+
+- [修订] 自有 Skill `wenje-image` v2.2.0（仅文档与结论更新，版本号不动）：owner 授权付费测试后，对 v2.2.0 留下的两项"未实测"结论做了真机验证，`references/providers.md` 中的 ⚠️ 待验证标注改为 ✅ 已实测结论。
+- [新增] **像素串下发形式成立**：`gpt-image-2.5` 以 `aspectRatio: "1024x1024"`、`gpt-image-2.5-flare` 以 `aspectRatio: "3840x2160"`（4K）均成功出图（task `9-3b258478…`、`15-e79185f7…`）。此前判断"'gpt-image-2.5` 家族可能只收比例串、需要改 `build_payload()` 的 `pixels` 分支"的推断被排除，代码无需改动。
+- [新增] **参考图 data URI 成立**：`images` 数组传 `data:image/png;base64,…` 时参考图被真实采纳。验证方式是构造性判断而非"请求成功"——输入是一张蓝圆加中心白方块的图，提示词要求把圆改绿、保留白方块；产出确实为绿圆且白方块按位置保留，说明参考图参与了生成而不是被忽略后重画（task `2-54eb0136…`）。
+- [新增] 一条出图尺寸观测：`gpt-image-2.5` 请求 1K（像素串 `1024x1024`）实际产出 **1254×1254**；`gpt-image-2.5-flare` 请求 4K 精确产出 **3840×2160**。基础款可能按模型原生尺寸出图、不严格照抄像素串，已记入 `providers.md`，需要精确尺寸时以实测为准。
+- 成本：本次三次付费调用共 3800 credits（`gpt-image-2.5` 600 + `gpt-image-2.5-flare` 2000 + `nano-banana-2` 1200），约合 ￥0.19；当日含 owner 先前一次调用合计 5600 credits / 4 张。产物留在 `~/Pictures/wenje-image/`（`verify-*` 前缀三张为本次验证产物）。
+- 仍未验证：`nano-banana-pro-4k-vip` 没做过真实调用——单次 ￥0.90，为确认"模型名与 4K 可用"付这个价不划算；其参数形式与同族 `nano-banana-2` 一致，而后者已实测通过。若某天真实用到即可顺手确认。
+- 验证：`tests/local_check.py` 20 项全过（离线）；`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+
 ## 2026-09-13 — wenje-image 限定 5 个模型，规格按模型原生能力落地
 
 - [修订] 自有 Skill `wenje-image` v2.1.0 → v2.2.0：按 owner 指示把可用模型**限定为 5 个**，表外模型一律拒绝（`--model` 收 `choices`、MCP 的 `model` 参数收 `enum`，传旧模型名直接报错而非静默替换）。限定集与能力取自 **Grsai 控制台模型页**（2026-09-13 实时核验，非 AI 推测）：
