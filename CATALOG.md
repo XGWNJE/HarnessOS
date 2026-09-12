@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 67 项资产、0 个配置档。
+共 64 项资产、0 个配置档。
 
 ## development-tool
 
@@ -50,10 +50,7 @@
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
-| `skill:ai-stack-harness` | ai-stack-harness | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 评估 AI 编程技术栈的反馈闭环、生态与失败代价；用于技术选型或重写底座判断。 |
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
-| `skill:codex-session-recovery` | codex-session-recovery | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断并安全恢复 Codex Desktop 中缺失、不可见或索引不一致的历史会话。 |
-| `skill:electron-runtime-debugging` | electron-runtime-debugging | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 诊断 Electron 的运行时契约、IPC 生命周期、模块迁移、打包资源或全局快捷键异常。 |
 | `skill:grsai-image-gen` | grsai-image-gen | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能原生出图时，通过付费 Grsai API 生成或编辑图片；调用前需确认付费意图。 |
 | `skill:image-understand` | image-understand | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能可靠读取图片时，用智谱视觉 API 提取描述、OCR 或图表信息；付费升级须确认。 |
 | `skill:kimi-webbridge` | kimi-webbridge | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Kimi WebBridge lets AI control the user's real browser — navigate, click, type, read, screenshot, and interact with any… |

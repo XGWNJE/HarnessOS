@@ -1,4 +1,0 @@
-interface:
-  display_name: "Codex 会话恢复"
-  short_description: "安全诊断、合并并验证 Codex Desktop 历史会话数据"
-  default_prompt: "诊断并安全恢复 Codex 历史会话，保留现有数据且验证正文可读。"

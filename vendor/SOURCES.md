@@ -21,10 +21,17 @@ vendor 原样不改——不手工修补内容，只整目录替换。以 vibehu
 
 ## 仅登记来源（不拷贝实体）
 
-| Skill | 来源 | 管理位置 | 更新方式 |
-|---|---|---|---|
-| skill-creator | https://github.com/anthropics/skills （Anthropic 官方，git clone） | `~/.agents/skills/skill-creator`（自带 .git） | 原地 `git pull`，不入 HarnessOS 库 |
+当前无此类登记。`skill-creator` 曾登记于此，2026-09-13 经 owner 确认不属于其管理的技能，撤销登记。
+
+## 不受管的池内技能
+
+以下技能位于 Agent 读取池中，但 2026-09-13 经 owner 明确确认不属于其管理的范围，因此不登记、不纳入发布与对账；后续巡检不要重新登记：
+
+| Skill | 位置 | 说明 |
+|---|---|---|
+| playwright | `~/.codex/skills/playwright` | 无顶层 `SKILL.md`（仅 agents/assets/references/scripts），不参与本仓库 skill 扫描与发布 |
+| skill-creator | `~/.agents/skills/skill-creator` | Anthropic 官方仓库内容，当前不是 git 工作树，`SKILL.md` 位于下一层 `skills/<name>/`，不由本仓库维护 |
 
 ## ~/.claude/skills 池对账
 
-`~/.claude/skills` 池现有技能已全部纳入管理（2026-08-04 核验：13 个均为 HarnessOS 发布产物或已登记引入）。后续若新出现来源不明的技能，按「物理引入」或「仅登记来源」流程登记后再对账。
+`~/.claude/skills` 池现有技能已全部纳入管理（2026-09-13 复核：9 个均为 HarnessOS 发布产物）。后续若新出现来源不明的技能，先查上节「不受管的池内技能」名单；名单之外的新来源按「物理引入」或「仅登记来源」流程登记后再对账。

@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — 退役三项自有 Skill 并澄清不受管的池内技能
+
+- [废止] 自有 Skill `ai-stack-harness`（v2.1.1）、`codex-session-recovery`（v1.0.1）、`electron-runtime-debugging`（v1.0.1）按 owner 2026-09-13 指示移除管理并删除：`skills/` 下三个源目录整目录删除，`~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池共 12 份副本全部撤出。删除前核对过引用面：仓库内除历史 CHANGELOG 与生成物外无活引用，结构化资产与 Profile 也没有指向它们的依赖关系。需要恢复时从本仓库 Git 历史取回。
+- [废止] `vendor/SOURCES.md` 撤销 `skill-creator` 的「仅登记来源」登记：owner 说明该技能不属于其管理范围，无需登记。该节现无在册条目。
+- [新增] `vendor/SOURCES.md` 增加「不受管的池内技能」名单，登记 `playwright`（`~/.codex/skills`）与 `skill-creator`（`~/.agents/skills`）：二者位于读取池但不属于受管范围，不登记、不纳入发布与对账，后续巡检不重新登记；磁盘副本保留，不由本仓库维护。同时更新池对账基线（2026-09-13 复核 `~/.claude/skills` 9 项均为发布产物）。
+- [修订] 资产目录由 67 项重建为 64 项：skill 由 12 项（自有 8 + 第三方 4）减为 9 项（自有 5 + 第三方 4）。`python scripts/catalog.py check` 与 `python scripts/sync.py --check` 均通过，无退役残留。
+
 ## 2026-09-13 — 全局规则新增 ZCode 发布目标
 
 - [新增] `scripts/publish_global.py` 新增 ZCode 目标 `~/.zcode/AGENTS.md`，全局规则发布映射由 5 个目标增至 6 个；文档字符串同步登记该路径，并注明它与 home 根 `~/AGENTS.md` 不是同一位置。依据 ZCode 官方配置说明：用户作用域指令文件为 `~/.zcode/AGENTS.md`，先注入用户级、后注入工作区级；此前该目标缺失，导致 ZCode 只加载工作区级规则、拿不到全局规则正文。
