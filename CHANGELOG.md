@@ -10,6 +10,7 @@
 - [新增] 一条出图尺寸观测：`gpt-image-2.5` 请求 1K（像素串 `1024x1024`）实际产出 **1254×1254**；`gpt-image-2.5-flare` 请求 4K 精确产出 **3840×2160**。基础款可能按模型原生尺寸出图、不严格照抄像素串，已记入 `providers.md`，需要精确尺寸时以实测为准。
 - 成本：本次三次付费调用共 3800 credits（`gpt-image-2.5` 600 + `gpt-image-2.5-flare` 2000 + `nano-banana-2` 1200），约合 ￥0.19；当日含 owner 先前一次调用合计 5600 credits / 4 张。产物留在 `~/Pictures/wenje-image/`（`verify-*` 前缀三张为本次验证产物）。
 - 仍未验证：`nano-banana-pro-4k-vip` 没做过真实调用——单次 ￥0.90，为确认"模型名与 4K 可用"付这个价不划算；其参数形式与同族 `nano-banana-2` 一致，而后者已实测通过。若某天真实用到即可顺手确认。
+- 收尾：owner 2026-09-13 明确本步验证没必要，决定不为 `nano-banana-pro-4k-vip` 单独付费验证；该项**从待办清单关闭**，`references/providers.md` 中相应的"仍待验证"表述改为记录该决定，避免后续复核重复提出。至此 v2.2.0 的所有待验证项均已关闭（两项已实测成立，一项经 owner 决定不验）。
 - 验证：`tests/local_check.py` 20 项全过（离线）；`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
 
 ## 2026-09-13 — wenje-image 限定 5 个模型，规格按模型原生能力落地
