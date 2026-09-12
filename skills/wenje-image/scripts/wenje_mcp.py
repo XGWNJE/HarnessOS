@@ -139,16 +139,18 @@ def tool_setup(args: dict) -> tuple[str, list[dict], bool]:
 TOOLS = [
     {
         "name": "generate_image",
-        "description": ("用 Grsai 生成或编辑图片，返回落盘绝对路径与预览图。属于付费外部调用："
-                        "参数含糊、要求高分辨率或 -vip 模型、重复生成时先与用户确认。"
-                        "reference_images 只上传用户为本次任务提供或确认使用的图。"),
+        "description": ("用 Grsai 生成或编辑图片，返回落盘绝对路径与预览图。"
+                        "用户在请求里点名的模型、档位、比例、尺寸按原样使用，不要替换成更便宜或更保险的选项；"
+                        "用户没点名的部分由你直接按默认路由决定，不要为此反问用户；"
+                        "两项声明互相冲突时（如点名的模型不支持该比例）在同模型内改选最接近的受支持取值，"
+                        "并在回复里说明改了什么。reference_images 只上传用户为本次任务提供或确认使用的图。"),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "prompt": {"type": "string", "description": "英文或中文视觉描述，含主体、风格、光照、构图"},
                 "tier": {"type": "string", "enum": ["draft", "standard", "premium"],
-                         "description": "成本档位，默认 standard（gpt-image-2）"},
-                "model": {"type": "string", "description": "直接指定模型，覆盖 tier"},
+                         "description": "成本档位，默认 standard（gpt-image-2）；用户以档位表述时用它"},
+                "model": {"type": "string", "description": "直接指定模型，覆盖 tier；用户点名模型时用它"},
                 "aspect_ratio": {"type": "string", "description": "比例，如 1:1 / 16:9 / 9:16 / 21:9"},
                 "image_size": {"type": "string", "enum": ["1K", "2K", "4K"], "description": "分辨率档"},
                 "scene": {"type": "string", "enum": sorted(core.SCENE_PRESETS),

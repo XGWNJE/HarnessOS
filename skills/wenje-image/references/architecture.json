@@ -38,7 +38,7 @@
     { "id": "engine-output", "from": "engine", "to": "output", "label": "下载落盘", "labelDy": 24 }
   ],
   "cards": [
-    { "dot": "cyan", "title": "两条入口，一个引擎", "items": ["MCP 工具优先：提示词是结构化参数，不经 shell 转义", "CLI 兜底：MCP 不可用时能力不降级"] },
+    { "dot": "cyan", "title": "入口与决策归属", "items": ["MCP 工具优先（结构化参数，免 shell 转义）", "CLI 兜底：MCP 不可用时能力不降级", "用户点名的模型与规格照做，没点名由 Agent 定"] },
     { "dot": "violet", "title": "密钥零暴露", "items": ["浏览器设置页录入，不进对话、命令与日志", "只写本机 config.json，报错信息先脱敏"] },
     { "dot": "amber", "title": "失败可定性", "items": ["上游含糊响应被翻译成统一退出码 0–9", "每次调用向 usage.jsonl 追加一行用量"] }
   ]

@@ -33,7 +33,7 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 SKILL_NAME = "wenje-image"
 
 CONFIG_DIR = Path(os.environ.get("WENJE_IMAGE_HOME") or (Path.home() / ".wenje-image"))
