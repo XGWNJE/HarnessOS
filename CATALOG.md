@@ -56,7 +56,7 @@
 | `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 在任何 Vibe Coding 编程任务及其后续补充中持续识别准确术语。用户即使已经让 Agent 完成了一部分代码、正在追加修改，或只用口语描述效果、交互、状态和问题（如“鼠标放上去有个小提示”“点完变一下颜色”“内容太长省略”），也必… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 连接、查询或部署受管 VPS 时提供 SSH、服务、路径和安全边界。 |
 | `skill:webbridge-acceptance` | webbridge-acceptance | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 在新环境验收 Kimi WebBridge 的浏览器控制能力，并清理验收现场。 |
-| `skill:wenje-image` | wenje-image | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能原生出图时，通过付费 Grsai API 生成或编辑图片；调用前需确认付费意图。 |
+| `skill:wenje-image` | wenje-image | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。 |
 
 ## software
 

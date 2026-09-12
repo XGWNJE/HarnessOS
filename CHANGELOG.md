@@ -2,6 +2,20 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — wenje-image 重构为 MCP 原生工具 + 本地设置页
+
+- [修订] 自有 Skill `wenje-image` v1.4.0 → v2.0.0（破坏性重构，故递增主版本号）：出图能力从"Agent 按文档手写 PowerShell/Bash 脚本、自己轮询、自己解析输出"改为"调用一个引擎"。原流程要求模型每次生成都写临时 `.ps1`、把中文提示词拼进 shell 命令、按固定 30×10s 轮询，并把 `grsai-output.png` 落到当前目录；现在这些机制全部下沉为代码，`references/runtime-guide.md` 随之废止删除（其机制部分进引擎，事实部分进 `references/providers.md`）。
+- [新增] `scripts/wenje_image.py`：单文件引擎（仅标准库，Pillow 可选），承担密钥解析、模型与参数校验（按模型能力换算比例/像素/尺寸，极端比例自动路由到 `-cl` 通道）、提交、轮询、下载、按提示词摘要命名，以及统一的退出码分类（0 成功、2 参数、3 未配置、4 密钥无效、5 余额不足、6 违规、7 网络、8 超时、9 服务端）。子命令：`setup` / `status` / `generate` / `install` / `mcp`。`--dry-run` 可在不产生费用的情况下报出将发送的请求与预估价格。
+- [新增] `scripts/wenje_mcp.py`：stdio MCP server（JSON-RPC 2.0，仅标准库），暴露 `generate_image`、`image_status`、`open_setup_page`。`generate_image` 在一次调用内走完全流程，并把缩略预览图以 MCP image content 直接返回给模型，同时给出落盘绝对路径——这是"接近原生出图体验"的关键：模型当场看到结果，不必再读文件或解析文本输出。
+- [新增] 密钥登记不再经过对话：`setup`（及 MCP 的 `open_setup_page`）在本机 `127.0.0.1` 随机端口起一次性设置页，用户在浏览器里填密钥、验证、保存，页面随即自行退出。设置页带一次性路径令牌与 CSRF 校验、Host 头校验；密钥只写入 `~/.wenje-image/config.json`（POSIX 下 0600）。原文案"请在环境变量中设置 GRSAI_API_KEY"取消——环境变量 `GRSAI_API_KEY` 仍可作为覆盖来源，但不再是唯一登记途径；本机此前也确实没有持久化的 `GRSAI_API_KEY`（`HKCU\Environment` 中不存在）。
+- [新增] `tests/local_check.py`：不产生费用的本地自检（14 项），覆盖 MCP 握手与 `tools/list`/`tools/call`、空提示词与未知工具的拒绝路径、设置页起停与 CSRF 拒绝、密钥落盘与档位生效、错误信息脱敏。`python <skill>/tests/local_check.py` 全部通过。
+- [修订] `references/grsai-api-docs.md` 增加「实测校准」节，纠正三处与上游文档不符、会直接导致误判的行为：①密钥无效不是文档写的 401——`/v1/api/generate` 在 `replyType=json` 下返回 HTTP 400 `{"id":"","status":"failed","error":"apikey error"}`，在 `replyType=async` 下返回 HTTP 200 且响应体为空；②`/v1/api/result` 不校验密钥，不能用它判断密钥有效性；③结果 URL 只在服务端保留 2 小时。引擎据此在"异步提交返回空响应"时补一次零费用鉴权探测再定性，避免把含糊结果抛给用户。
+- [新增] `references/providers.md` 与 `references/mcp.md`：前者登记服务选型（Grsai 属聚合中转，价格约为官方 1/10，代价是无 SLA、内容违规不退款、可能涨价或中断）、模型价格与路由规则、替代方案（火山方舟 Seedream 4.0、Gemini 官方、海外聚合）的取舍与切换条件；后者登记 MCP 在三类 Agent 的注册位置、手工片段与故障排查。
+- [修订] `SKILL.md` 由 55 行改为薄入口：明确"MCP 工具优先、CLI 兜底"两条入口与各自调用方式；目标验收保留密钥零暴露、付费意图确认、参考图不越权、内容合规与成本路由等红线；失效模式表按实测语义重写。
+- [发布] `~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池已发布 v2.0.0；`catalog.py check`、`sync.py --check`、`git diff --check` 均通过。
+- [注册] MCP server 注册到本机三个 Agent 配置（`~/.zcode/cli/config.json` 的 `mcp.servers`、`~/.claude.json` 的 `mcpServers`、`~/.codex/config.toml` 的 `[mcp_servers]`），指向发布池路径 `~/.agents/skills/wenje-image/scripts/wenje_mcp.py` 与本机 Python 绝对路径。写入前各自留 `.wenje-backup-<时间戳>` 备份，写入后回读解析校验、失败即回滚；三家原有 MCP 条目（blender/context7/pencil/node_repl 等）经解析核对均未变动。需重启 Agent 才会出现 `generate_image` 工具。
+- 边界与存疑：①参考图上传（`--ref`/`reference_images`）按文档实现为 data URI，未实拍验证——需要一次真实付费调用，等 owner 授权后再补；②provider 层只实现了 Grsai 一个，配置里的 `provider` 字段是预留切换点，未实现的服务不会被静默回退；③MCP 注册属每台机器的本地动作，不在本仓库发布流水线内，换机恢复时要重跑 `install`；④ZCode 若在退出时重写 `config.json`，注册条目可能被覆盖，届时按 `references/mcp.md` 重跑即可。
+
 ## 2026-09-13 — grsai-image-gen 更名为 wenje-image
 
 - [修订] 自有 Skill `grsai-image-gen` v1.3.1 → `wenje-image` v1.4.0：按 owner 指示以昵称加 image 命名，属身份变更故递增次版本号。目录 `skills/grsai-image-gen/` 改用 `git mv` 迁移为 `skills/wenje-image/`（保留文件历史），frontmatter 的 `name` 与 `agents/openai.yaml` 的调用引用（`$grsai-image-gen` → `$wenje-image`）同步更新。`catalog.py` 校验 skill 目录名必须与 frontmatter `name` 一致，两处必须同改。

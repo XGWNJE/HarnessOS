@@ -1,6 +1,6 @@
 interface:
-  display_name: "Grsai 图片生成"
-  short_description: "通过 Grsai API 生成图片，使用环境变量密钥并支持 Codex 预览"
+  display_name: "wenje-image 图片生成"
+  short_description: "通过 Grsai 生成或编辑图片，MCP 原生工具调用，密钥在本机浏览器配置"
   brand_color: "#9373EE"
   default_prompt: "使用 $wenje-image 生成一张 16:9 插画，主题是..."
 

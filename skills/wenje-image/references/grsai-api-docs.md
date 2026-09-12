@@ -3,6 +3,21 @@
 > 来源: https://qmy27nhsd9.apifox.cn  
 > 更新时间: 2026-05-06
 
+## 实测校准（2026-09-13）
+
+以下几处与上游文档不一致，以实测为准；写代码前先看这里。
+
+| 项 | 文档说法 | 实测行为 |
+|---|---|---|
+| 密钥无效 | HTTP 401 | `/v1/api/generate` + `replyType=json` → **HTTP 400** `{"id":"","status":"failed","error":"apikey error"}`；+ `replyType=async` → **HTTP 200 且响应体为空** |
+| `/v1/images/generations` 密钥无效 | HTTP 401 | **HTTP 400** `{"error":{"message":"apikey error"}}` |
+| `/v1/chat/completions` 密钥无效 | — | **HTTP 400** `{"error":{"message":"apikey error","type":"rix_api_error"}}` |
+| 查询结果接口的鉴权 | 需 Authorization | 实测**不校验密钥**：`?id=probe` 直接返回 404 `{"error":"result not exist, valid for 2 hours"}`。所以不能用它判断密钥是否有效 |
+| 结果 URL 有效期 | 未说明 | **仅 2 小时**（由上面的 404 消息得出）。必须下载落盘 |
+| 是否退费 | 未说明 | 仅系统错误退积分；**内容违规不退** |
+
+零费用的鉴权探测方式：用 `/v1/chat/completions` 配一个不存在的模型名，密钥无效会命中 `apikey error`，密钥有效则停在模型不存在，不产生生成费用。
+
 ## 基础信息
 
 - **全球节点**: `https://grsaiapi.com`
@@ -523,11 +538,12 @@ data: {
 
 ## 通用状态码
 
+> 下表是上游文档的原始说法；密钥相关的 401 已被实测推翻，见文首「实测校准」。
+
 | 状态码 | 说明 |
 |--------|------|
-| 200 | 请求成功 |
-| 400 | 请求参数错误 / 生成失败 |
-| 401 | API Key 无效或缺失 |
+| 200 | 请求成功（异步模式下密钥无效也是 200 + 空响应体） |
+| 400 | 请求参数错误 / 生成失败 / **apikey error** |
 | 429 | 请求频率超限 |
 | 500 | 服务器内部错误 |
 
