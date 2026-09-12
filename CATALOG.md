@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 64 项资产、0 个配置档。
+共 62 项资产、0 个配置档。
 
 ## development-tool
 
@@ -52,9 +52,7 @@
 |---|---|---|---|---|---|---|---|---|
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:grsai-image-gen` | grsai-image-gen | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能原生出图时，通过付费 Grsai API 生成或编辑图片；调用前需确认付费意图。 |
-| `skill:image-understand` | image-understand | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 默认模型不能可靠读取图片时，用智谱视觉 API 提取描述、OCR 或图表信息；付费升级须确认。 |
 | `skill:kimi-webbridge` | kimi-webbridge | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Kimi WebBridge lets AI control the user's real browser — navigate, click, type, read, screenshot, and interact with any… |
-| `skill:mini-vault` | mini-vault | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 经用户同意后上传构建产物到 mini-vault，并核验上传、下载与交付信息。 |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、网盘文件搜索、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户需要操作夸克网盘文件或进行身份验证时使用。 |
 | `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 在任何 Vibe Coding 编程任务及其后续补充中持续识别准确术语。用户即使已经让 Agent 完成了一部分代码、正在追加修改，或只用口语描述效果、交互、状态和问题（如“鼠标放上去有个小提示”“点完变一下颜色”“内容太长省略”），也必… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 连接、查询或部署受管 VPS 时提供 SSH、服务、路径和安全边界。 |

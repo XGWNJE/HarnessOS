@@ -2,6 +2,15 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — 退役 image-understand 与 mini-vault
+
+- [废止] 自有 Skill `image-understand`（v1.0.1）退役并删除：owner 说明当前主流模型已具备视觉推理能力，不需要另设视觉 API 提取链路。`skills/image-understand/`（含 `references/runtime-guide.md`）整目录删除。
+- [废止] 自有 Skill `mini-vault`（v1.0.2）退役并删除：owner 说明该构建产物中转站部署在旧服务器上、现已停用。`skills/mini-vault/` 整目录删除。
+- [废止] 两个技能在 `~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池的 8 份副本全部撤出，`sync.py --check` 无退役残留；仓库内已无 `mini-vault` 与 `get.xgwnje.cn` 的残留描述。
+- [修订] 清理 `~/.codex/config.toml` 中 4 条 `[[skills.config]]` 技能禁用条目：分别指向 `ai-stack-harness`、`codex-session-recovery`（上一轮退役）与本轮两项，删除目录后会变成悬空路径。改动前备份为 `config.toml.backup-<时间戳>-skills-retire`，改后通过 TOML 解析校验，138 → 121 行，差异仅为这 4 条条目，MCP、项目信任级别与 features 等其余配置未变动。
+- [修订] 资产目录由 64 项重建为 62 项：skill 由 9 项（自有 5 + 第三方 4）减为 7 项（自有 3 + 第三方 4）。
+- 边界说明：本次只删除仓库中的技能定义；旧服务器上 mini-vault 对应的服务与数据未被停止或清理，停服与数据处置需另行操作。
+
 ## 2026-09-13 — 退役三项自有 Skill 并澄清不受管的池内技能
 
 - [废止] 自有 Skill `ai-stack-harness`（v2.1.1）、`codex-session-recovery`（v1.0.1）、`electron-runtime-debugging`（v1.0.1）按 owner 2026-09-13 指示移除管理并删除：`skills/` 下三个源目录整目录删除，`~/.agents`、`~/.codex`、`~/.claude`、`~/.dsh` 四个读取池共 12 份副本全部撤出。删除前核对过引用面：仓库内除历史 CHANGELOG 与生成物外无活引用，结构化资产与 Profile 也没有指向它们的依赖关系。需要恢复时从本仓库 Git 历史取回。
