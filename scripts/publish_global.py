@@ -14,7 +14,8 @@
     ~/.dsh/AGENTS.md                    DSH（$DSH_HOME/AGENTS.md）
 Kimi Code 无全局规则注入机制，不发布（规则走项目级 AGENTS.md / skills）。
 
-目标文件被视为发布产物：与源不一致时直接覆盖。
+目标文件被视为发布产物：与源不一致时直接覆盖。读写均按字节进行，不经文本
+模式换行转换，产物与源字节一致（含换行符），换行漂移因此可被 --check 检出。
 """
 
 import sys
@@ -33,8 +34,8 @@ TARGETS = [
 ]
 
 
-def build() -> str:
-    return CORE.read_text(encoding="utf-8")
+def build() -> bytes:
+    return CORE.read_bytes()
 
 
 def main() -> None:
@@ -42,7 +43,7 @@ def main() -> None:
     drift = False
     for name, target in TARGETS:
         want = build()
-        current = target.read_text(encoding="utf-8") if target.exists() else None
+        current = target.read_bytes() if target.exists() else None
         if current == want:
             print(f"[同步] {name:9s} {target}")
             continue
@@ -52,7 +53,7 @@ def main() -> None:
             print(f"[漂移] {name:9s} {target}（{state}）")
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(want, encoding="utf-8")
+        target.write_bytes(want)
         print(f"[发布] {name:9s} {target}")
     if check_only and drift:
         sys.exit(1)

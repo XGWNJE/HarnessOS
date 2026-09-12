@@ -1,0 +1,3 @@
+# 统一 LF：源与发布产物保持字节一致。autocrlf=true 的机器上若无此声明，
+# 工作区会被检出为 CRLF，使源与 LF 产物漂移。
+* text=auto eol=lf
