@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 62 项资产、0 个配置档。
+共 63 项资产、0 个配置档。
 
 ## development-tool
 
@@ -79,6 +79,7 @@
 | `software:tuba-toolbox` | 图吧工具箱 | `system-hardware` | 第三方 | 不跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 硬件检测、信息查看与性能测试工具集合。 |
 | `software:uu-remote` | UU远程 | `network-remote` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供远程桌面连接与远程控制。 |
 | `software:visual-studio-community` | Visual Studio Community | `development` | 第三方 | 跟踪（official-page） | `managed` | `current` | owner-declared | 提供 Windows 与 .NET 桌面应用的集成开发、编译、调试和 SDK 工作负载。 |
+| `software:vmware-workstation-pro` | VMware Workstation Pro | `development` | 第三方 | 跟踪（official-page） | `managed` | `current` | owner-declared | 提供本地隔离的开发与测试环境，用于跨平台构建、依赖隔离与可回滚的实验。 |
 | `software:wechat` | 微信 | `communication` | 第三方 | 跟踪（official-page） | `managed` | `current` | owner-declared | 提供桌面即时通信、文件传输与扫码登录入口。 |
 | `software:wechat-input` | 微信输入法 | `productivity` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供中文文字输入与词库服务。 |
 | `software:zcode` | ZCode | `ai-agent` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Z.AI 官方的桌面 AI 编程、长程任务与多 Agent 协作入口。 |

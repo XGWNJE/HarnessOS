@@ -1,0 +1,26 @@
+schema_version = 1
+id = "software:vmware-workstation-pro"
+type = "software"
+name = "VMware Workstation Pro"
+domain = "development"
+status = "managed"
+purpose = "提供本地隔离的开发与测试环境，用于跨平台构建、依赖隔离与可回滚的实验。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/vmware-workstation-pro.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-13"
+last_verified_on = "2026-09-13"
+review_days = 90
+notes = "本机 2026-09-13 静默安装 26H1u1，安装包签名有效、签署者为 Broadcom Inc，官方 build 25688693；程序内部版本为 26.0.1 build-25688693，即 26H1u1。官方条款为个人、商业与教育用途均免费且不再需要许可证密钥，安装时密钥框留空。按 owner 确认的版本策略关闭应用内自动更新（AUTOSOFTWAREUPDATE=0），上游升级走人工决策；CEIP 数据收集保持关闭（DATACOLLECTION=0，与图形向导默认不勾选一致）。主机 Hyper-V、虚拟机平台与 WSL2 均未启用，VMware 使用原生 VMM，无需共存配置。下载需 Broadcom 支持门户的免费账号，官方下载页已并入该门户。安装无需重启。上游定位符当前为 26H1 发布说明索引，官方发布下一版本线时需核验并前移到对应索引。虚拟机磁盘、运行状态与主机偏好设置属用户数据，不在本记录恢复范围。"
+install_form = "installer"
+official_source = "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion"
+release_channel = "stable"
+minimum_verified_version = "26H1u1"
+config_reference = "重新运行官方安装包，按已确认的静默参数安装到默认目录；虚拟机、主机偏好设置与授权状态按应用自身流程另行核验，不复制完整用户配置。"
+backup_location = "unknown"
+post_restore_checks = ["vmware.exe 可启动且版本显示 26H1u1（26.0.1 build-25688693）", "vmrun list 返回成功", "VMAuthdService、VMnetDHCP、VMware NAT Service、VMUSBArbService 均为 Running", "vmx86、vmci、vmnetadapter、vmnetbridge 驱动已加载", "VMnet1 与 VMnet8 虚拟网卡存在且状态为 Up"]
+upstream_channel = "official-page"
+upstream_identifier = "https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/workstation-pro/26H1/release-notes.html"
+upstream_latest_stable = "26H1u1"

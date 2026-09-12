@@ -2,6 +2,17 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — VMware Workstation Pro 静默安装并纳管
+
+- [新增] `software:vmware-workstation-pro`：登记 VMware Workstation Pro 26H1u1（程序内部版本 26.0.1 build-25688693），安装形态 `installer`、发行渠道 `stable`、领域 `development`，用途为 owner 确认的本地隔离开发与测试环境。
+- [新增] 本机完成静默无人值守安装：安装包 Authenticode 签名有效、签署者为 Broadcom Inc 且带 DigiCert 时间戳，文件版本与官方 26H1u1 build 25688693 一致（SHA256 `3d775c3c…92db473`，安装包本身不入库）；安装前已创建系统还原点（序号 8）作为回退保障。
+- 安装参数与取舍：按 owner 确认的版本策略关闭应用内自动更新（`AUTOSOFTWAREUPDATE=0`），上游升级改由 `versions.py` 走人工决策；CEIP 数据收集保持关闭（`DATACOLLECTION=0`），与图形向导默认不勾选一致。官方自 2024-11 起对个人、商业与教育用途全部免费且不再需要许可证密钥，故本次不涉及密钥登记。
+- 环境结论：主机 Hyper-V、虚拟机平台与 WSL2 均未启用，VMware 使用原生 VMM，无需共存配置；安装日志明确记录无组件要求重启。
+- 上游渠道登记为 `official-page`，定位符为官方 26H1 发布说明索引；经核验 winget 无该包，故不登记 winget 渠道。官方下载页已并入 Broadcom 支持门户（需免费账号），`official_source` 保留官方产品页。
+- 核验证据：`vmware.exe`、`vmrun.exe`、`vmware-authd.exe`、`vmware-vmx.exe` 均为 26.0.1 build-25688693；VMAuthdService、VMnetDHCP、VMware NAT Service、VMUSBArbService 均为 Running；vmx86、vmci、vmnetadapter、vmnetbridge、vmnetuserif、hcmon 驱动均已加载；VMnet1/VMnet8 网卡状态 Up；`vmrun list` 返回 0。
+- 存疑与边界：未做真实虚拟机开机验证（需 guest 镜像，超出本次范围），虚拟机运行可用性留待首次实际使用确认；未创建 Profile，仓库当前无配置档，不为单项资产新建。安装后会话管理器中存在 5724 条待重启文件改名操作，逐条核对确认全部指向 Visual Studio Setup 的 Temp 残留，与本次安装无关。
+- 验证：`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+
 ## 2026-09-13 — wenje-image 记录模型风格倾向（owner 声明）
 
 - [新增] 自有 Skill `wenje-image` v2.2.0 → v2.3.0：记录 owner 声明的选型倾向——**Banana 系更偏真实写实**，用户要求自然、以及"扩展像素增加细节"（放大补细节、外扩画面、真实材质质感）时优先考虑 Banana 模型；**Image 2.5 系创意与编辑能力更强**，用户需要更多创意、更强编辑能力与效果（改图、特效、风格化、局部改动）时优先使用 Image 2.5 系列。
