@@ -7,6 +7,7 @@
 
 发布映射（源 = global/AGENTS.md）：
     ~/AGENTS.md                         home 根
+    ~/.zcode/AGENTS.md                  ZCode（用户级指令文件，非 home 根 ~/AGENTS.md）
     ~/.codex/AGENTS.md                  Codex
     ~/.config/opencode/AGENTS.md        OpenCode
     ~/.claude/CLAUDE.md                 Claude Code
@@ -24,6 +25,7 @@ HOME = Path.home()
 CORE = ROOT / "global" / "AGENTS.md"
 TARGETS = [
     ("home",     HOME / "AGENTS.md"),
+    ("zcode",    HOME / ".zcode" / "AGENTS.md"),
     ("codex",    HOME / ".codex" / "AGENTS.md"),
     ("opencode", HOME / ".config" / "opencode" / "AGENTS.md"),
     ("claude",   HOME / ".claude" / "CLAUDE.md"),

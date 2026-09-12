@@ -2,6 +2,11 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — 全局规则新增 ZCode 发布目标
+
+- [新增] `scripts/publish_global.py` 新增 ZCode 目标 `~/.zcode/AGENTS.md`，全局规则发布映射由 5 个目标增至 6 个；文档字符串同步登记该路径，并注明它与 home 根 `~/AGENTS.md` 不是同一位置。依据 ZCode 官方配置说明：用户作用域指令文件为 `~/.zcode/AGENTS.md`，先注入用户级、后注入工作区级；此前该目标缺失，导致 ZCode 只加载工作区级规则、拿不到全局规则正文。
+- [发布] `global/AGENTS.md`（63 行）已同步到新增的 ZCode 目标，与事实源内容逐字节一致（除 Windows 下的 CRLF 换行差异）；用户级指令文件在会话启动时载入，本次发布对已开启的会话不热更新。
+
 ## 2026-09-13 — 退役 Codex DeepSeek 子 Agent 集成
 
 - [废止] `vendor/codex-deepseek-subagent`（上游 oil-oil/codex-deepseek-subagent@978b079）退役：实时验收确认 Codex Desktop 0.154.0-alpha.6.2 会把自定义 Provider 的原生子线程按 ChatGPT 账户端点派发并返回 400，集成在该版本不可用，用户指示移除最近登记的 DeepSeek 子代理。源目录整目录删除，`vendor/SOURCES.md` 登记移除；需要恢复时从上游重新引入并按原补丁记录重放本地差异（本地补丁依据仍可从本仓库 Git 历史检索）。
