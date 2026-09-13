@@ -2,6 +2,14 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-13 — quarkclouddrive 整目录更新至上游 1.0.20，消除发布漂移
+
+- [修订] `vendor/quarkclouddrive` 由 1.0.15 整目录替换为上游 **1.0.20-5be3987**，替换后与已部署副本逐字节一致。变化范围：新增 `references/file-rename.md`（15,011 字节，批量重命名与整批撤销）；`SKILL.md` 22,213 → 32,495、`references/file-ops.md` 6,757 → 8,831、`file-saveas.md` 6,980 → 15,996、`file-search.md` 17,625 → 10,095、`file-share.md` 10,078 → 21,954、`scripts/hash-worker.cjs` 内容有更新、`scripts/quark-drive.cjs` 509,702 → 601,751 字节；`assistant.md`、`auth.md`、`file-organize.md`、`file-read.md`、`file-upload.md`、`install.sh`、`uninstall.sh` 未变。目录体积 668K → 796K。
+- 触发原因：为调用该技能运行了一次官方 `scripts/install.sh`，脚本把已部署副本更新到 1.0.20，使发布件领先于 vendor 副本，`sync.py --check` 报 `[漂移] quarkclouddrive ~/.agents/skills`。本次即把 vendor 与四个发布目标统一到上游版本。
+- 无本地补丁：`vendor/SOURCES.md` 未登记该技能的补丁，故按规则只做整目录替换，不存在"补丁是否已被吸收"的核对与重放。
+- [修订] `vendor/SOURCES.md` 登记版本与更新说明；`CATALOG.md` 与 `catalog.html` 随事实源重建（该 skill 的 description 已随上游变更）。
+- 验证：`catalog.py check`、`sync.py --check`（退出码 0）、`git diff --check` 均通过；`.agents`/`.claude`/`.codex`/`.dsh` 四个发布目标与 vendor 零差异。
+
 ## 2026-09-13 — VMware Workstation Pro 静默安装并纳管
 
 - [新增] `software:vmware-workstation-pro`：登记 VMware Workstation Pro 26H1u1（程序内部版本 26.0.1 build-25688693），安装形态 `installer`、发行渠道 `stable`、领域 `development`，用途为 owner 确认的本地隔离开发与测试环境。

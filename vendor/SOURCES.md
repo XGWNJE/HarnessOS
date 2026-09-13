@@ -9,7 +9,7 @@
 | vibehub | https://github.com/oil-oil/vibe-hub-skill （skills/vibehub 目录 + LICENSE） | 2026-07-24 | Vibe Coding 术语学习助手（面向普通人的教学流程，依赖 VibeHub 网站知识源）；2026-09-12 整目录更新至上游 8d77154（2026-09-10），上游重构后 SKILL.md 不再引用 references/ 与 assets/，旧目录随之移除 |
 | kimi-webbridge | Kimi 官方 WebBridge 技能（官方页 https://www.kimi.com/features/webbridge ，版本 1.11.3，随 Kimi Code 生态发布；非 git 仓库，从部署的 skill 目录回收） | 2026-08-04 | 浏览器控制：经本地守护进程（127.0.0.1:10086）控制真实浏览器。机制不绑定 Kimi 运行时，HTTP API 通用，任何 Agent 可调用；引入前已散装部署于 .claude/.codex/.config-opencode 三池 |
 | archify | https://github.com/tt-a1i/archify （archify/ 目录 + LICENSE，MIT，SKILL metadata v2.17） | 2026-08-28 | 架构、流程、时序、数据流和生命周期图的本地渲染与校验技能；从 Codex 试点安装副本原样回收。迁移时保留完整目录，目标需 Node.js >=18；核心渲染不需安装 node_modules，视觉检查另需本机 Chrome/Chromium。2026-09-12 整目录更新至上游 c1443b3（2026-09-11，metadata 2.16 → 2.17），随上游新增 THIRD_PARTY_NOTICES.md 与 JetBrains Mono 字体许可 |
-| quarkclouddrive | 夸克网盘（Quark Drive）官方 Skill，版本 1.0.15；经夸克开放平台 API（`@ali/qkop-*` SDK）操作网盘；非 git 仓库，预编译 minified 包（约 650KB），从已部署的 skill 目录（`~/.agents/skills` 等）回收 | 2026-09-02 | 夸克网盘文件操作：上传/下载（断点续传）、分享与转存、搜索、相册整理、AI 助手（文件总结与知识问答，支持万级文件）。运行依赖 Node.js（`scripts/install.sh` 装 CLI） |
+| quarkclouddrive | 夸克网盘（Quark Drive）官方 Skill，版本 1.0.20-5be3987；经夸克开放平台 API（`@ali/qkop-*` SDK）操作网盘；非 git 仓库，预编译 minified 包（约 796KB），从已部署的 skill 目录（`~/.agents/skills` 等）回收 | 2026-09-02 | 夸克网盘文件操作：上传/下载（断点续传）、分享与转存、搜索、相册整理、AI 助手（文件总结与知识问答，支持万级文件）。运行依赖 Node.js（`scripts/install.sh` 装 CLI）。2026-09-13 整目录更新至上游 1.0.20-5be3987（引入时 1.0.15）：新增 `references/file-rename.md`（批量重命名与整批撤销），`file-saveas`、`file-share`、`file-ops` 文档扩充，`SKILL.md` 与 CLI 包同步更新；该技能无本地补丁，故只做整目录替换 |
 
 ## 上游更新（owner 问"是否最新"时执行）
 
