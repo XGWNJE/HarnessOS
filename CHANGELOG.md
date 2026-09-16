@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-16 — DeepSeek Harness 升级至 0.1.5-rc.1
+
+- [修订] `development-tool:deepseek-harness` 本机 launcher 由 0.1.1-rc.2（2026-08-21 发布）升级到 npm `latest` 0.1.5-rc.1（2026-09-10 发布），中间跨 0.1.2、0.1.3、0.1.5 三条版本线；`version_constraint` 同步改为 `=0.1.5-rc.1`，notes 与 `last_verified_on` 刷新为 2026-09-16。
+- 触发原因：核对版本时发现本机实装落后上游。上游未提供 stable 标签，`latest`/`next`/`alpha` 均为预发布（当前分别为 0.1.5-rc.1 / 0.1.5-rc.2 / 0.1.6-alpha.1），按 owner 选定升到 `latest`，不取更新但更不稳的 `next` 与 `alpha`。
+- 验证：`dsh --version` 与 `npm ls -g` 均为 0.1.5-rc.1；`dsh --profile web --dump-config` 组合 542 行、无 stderr 与解析告警，用户层 `dsh-plugin-usage-meter` 正确叠加在最后；`dsh --profile web` 实起服务对无 token 请求返回 401、带 token 返回 303，浏览器信任栅栏行为符合预期，测试后进程已结束、端口 17888 已释放。`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+- 边界：dsh 无自带更新命令，升级依赖 npm 全局安装；本次跨版本未出现 profile 或插件不兼容，但 `~/.dsh/profiles/web` 的插件 bundle 仍解析到原有版本，上游若调整 bundle 契约需重装该 profile 插件。凭据（`.credentials.yaml`）与本地会话未随升级变动，也不入仓库。
+
 ## 2026-09-13 — quarkclouddrive 整目录更新至上游 1.0.20，消除发布漂移
 
 - [修订] `vendor/quarkclouddrive` 由 1.0.15 整目录替换为上游 **1.0.20-5be3987**，替换后与已部署副本逐字节一致。变化范围：新增 `references/file-rename.md`（15,011 字节，批量重命名与整批撤销）；`SKILL.md` 22,213 → 32,495、`references/file-ops.md` 6,757 → 8,831、`file-saveas.md` 6,980 → 15,996、`file-search.md` 17,625 → 10,095、`file-share.md` 10,078 → 21,954、`scripts/hash-worker.cjs` 内容有更新、`scripts/quark-drive.cjs` 509,702 → 601,751 字节；`assistant.md`、`auth.md`、`file-organize.md`、`file-read.md`、`file-upload.md`、`install.sh`、`uninstall.sh` 未变。目录体积 668K → 796K。
