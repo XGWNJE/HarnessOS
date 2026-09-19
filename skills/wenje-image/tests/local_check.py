@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""wenje-image 的本地自检：MCP 协议握手、工具清单、设置页起停与密钥落盘。
+"""wenje-image 的本地自检：MCP 协议握手、工具清单、设置页起停、密钥落盘与注册落点。
 
 不发起任何付费调用。用法：python tests/local_check.py
 """
@@ -211,6 +211,59 @@ def test_key_redaction() -> None:
     check("未配置时 resolve_key 返回空", core.resolve_key({})[0] is None)
 
 
+def test_install_targets() -> None:
+    """注册落点：JSON / TOML / DSH YAML 补丁层各自写对，二次运行幂等且不改文件。"""
+    tmp = Path(tempfile.mkdtemp(prefix="wenje-agents-"))
+    (tmp / ".zcode" / "cli").mkdir(parents=True)
+    (tmp / ".zcode" / "cli" / "config.json").write_text('{"mcp": {"servers": {}}}\n', encoding="utf-8")
+    (tmp / ".claude.json").write_text("{}\n", encoding="utf-8")
+    (tmp / ".codex").mkdir()
+    codex_path = tmp / ".codex" / "config.toml"
+    codex_path.write_text('[mcp_servers.blender]\ncommand = "uv"\n\n'
+                          '[mcp_servers.wenje-image]\ncommand = "old-python"\nargs = ["old.py"]\n',
+                          encoding="utf-8")
+    patch = tmp / ".dsh" / "profiles" / "web" / "cordis.patch.yml"
+    patch.parent.mkdir(parents=True)
+    patch.write_text("# patch\n- id: usage-meter\n  disabled: true\n\n"
+                     "- id: mcp-wenje-image\n  name: '@deepseek-ai/dsh-mcp-client'\n"
+                     "  config:\n    serverName: wenje-image\n", encoding="utf-8")
+    env = isolated_env(WENJE_IMAGE_AGENT_HOME=str(tmp))
+    try:
+        run = lambda: subprocess.run(  # noqa: E731 - 两轮调用共用同一命令行
+            [sys.executable, str(ENGINE), "install", "--agent", "all"],
+            capture_output=True, timeout=60, env=env)
+        first = run()
+        out = first.stdout.decode("utf-8", errors="replace")
+        check("install --agent all 注册四个落点", out.count("[注册]") == 4, out.replace("\n", " ")[:200])
+
+        codex = codex_path.read_text(encoding="utf-8")
+        check("Codex 旧注册被整块升级且保留其它 server",
+              "tool_timeout_sec = 360" in codex and "old-python" not in codex
+              and "[mcp_servers.blender]" in codex)
+
+        yaml_text = patch.read_text(encoding="utf-8")
+        check("DSH 旧写法被升级为 - insert: 条目且保留原有条目",
+              "- insert:" in yaml_text and "    - id: mcp-wenje-image" in yaml_text
+              and "toolCallTimeoutMs: 360000" in yaml_text and "- id: usage-meter" in yaml_text
+              and "\n- id: mcp-wenje-image" not in yaml_text)
+
+        claude = json.loads((tmp / ".claude.json").read_text(encoding="utf-8"))
+        cmd = claude.get("mcpServers", {}).get("wenje-image", {}).get("command", "")
+        check("Claude 写入 mcpServers.wenje-image 且指向当前解释器",
+              Path(cmd).name == Path(sys.executable).name, cmd)
+
+        watched = [tmp / ".claude.json", codex_path, patch]
+        before = [p.read_bytes() for p in watched]
+        second = run()
+        out2 = second.stdout.decode("utf-8", errors="replace")
+        check("二次 install 全部认出已存在且不改动任何文件",
+              out2.count("[已存在]") == 4 and [p.read_bytes() for p in watched] == before,
+              out2.replace("\n", " ")[:200])
+        check("写入前留了同目录备份", bool(list((tmp / ".codex").glob("config.toml.wenje-backup-*"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main() -> int:
     print(f"引擎：{ENGINE}")
     test_mcp()
@@ -218,6 +271,7 @@ def main() -> int:
     test_size_capability()
     test_setup_page()
     test_key_redaction()
+    test_install_targets()
     print()
     if failures:
         print(f"× {len(failures)} 项未通过：" + "、".join(failures))

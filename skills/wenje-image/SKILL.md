@@ -1,5 +1,5 @@
 ---
-version: 2.3.0
+version: 2.4.0
 name: wenje-image
 description: 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。
 ---
@@ -12,7 +12,7 @@ description: 需要生成或编辑图片而默认模型不能原生出图时，�
 
 ## 入口：优先用 MCP 工具，其次用 CLI
 
-两条入口能力等价，走同一条引擎。**先看工具列表里有没有 `generate_image`**。
+两条入口能力等价，走同一条引擎。**先在工具列表里搜 `generate_image`**：DSH、Claude Code、Codex、ZCode 都会把它挂成带服务器前缀的全名（如 DSH 的 `mcp__wenje-image__generate_image`），按名字搜即可，不要按精确全名去判断"有没有注册"。
 
 ### 入口一：MCP 工具（有则必用）
 
@@ -24,12 +24,17 @@ description: 需要生成或编辑图片而默认模型不能原生出图时，�
 
 用 MCP 时**不要**再写临时脚本、不要自己拼 URL 或轮询、也不要把提示词塞进 shell 命令——提示词是结构化参数，中文与引号不需要转义。
 
-工具没出现时先注册（写配置前自动备份，需重启 Agent 生效）：
+工具没出现时先注册（写配置前自动备份，旧条目会整块升级到当前字段）：
 
 ```bash
-python <本skill目录>/scripts/wenje_image.py install --agent zcode   # 也可 codex / claude / all
-python <本skill目录>/scripts/wenje_image.py install --print        # 只打印配置片段，不改文件
+python <本skill目录>/scripts/wenje_image.py install --agent all    # 也可 claude / codex / zcode / dsh
+python <本skill目录>/scripts/wenje_image.py install --print        # 只打印三种片段，不改文件
 ```
+
+- 覆盖四个落点：Claude Code、Codex、ZCode、DSH；本机不存在的配置文件自动跳过，缺哪家都不用管。
+- `--agent dsh` 默认写 `~/.dsh/profiles/web/cordis.patch.yml`（DSH 的 profile 补丁层），以 `- insert:` 条目挂上 `@deepseek-ai/dsh-mcp-client`；别的 profile 用 `--dsh-profile <名>`。
+- 注册会一并写入调用超时（Codex `tool_timeout_sec`、DSH `toolCallTimeoutMs`）：出图含提交与轮询，默认 60 秒级的工具超时会在出图中途把调用掐断。
+- 生效方式：DSH 保存即热应用补丁层，其余 Agent 需重启。
 
 ### 入口二：CLI（MCP 不可用时）
 

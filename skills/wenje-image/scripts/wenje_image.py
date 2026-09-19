@@ -851,11 +851,31 @@ def cmd_status(args) -> int:
 
 # ---------------------------------------------------------------- MCP 注册
 
-MCP_TARGETS = {
-    "zcode": {"path": Path.home() / ".zcode" / "cli" / "config.json", "kind": "json", "key": ["mcp", "servers"]},
-    "claude": {"path": Path.home() / ".claude.json", "kind": "json", "key": ["mcpServers"]},
-    "codex": {"path": Path.home() / ".codex" / "config.toml", "kind": "toml", "key": ["mcp_servers"]},
-}
+MCP_AGENT_NAMES = ("zcode", "claude", "codex", "dsh")
+DSH_PLUGIN = "@deepseek-ai/dsh-mcp-client"
+DSH_PROFILE_DEFAULT = "web"
+# 出图是长任务（提交→轮询→下载，默认最长 300 秒），多数 Agent 默认 60 秒级调用超时会把调用掐断，
+# 所以注册时就写死一个足够大的值：Codex 用秒，DSH 用毫秒。
+TOOL_TIMEOUT_SEC = 360
+STARTUP_TIMEOUT_SEC = 30
+
+
+def agent_home() -> Path:
+    """Agent 配置根目录；WENJE_IMAGE_AGENT_HOME 供自检指向临时目录。"""
+    override = os.environ.get("WENJE_IMAGE_AGENT_HOME")
+    return Path(override).expanduser() if override else Path.home()
+
+
+def mcp_targets(dsh_profile: str = DSH_PROFILE_DEFAULT) -> dict:
+    """各 Agent 的 MCP 落点：JSON / TOML 是配置树，dsh 是 YAML 补丁层（数组追加条目）。"""
+    home = agent_home()
+    return {
+        "zcode": {"kind": "json", "path": home / ".zcode" / "cli" / "config.json", "key": ["mcp", "servers"]},
+        "claude": {"kind": "json", "path": home / ".claude.json", "key": ["mcpServers"]},
+        "codex": {"kind": "toml", "path": home / ".codex" / "config.toml"},
+        "dsh": {"kind": "dsh", "profile": dsh_profile,
+                "path": home / ".dsh" / "profiles" / dsh_profile / "cordis.patch.yml"},
+    }
 
 
 def mcp_entry() -> dict:
@@ -866,29 +886,140 @@ def mcp_entry() -> dict:
     }
 
 
-def verify_written(path: Path, kind: str) -> str:
+def yaml_quote(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
+
+
+def codex_block(entry: dict) -> str:
+    return (f"[mcp_servers.{SKILL_NAME}]\n"
+            f"command = {json.dumps(entry['command'])}\n"
+            f"args = {json.dumps(entry['args'])}\n"
+            f"tool_timeout_sec = {TOOL_TIMEOUT_SEC}\n"
+            f"startup_timeout_sec = {STARTUP_TIMEOUT_SEC}\n")
+
+
+def dsh_block(entry: dict) -> str:
+    """DSH 的补丁层按 id 定向：新增插件要挂在 `- insert:` 下，无 id 的 insert 追加到顶层数组。"""
+    args = ", ".join(yaml_quote(item) for item in entry["args"])
+    return ("- insert:\n"
+            f"    - id: mcp-{SKILL_NAME}\n"
+            f"      name: {yaml_quote(DSH_PLUGIN)}\n"
+            f"      config:\n"
+            f"        serverName: {SKILL_NAME}\n"
+            f"        transport: stdio\n"
+            f"        command: {yaml_quote(entry['command'])}\n"
+            f"        args: [{args}]\n"
+            f"        toolCallTimeoutMs: {TOOL_TIMEOUT_SEC * 1000}\n")
+
+
+def _separator(text: str) -> str:
+    return "\n" if text.endswith("\n") else ("\n\n" if text else "")
+
+
+def upsert_block(text: str, header: str, block: str) -> tuple[str, bool]:
+    """TOML 节写入：已有同头部节就整节替换（便于补字段），否则追加。
+
+    返回 (新文本, 是否已经是最新内容)——已经是最新时调用方不写文件、不留备份。
+    """
+    lines = text.splitlines()
+    start = next((i for i, line in enumerate(lines) if line.startswith(header)), None)
+    if start is None:
+        return text + _separator(text) + block, False
+    end = start + 1
+    while end < len(lines) and not lines[end].startswith("["):
+        end += 1
+    if "".join(line + "\n" for line in lines[start:end]) == block:
+        return text, True
+    new = ("".join(line + "\n" for line in lines[:start]) + block
+           + "".join(line + "\n" for line in lines[end:]))
+    return new, False
+
+
+def upsert_dsh_block(text: str, block: str) -> tuple[str, bool]:
+    """DSH 补丁层写入：按条目特征行定位整块替换，兼作旧写法的升级。
+
+    早期版本把插件条目直接写成顶层 `- id: ...`，那是「改已有条目」的写法，DSH 会报
+    `patch: entry ... not found`；这里两种情况都能被替换成正确的 `- insert:` 写法。
+    """
+    lines = text.splitlines()
+    marker = f"- id: mcp-{SKILL_NAME}"
+    hit = next((i for i, line in enumerate(lines) if line.strip() == marker), None)
+    if hit is None:
+        return text + _separator(text) + block, False
+    start = hit
+    while start > 0 and not lines[start].startswith("- "):
+        start -= 1
+    end = hit + 1
+    while end < len(lines) and not lines[end].startswith("- "):
+        end += 1
+    if "".join(line + "\n" for line in lines[start:end]) == block:
+        return text, True
+    new = ("".join(line + "\n" for line in lines[:start]) + block
+           + "".join(line + "\n" for line in lines[end:]))
+    return new, False
+
+
+def verify_written(path: Path, kind: str, entry: dict) -> str:
     """写完立刻回读解析：Agent 配置写坏会让它起不来，宁可回滚。"""
     try:
         text = path.read_text(encoding="utf-8")
         if kind == "json":
             json.loads(text)
-        else:
+        elif kind == "toml":
             import tomllib
             tomllib.loads(text)
+        else:
+            return verify_dsh_block(text, entry)
         return ""
     except (OSError, ValueError) as exc:
         return str(exc)
 
 
+def verify_dsh_block(text: str, entry: dict) -> str:
+    """标准库没有 YAML 解析器：按行核对写入块的结构与缩进，别把补丁层写坏。"""
+    lines = text.splitlines()
+    marker = f"- id: mcp-{SKILL_NAME}"
+    hit = next((i for i, line in enumerate(lines) if line.strip() == marker), None)
+    if hit is None:
+        return f"找不到 {marker} 条目"
+    start = hit
+    while start > 0 and not lines[start].startswith("- "):
+        start -= 1
+    end = hit + 1
+    while end < len(lines) and not lines[end].startswith("- "):
+        end += 1
+    block = lines[start:end]
+    args = ", ".join(yaml_quote(item) for item in entry["args"])
+    expected = [
+        (0, "- insert:"),
+        (4, marker),
+        (6, f"name: {yaml_quote(DSH_PLUGIN)}"),
+        (6, "config:"),
+        (8, f"serverName: {SKILL_NAME}"),
+        (8, "transport: stdio"),
+        (8, f"command: {yaml_quote(entry['command'])}"),
+        (8, f"args: [{args}]"),
+        (8, f"toolCallTimeoutMs: {TOOL_TIMEOUT_SEC * 1000}"),
+    ]
+    for indent, content in expected:
+        if " " * indent + content not in block:
+            return f"条目缺少或缩进不对：{content}"
+    return ""
+
+
 def cmd_install(args) -> int:
     entry = mcp_entry()
+    targets = mcp_targets(getattr(args, "dsh_profile", DSH_PROFILE_DEFAULT))
     if args.print_only or args.agent == "print":
+        print("# Claude / ZCode 类客户端（JSON）")
         print(json.dumps({"mcpServers": {SKILL_NAME: entry}}, ensure_ascii=False, indent=2))
+        print(f"\n# Codex（~/.codex/config.toml）\n{codex_block(entry)}")
+        print(f"# DSH（~/.dsh/profiles/<profile>/cordis.patch.yml）\n{dsh_block(entry)}")
         return EXIT_OK
-    targets = list(MCP_TARGETS) if args.agent == "all" else [args.agent]
+    names = list(targets) if args.agent == "all" else [args.agent]
     failed = False
-    for name in targets:
-        spec = MCP_TARGETS[name]
+    for name in names:
+        spec = targets[name]
         path: Path = spec["path"]
         if not path.is_file():
             print(f"[跳过] {name}：{path.as_posix()} 不存在")
@@ -909,31 +1040,43 @@ def cmd_install(args) -> int:
                 node[SKILL_NAME] = entry
                 backup = backup_config(path)
                 path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-                problem = verify_written(path, "json")
+                problem = verify_written(path, "json", entry)
                 if problem:
                     restore(path, backup)
                     raise WenjeError(f"写入后无法解析，已回滚：{problem}", EXIT_SERVER)
                 print(f"[注册] {name}：{path.as_posix()} → {'.'.join(spec['key'])}.{SKILL_NAME}")
-            else:
+            elif spec["kind"] == "toml":
                 text = path.read_text(encoding="utf-8")
-                if f"[mcp_servers.{SKILL_NAME}]" in text:
+                updated, done = upsert_block(text, f"[mcp_servers.{SKILL_NAME}]", codex_block(entry))
+                if done:
                     print(f"[已存在] {name}：{path.as_posix()}")
                     continue
-                block = (f"[mcp_servers.{SKILL_NAME}]\n"
-                         f'command = {json.dumps(entry["command"])}\n'
-                         f'args = {json.dumps(entry["args"])}\n')
                 backup = backup_config(path)
-                sep = "\n" if text.endswith("\n") else "\n\n"
-                path.write_text(text + sep + block, encoding="utf-8")
-                problem = verify_written(path, "toml")
+                path.write_text(updated, encoding="utf-8")
+                problem = verify_written(path, "toml", entry)
                 if problem:
                     restore(path, backup)
                     raise WenjeError(f"写入后 TOML 无法解析，已回滚：{problem}", EXIT_SERVER)
                 print(f"[注册] {name}：{path.as_posix()} → [mcp_servers.{SKILL_NAME}]")
+            else:
+                text = path.read_text(encoding="utf-8")
+                updated, done = upsert_dsh_block(text, dsh_block(entry))
+                if done:
+                    print(f"[已存在] {name}：{path.as_posix()}（profile {spec['profile']}）")
+                    continue
+                backup = backup_config(path)
+                path.write_text(updated, encoding="utf-8")
+                problem = verify_written(path, "dsh", entry)
+                if problem:
+                    restore(path, backup)
+                    raise WenjeError(f"写入后补丁层结构不对，已回滚：{problem}", EXIT_SERVER)
+                print(f"[注册] {name}：{path.as_posix()} → mcp-{SKILL_NAME} 条目"
+                      f"（profile {spec['profile']}，MCP 插件 {DSH_PLUGIN}）")
         except (OSError, WenjeError) as exc:
             failed = True
             print(f"[失败] {name}：{exc}", file=sys.stderr)
-    print("\n重启 Agent 后生效；验证：Agent 中出现 generate_image 工具。")
+    print("\n生效方式：DSH 保存后热应用补丁层；其余 Agent 需重启。"
+          f"验证：工具列表出现 generate_image（DSH 下为 mcp__{SKILL_NAME}__generate_image）。")
     return EXIT_SERVER if failed else EXIT_OK
 
 
@@ -992,7 +1135,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--poll-interval", type=float, default=3.0, help="轮询间隔秒数")
 
     s = sub.add_parser("install", help="把 MCP server 注册到本机 Agent 配置")
-    s.add_argument("--agent", choices=sorted(MCP_TARGETS) + ["all", "print"], default="zcode")
+    s.add_argument("--agent", choices=[*MCP_AGENT_NAMES, "all", "print"], default="all",
+                   help="目标 Agent；all 自动跳过本机不存在的配置，print 只打印片段")
+    s.add_argument("--dsh-profile", default=DSH_PROFILE_DEFAULT,
+                   help="DSH profile 名，决定 ~/.dsh/profiles/<name>/cordis.patch.yml")
     s.add_argument("--print", dest="print_only", action="store_true", help="只打印配置片段，不写文件")
 
     s = sub.add_parser("mcp", help="以 stdio MCP server 运行")

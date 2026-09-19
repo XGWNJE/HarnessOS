@@ -14,7 +14,7 @@
   },
   "layout": { "mode": "grid", "cols": 4, "cellW": 210, "cellH": 108, "gapX": 66, "gapY": 66, "origin": [60, 92] },
   "components": [
-    { "id": "agent", "type": "external", "label": "Agent", "sublabel": "ZCode / Codex / Claude", "col": 0, "row": 1 },
+    { "id": "agent", "type": "external", "label": "Agent", "sublabel": "Claude / Codex / DSH", "col": 0, "row": 1 },
     { "id": "setup", "type": "security", "label": "本地设置页", "sublabel": "127.0.0.1 · 一次性页面", "col": 1, "row": 0 },
     { "id": "mcp", "type": "backend", "label": "MCP server", "sublabel": "wenje_mcp.py", "tag": "generate_image", "col": 1, "row": 1 },
     { "id": "cli", "type": "backend", "label": "CLI", "sublabel": "同文件的命令行入口", "tag": "generate / status / install", "col": 1, "row": 2 },

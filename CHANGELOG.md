@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-19 — wenje-image 补齐 DSH 落点与调用超时，MCP 注册扩到四个 Agent
+
+- [修订] 自有 Skill `wenje-image` v2.3.0 → v2.4.0：MCP 注册落点由 3 个增至 4 个，新增 **DSH**（挂 `@deepseek-ai/dsh-mcp-client`）；Codex 与 DSH 的注册同时写入工具调用超时。
+- 触发原因一（超时）：一次出图含提交、轮询与下载，默认最长 300 秒，而 Codex 与 DSH 的工具超时默认在 60 秒量级——不显式放宽会在出图中途掐断调用。现写死 Codex `tool_timeout_sec = 360` + `startup_timeout_sec = 30`、DSH `toolCallTimeoutMs = 360000`。字段名有来源而非推测：`codex.exe` 内 `cli\src\mcp_cmd.rs` 的字段串，以及 `dsh-mcp-client` 官方 README 的字段表。
+- 触发原因二（落点）：DSH 的 MCP 不在独立配置文件里，而在 profile 的补丁层 `~/.dsh/profiles/<profile>/cordis.patch.yml`；`--agent dsh` 默认 profile `web`，可用 `--dsh-profile` 换。
+- [修订] 写入与幂等逻辑重构：新增 `upsert_block`（TOML 整节替换）与 `upsert_dsh_block`（按条目特征行整块替换），旧注册缺字段时不再被"已存在"挡住而是整块升级；`verify_dsh_block` 在无 YAML 依赖的前提下逐行核对缩进结构，写坏即回滚。`--agent` 默认值由 `zcode` 改为 `all`（本机不存在的配置自动跳过），`--print` 打印 JSON / TOML / YAML 三种片段。
+- 关键纠错：首版把 DSH 条目写成顶层 `- id: mcp-wenje-image`，`dsh --profile web --dump-config` 报 `patch: entry "mcp-wenje-image" not found`；读 `@deepseek-ai/dsh-app-boot` 的 `applyEntryPatches` 才确认补丁层是 **id 定向**语义——顶层 `- id:` 只用于覆盖或禁用已有条目，**新增插件必须写成 `- insert:`**（不带 `id` 时追加到顶层数组，带 `id` 时插入该 group 的 `config`）。实现与文档已按此改写，旧写法也能被自动升级。
+- 验证：`tests/local_check.py` 由 20 项增至 26 项（新增 6 项覆盖四落点注册、Codex 旧节升级、DSH 旧写法升级、二次运行幂等且不改文件、备份落盘），全部通过且离线；本机 `install --agent all` 后 `dsh --profile web --dump-config` 退出码 0、无 patch 警告、组合树含 `mcp-wenje-image`；DSH 热应用补丁层并常驻 MCP 子进程（python 运行 `wenje_mcp.py`），无需重启。`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+- 边界与存疑：①Claude Code 的每服务器超时字段名未在本机核实，故不写入，用其 `MCP_TOOL_TIMEOUT` 环境变量兜底并已记入文档；②DSH 会清洗 stdio 子进程环境（名字含 `KEY`/`PASSWORD`/`SECRET`/`TOKEN` 的变量与所有 `DSH_*` 全删），因此密钥必须走 skill 自己的配置文件，只设 `GRSAI_API_KEY` 在 DSH 下无效——已写入 `references/mcp.md`；③`--agent zcode` 目标保留，与本机已卸载 ZCode 无关；④架构图 `references/architecture.{json,html}` 的 Agent 标注由「ZCode / Codex / Claude」改为「Claude / Codex / DSH」，属文本同步修改，未重跑 archify 生成器。
+
 ## 2026-09-19 — ZCode 登记退役并本机卸载，发布链移除该目标
 
 - [废止] `software:zcode` 由 `managed` 改为 `retired`：保留"曾纳管、已卸载"的决策历史，不进入恢复清单，同时关闭上游跟踪。因校验要求"只有跟踪上游更新的资产才能登记 `upstream_*` 渠道字段"，`upstream_updates` 置 `false` 并移除 `upstream_channel`、`upstream_identifier`、`upstream_latest_stable`；WinGet 包 ID `ZhipuAI.ZCode` 与退役前版本留在 notes 中作为历史。
