@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-20 — WebBridge 退出管理：移除 kimi-webbridge 与 webbridge-acceptance
+
+- 触发：owner 要求把 WebBridge 的删除登记进 HarnessOS。Skill 没有结构化资产 TOML，退役在源侧就是移除目录——本仓库的 `skills/`、`vendor/` 目录扫描即资产身份，无目录即无登记。
+- [废止] `vendor/kimi-webbridge/`（第三方 Skill，v1.11.3，2026-08-04 引入）整体移除；`vendor/SOURCES.md` 的「物理引入」登记行同步删除，「引入时间 2026-08-04 / 官方页 / 守护进程 10086」等历史事实留在本文件与该行出处。
+- [废止] 自有 Skill `webbridge-acceptance/` 一并移除：它唯一用途是验收 WebBridge 的浏览器控制能力，验收对象消失后是死技能。
+- [清理] 四个发布池（`~/.agents/skills`、`~/.codex/skills`、`~/.claude/skills`、`~/.dsh/skills`）中各两个技能目录共 8 份副本删除。`publish_skills.py` 只报告不删除退役残留，故按报告清单人工清理；清理后 `~/.claude/skills` 余 5 个，全部仍为 HarnessOS 发布产物。
+- 机器现状核验（2026-09-20，只读）：`~/.kimi-webbridge`（守护进程目录与二进制）不存在，10086 端口无监听进程，PATH 中无 `kimi-webbridge` 命令，`~/.kimi`、`~/.kimi-code` 与 Kimi 桌面/CLI 安装目录均不存在——本机无需再执行卸载，也没有池外遗留副本。
+- 边界与存疑：①浏览器扩展是否仍装在各浏览器里未核验（本仓库不管理浏览器配置，也不扫描用户数据），若扩展仍启用需 owner 自行在浏览器扩展页移除；②将来若重新纳管 WebBridge，按 `vendor/SOURCES.md` 的「物理引入」流程重新登记并从官方渠道取正文——本仓库不再保留副本。
+- 验证：`catalog.py check`（资产 63 → 61）、`sync.py --check`（无漂移、无残留）、`git diff --check` 通过。
+
 ## 2026-09-19 — 新增 project 资产类型，让「登记即落实备份」可被机器判定
 
 - [新增] `inventory/taxonomy.toml` 新增 `project`（自有项目）类型：用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码与文档项目，配合 `AGENTS.md` 的「自有资产入仓备份」把无独立远端仓库的项目正文放进 `archive/<slug>/`。
