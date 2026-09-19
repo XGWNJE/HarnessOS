@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-19 — ZCode 登记退役并本机卸载，发布链移除该目标
+
+- [废止] `software:zcode` 由 `managed` 改为 `retired`：保留"曾纳管、已卸载"的决策历史，不进入恢复清单，同时关闭上游跟踪。因校验要求"只有跟踪上游更新的资产才能登记 `upstream_*` 渠道字段"，`upstream_updates` 置 `false` 并移除 `upstream_channel`、`upstream_identifier`、`upstream_latest_stable`；WinGet 包 ID `ZhipuAI.ZCode` 与退役前版本留在 notes 中作为历史。
+- [修订] `scripts/publish_global.py` 删除 ZCode 发布目标 `~/.zcode/AGENTS.md`，全局规则发布映射由 6 个目标减为 5 个，文档字符串同步删去该路径说明。不删该目标会让每次 `sync.py` 重建 `~/.zcode` 目录，与本次移除相互矛盾。
+- [卸载] owner 要求移除本机安装：`winget uninstall --id ZhipuAI.ZCode --exact --silent` 成功（退役前本机 3.11.2，退役时上游 winget 为 3.12.3）。核验 `%LOCALAPPDATA%\Programs\ZCode`、注册表卸载项、开始菜单与桌面快捷方式均已消失，`winget list --id ZhipuAI.ZCode` 返回无匹配包。
+- [清理] 按 owner 决定删除数据目录：`~/.zcode`（489 MB，含 cli/db 会话记录、memories、plugins、config.json 与其中的 MCP 注册）、`%APPDATA%\ZCode`（43 MB）、`%LOCALAPPDATA%\@zcodedesktop-updater`（156 MB），合计约 688 MB。用户 PATH 与用户级环境变量中无 ZCode 项。
+- 观测：`winget uninstall` 返回成功后 NSIS 卸载器仍在后台收尾，首次复查时注册表项、快捷方式与安装目录尚在，数十秒后复查才全部消失；这是异步收尾而非残留，无需人工补删。
+- 边界与存疑：①`skills/wenje-image` 的 MCP 安装器保留 `--agent zcode` 目标及其 `references/mcp.md` 说明——它面向多 Agent 通用安装、指向 `~/.zcode/cli/config.json`，与本机当前是否装有 ZCode 无关，删除会削弱该技能对 ZCode 用户的支持；②退役后不再核验 ZCode 版本与许可条件，若将来重新纳管须重建上游渠道字段并重新核验；③被删的会话记录与 memories 不可恢复，已按 owner 明确选择执行。
+- 验证：`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+
 ## 2026-09-16 — DeepSeek Harness 升级至 0.1.5-rc.1
 
 - [修订] `development-tool:deepseek-harness` 本机 launcher 由 0.1.1-rc.2（2026-08-21 发布）升级到 npm `latest` 0.1.5-rc.1（2026-09-10 发布），中间跨 0.1.2、0.1.3、0.1.5 三条版本线；`version_constraint` 同步改为 `=0.1.5-rc.1`，notes 与 `last_verified_on` 刷新为 2026-09-16。
