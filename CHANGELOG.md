@@ -2,6 +2,16 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-19 — 新增「自有资产入仓备份」规则
+
+- [新增] `AGENTS.md` 新增「自有资产入仓备份」章节：自有资产（`owner-produced`）在**没有独立远端仓库**时按体积分档决定是否把正文放进本仓库——Rule / 自有 Skill / Workflow 的正文本来就在 `global/`、`skills/`、`workflows/`，仓库即备份、不再另建副本；自有项目正文 ≤ 50 MB 时复制到 `archive/<slug>/` 并把 `backup_location` 指向该路径；> 50 MB、或剔除凭据后仍无法脱敏的，不入库、只登记逻辑引用与原因；已有独立远端仓库的不重复备份。
+- 阈值口径：50 MB 是**单个项目正文的总体积**上限，与 GitHub 单文件 50 MiB 警告线同一数量级，给单文件 100 MiB 硬限留足余量。入库内容仍受既有安全边界约束（剔除密钥、token、私钥、`.env`、许可证正文与生产配置），只备份正文与文档，不备份安装包与构建产物。
+- [修订] `inventory/README.md` 的「登记与安全边界」补一条指向该规则；资产身份与字段仍只由 inventory 维护，避免同一事实两处书写。
+- `archive/` 不参与 `catalog.py` 的资产扫描（该脚本只扫 `global/AGENTS.md`、`skills/`、`vendor/`、`workflows/`、`inventory/`），也不进入发布流水线；无符合条件资产时不预先创建空目录，故本次不产生新目录。
+- 现状核对：自有 Skill `wenje-image`（0.89 MB，10 个文件）全部在 Git 跟踪内、无未跟踪遗漏，仅 `__pycache__/` 按 `.gitignore` 忽略——它的仓库内备份已经成立，规则不要求额外复制。另两个自有 Skill `vps-server-info`、`webbridge-acceptance` 同理。
+- 边界与存疑：①GitHub 的大小限制采用官方文档口径，本机网络无法直接抓取正文复核（DNS 被代理接管解析到 `198.18.x.x` 保留地址，`web_fetch` 与 `curl` 均被拒）；50 MB 取的是保守值，上游口径若变化可再调。②`PhotoStory` 走独立远端，由 owner 自行处理，不在本规则执行范围内。
+- 验证：`catalog.py check`、`sync.py --check`、`git diff --check` 通过。
+
 ## 2026-09-19 — wenje-image v2.4.0 实测：DSH 侧从注册到出图全链路走通
 
 - [验证] DSH 端到端实测成立：`mcp__wenje-image__generate_image` 与 `image_status` 已在本机 DSH 会话的工具列表里，`image_status` 报密钥来自配置文件、鉴权有效、当日用量 0（无需重启即生效，印证补丁层热应用）。
