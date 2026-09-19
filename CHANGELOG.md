@@ -2,6 +2,14 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-19 — wenje-image v2.4.0 实测：DSH 侧从注册到出图全链路走通
+
+- [验证] DSH 端到端实测成立：`mcp__wenje-image__generate_image` 与 `image_status` 已在本机 DSH 会话的工具列表里，`image_status` 报密钥来自配置文件、鉴权有效、当日用量 0（无需重启即生效，印证补丁层热应用）。
+- 实测过程：首选默认档位模型 `gpt-image-2.5-flare` 被上游拒绝——轮询状态 `failed`、CLI 与 MCP 两侧一致、退出码 9、消息「模型正在修复」，判定为该模型的服务端临时状态而非本地问题（内容合规类失败按 skill 约定不换模型重试，服务端故障则可改选）。改用 `gpt-image-2.5` 后一次成功：task `13-0818a3cc-1ff9-4e64-bf3e-86e96a8c0f67`，600 credits / ￥0.03。
+- 产物：`~/Pictures/wenje-image/black-smiley-emoji-20260919-215108.png`（黑脸笑 emoji，纯黑圆脸 + 白色弯月眼与笑嘴、纯白背景）；请求 1K 实际产出 **1254×1254**，与 `references/providers.md` 中「基础款按模型原生尺寸出图、不严格照抄像素串」的既有观测一致。
+- [修订] `wenje_image.py` 的 `VERSION` 常量补正为 `2.4.0`：上一轮只改了 `SKILL.md` 的 frontmatter，代码侧仍报 2.3.0，正是本次 `image_status` 实测暴露出来的不一致。
+- 结论与待办：DSH 落点从注册、热加载到真实出图全链路成立；`gpt-image-2.5-flare` 的可用性待上游恢复后复核，暂不改默认档位映射（standard 仍指向它），复核前若再遇同一报错直接换 `gpt-image-2.5` 或 `nano-banana-2` 即可。
+
 ## 2026-09-19 — wenje-image 补齐 DSH 落点与调用超时，MCP 注册扩到四个 Agent
 
 - [修订] 自有 Skill `wenje-image` v2.3.0 → v2.4.0：MCP 注册落点由 3 个增至 4 个，新增 **DSH**（挂 `@deepseek-ai/dsh-mcp-client`）；Codex 与 DSH 的注册同时写入工具调用超时。
