@@ -2,6 +2,14 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-19 — 新增 project 资产类型，让「登记即落实备份」可被机器判定
+
+- [新增] `inventory/taxonomy.toml` 新增 `project`（自有项目）类型：用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码与文档项目，配合 `AGENTS.md` 的「自有资产入仓备份」把无独立远端仓库的项目正文放进 `archive/<slug>/`。
+- [修订] `scripts/catalog.py` 的 `_is_incomplete` 增加 `project` 分支：`backup_location` 缺失或为 `unknown` 时标为 incomplete，把"登记时就要落实备份"从文档约定变成目录里看得见的判定，不再出现"登记了却没备份"的静默状态。
+- [修订] `inventory/README.md` 补 `project` 的必填字段与类型边界；`AGENTS.md` 的备份章节注明这类资产按 `project` 登记。类型下限校验 `required_types` 只要求 rule/skill/workflow/software/development-tool 存在，新增类型不影响既有校验，也无需改动 `catalog.py` 的扫描路径。
+- 设计取舍：`archive/` 不纳入 `catalog.py` 的资产扫描、也不预建空目录——正文副本是备份、资产记录是身份，两者分开，避免同一份正文出现两个事实源。
+- 验证：`catalog.py check`（63 项资产）、`sync.py --check`、`git diff --check` 通过；`_is_incomplete` 的 project 分支用构造数据核验——缺 `backup_location` 与写 `unknown` 均为 incomplete，写 `archive/<slug>/` 后为 current，且不影响 skill 等既有类型。
+
 ## 2026-09-19 — 新增「自有资产入仓备份」规则
 
 - [新增] `AGENTS.md` 新增「自有资产入仓备份」章节：自有资产（`owner-produced`）在**没有独立远端仓库**时按体积分档决定是否把正文放进本仓库——Rule / 自有 Skill / Workflow 的正文本来就在 `global/`、`skills/`、`workflows/`，仓库即备份、不再另建副本；自有项目正文 ≤ 50 MB 时复制到 `archive/<slug>/` 并把 `backup_location` 指向该路径；> 50 MB、或剔除凭据后仍无法脱敏的，不入库、只登记逻辑引用与原因；已有独立远端仓库的不重复备份。

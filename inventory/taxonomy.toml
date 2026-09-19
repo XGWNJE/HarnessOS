@@ -45,6 +45,12 @@ active = true
 native_sources = ["inventory/assets/development-tool/*.toml"]
 
 [[asset_types]]
+id = "project"
+label = "自有项目"
+active = true
+native_sources = ["inventory/assets/project/*.toml"]
+
+[[asset_types]]
 id = "hardware"
 label = "硬件"
 active = false

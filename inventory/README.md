@@ -76,7 +76,8 @@ target = "另一资产的完整 ID"
 
 - `domain` 判定口径：类型按形态划分（命令行工具、SDK 与运行时归 development-tool，桌面应用与游戏归 software）；领域按资产服务的主要场景归入唯一领域——development-tool 统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途，不按次要能力叠加。
 - `tool_kind`、`install_form`、`release_channel` 取 `taxonomy.toml` 枚举；`release_channel` 统一承载原 software 发行通道与 development-tool 更新通道语义。
-- 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`。其余字段按适用性填写，不适用时省略。
+- 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`；`project` 必填 `backup_location`——无独立远端仓库时写 `archive/<slug>/`，已有远端时写该远端的逻辑引用。其余字段按适用性填写，不适用时省略。
+- `project` 只用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码或文档项目；能用 `skill`、`software`、`development-tool` 表达的不要归到这里。没有独立远端仓库的按 `AGENTS.md` 的「自有资产入仓备份」把正文放进 `archive/<slug>/`。
 - 空版本只表示用户明确不固定版本；实际版本未知时记录不完整，不能用空值代替核验；用户尚未决定的个人偏好才可使用 `unknown`，不得自行猜测。
 - `status` 只取 `managed`、`excluded`、`retired`。后两者保留决策历史，但不进入恢复清单。
 - `preference_source` 只描述偏好依据：用户明确声明、已核验的公开事实或未知。公开事实不能代替个人偏好。

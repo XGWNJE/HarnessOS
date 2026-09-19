@@ -622,6 +622,9 @@ class Catalog:
             return any(not data.get(key) or data.get(key) == "unknown" for key in critical)
         if asset_type == "development-tool":
             return any(not data.get(key) for key in ("tool_kind", "commands", "install_source", "version_constraint", "verification_commands"))
+        if asset_type == "project":
+            # 自有项目没有备份位置就等于没有第二份：目录据此标 incomplete，逼登记时把备份落实。
+            return not data.get("backup_location") or data.get("backup_location") == "unknown"
         return False
 
     def _validate_sensitive(self, path: Path, value: Any, keys: tuple[str, ...] = ()) -> None:
