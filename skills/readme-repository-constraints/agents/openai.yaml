@@ -1,0 +1,6 @@
+interface:
+  display_name: "README 仓库模板约束"
+  short_description: "按仓库类型产出可读、可用且不空泛的 README"
+  default_prompt: "Use $readme-repository-constraints to create or revise this repository README."
+policy:
+  allow_implicit_invocation: true

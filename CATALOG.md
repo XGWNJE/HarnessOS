@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 61 项资产、0 个配置档。
+共 64 项资产、0 个配置档。
 
 ## development-tool
 
@@ -25,6 +25,7 @@
 | `development-tool:llvm` | LLVM | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Clang/LLVM 编译、链接、调试、格式化和语言服务工具。 |
 | `development-tool:nodejs` | Node.js | `development` | 第三方 | 跟踪（official-api） | `managed` | `current` | owner-declared | 提供 JavaScript/TypeScript 运行时及 npm 生态的基础开发环境。 |
 | `development-tool:openssl` | OpenSSL | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 TLS、证书、密钥格式和密码学相关的开发与诊断命令。 |
+| `development-tool:pen-dev-mcp` | pen.dev MCP（pencil） | `development` | 第三方 | 跟踪（渠道未确认） | `managed` | `current` | owner-declared | 通过 MCP 让 Codex 读取和编辑 pen.dev 当前打开的 .pen 设计文档。 |
 | `development-tool:php` | PHP | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 PHP 命令行运行、调试和服务端项目开发环境。 |
 | `development-tool:pnpm` | pnpm | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供高效、严格的 Node.js 包依赖安装与工作区管理。 |
 | `development-tool:poetry` | Poetry | `development` | 第三方 | 跟踪（pypi） | `managed` | `current` | owner-declared | 管理 Python 项目的依赖、虚拟环境、构建与发布元数据。 |
@@ -52,6 +53,7 @@
 |---|---|---|---|---|---|---|---|---|
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、转存分享更新查询、网盘文件搜索、批量重命名与整批撤销、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户要求将当前搜索结果批… |
+| `skill:readme-repository-constraints` | readme-repository-constraints | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | Create or revise software and data repository README files using a repository-specific structure, factual copy, and pro… |
 | `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 在任何 Vibe Coding 编程任务及其后续补充中持续识别准确术语。用户即使已经让 Agent 完成了一部分代码、正在追加修改，或只用口语描述效果、交互、状态和问题（如“鼠标放上去有个小提示”“点完变一下颜色”“内容太长省略”），也必… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 连接、查询或部署受管 VPS 时提供 SSH、服务、路径和安全边界。 |
 | `skill:wenje-image` | wenje-image | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。 |
@@ -72,6 +74,7 @@
 | `software:mpv` | mpv | `entertainment` | 第三方 | 跟踪（github-releases） | `managed` | `incomplete` | owner-declared | 提供本地音视频播放。 |
 | `software:obsidian` | Obsidian | `productivity` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供本地 Markdown 知识库编辑与链接式笔记管理。 |
 | `software:opencode-desktop` | OpenCode 桌面端 | `ai-agent` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 OpenCode 的桌面 AI 编程与本地项目交互入口。 |
+| `software:pen-dev` | pen.dev | `creative-media` | 第三方 | 跟踪（launcher） | `managed` | `current` | owner-declared | 提供 AI 画布设计能力，并作为 pencil MCP 服务的桌面宿主。 |
 | `software:quark-drive` | 夸克网盘 | `storage-backup` | 第三方 | 跟踪（渠道未确认） | `managed` | `current` | owner-declared | 提供云端文件存储、同步与分享。 |
 | `software:soda-music` | 汽水音乐 | `entertainment` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供音乐播放、发现与账号内容服务。 |
 | `software:tuba-toolbox` | 图吧工具箱 | `system-hardware` | 第三方 | 不跟踪 | `managed` | `incomplete` | owner-declared | 提供 Windows 硬件检测、信息查看与性能测试工具集合。 |
@@ -99,6 +102,7 @@
 | `development-tool:deepseek-harness` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:github-cli` | `uses` | `development-tool:git` |
 | `development-tool:lark-cli` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:pen-dev-mcp` | `depends-on` | `software:pen-dev` |
 | `development-tool:pnpm` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:poetry` | `depends-on` | `development-tool:python` |
 | `development-tool:yarn` | `depends-on` | `development-tool:nodejs` |

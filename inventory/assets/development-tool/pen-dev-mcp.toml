@@ -1,0 +1,28 @@
+schema_version = 1
+id = "development-tool:pen-dev-mcp"
+type = "development-tool"
+name = "pen.dev MCP（pencil）"
+domain = "development"
+status = "managed"
+purpose = "通过 MCP 让 Codex 读取和编辑 pen.dev 当前打开的 .pen 设计文档。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/pen-dev-mcp.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-09-27"
+last_verified_on = "2026-09-27"
+review_days = 90
+notes = "MCP 服务由 pen.dev 桌面端捆绑和配置，不单独安装。官方文档确认 Codex 配置使用服务名 pencil，并通过本地管道连接运行中的 Pen；服务与宿主版本同步，版本核验依据宿主 About Pen。"
+tool_kind = "other"
+commands = ["pencil (MCP server name)"]
+install_source = "随 pen.dev 桌面端捆绑；在 Settings → MCP 启用 Codex CLI 集成"
+version_constraint = "与 software:pen-dev 捆绑版本同步"
+release_channel = "stable"
+config_reference = "由 pen.dev 管理的 Codex MCP 配置；不复制或保存客户端配置文件内容。"
+verification_commands = ["MCP initialize", "MCP tools/list", "确认 pencil 工具可访问当前打开的 .pen 文档"]
+upstream_channel = "unavailable"
+
+[[relationships]]
+type = "depends-on"
+target = "software:pen-dev"
