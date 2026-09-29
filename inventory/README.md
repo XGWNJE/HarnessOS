@@ -1,21 +1,23 @@
 # 受管资产模型
 
-本目录是 HarnessOS 受管资产的结构与字段说明。仓库统一管理资产的身份、关系、状态、索引与恢复入口，但不强迫不同资产共用同一种正文格式。
+本文主要定义资产类型、字段、关系与配置档格式。仓库怎样登记、发布和备份，见[项目规则](../AGENTS.md)；登记及恢复的执行步骤分别见[登记受管资产](../workflows/register-managed-asset.md)和[恢复工作站](../workflows/restore-workstation.md)。
 
 ## 事实源与目录
 
-- Rule 正文的唯一事实源是 `global/AGENTS.md`。
-- Skill 正文及来源的唯一事实源是 `skills/` 与 `vendor/`。
-- Workflow 的唯一事实源是 `workflows/<slug>.md`，使用 TOML frontmatter 携带公共字段。
-- 软件、开发工具及后续类型的唯一事实源是 `inventory/assets/<type>/<slug>.toml`。
-- Profile 位于 `inventory/profiles/<slug>.toml`，只组合资产，不复制资产事实。
-- `inventory/taxonomy.toml` 是类型、领域、状态、关系和配置档层级枚举的唯一事实源。
+| 内容 | 事实源 | 在目录中的处理 |
+|---|---|---|
+| Rule | `global/AGENTS.md` | 由生成器适配，不另建资产 TOML |
+| 自有与第三方 Skill | `skills/`、`vendor/` | 从 Skill frontmatter 和目录名生成索引，不另建资产 TOML |
+| Workflow | `workflows/<slug>.md` | 正文留在原文件，TOML frontmatter 携带公共字段 |
+| 软件、开发工具和其他结构化资产 | `inventory/assets/<type>/<slug>.toml` | 每项资产一份记录 |
+| Profile | `inventory/profiles/<slug>.toml` | 组合资产，不复制资产事实 |
+| 枚举 | `inventory/taxonomy.toml` | 类型、领域、状态、关系及配置档层级的唯一事实源 |
 
 类型演进遵循增量优先：新内容能在现有类型语义和扩展字段内表达时直接新增字段或记录；只有语义边界、生命周期或恢复方式发生不兼容变化时才新增或重构类型。主线程根据事实自动判断，并在记录或交付中说明依据。
 
 资产 ID 固定为 `<type>:<slug>`。文件名只使用 `slug`，不包含 Windows 文件名不支持的冒号。目录尚无真实资产或配置档时不创建空目录。
 
-Rule 与 Skill 由目录生成器通过原生来源适配为统一索引：路径是 `fact_source`，Rule 使用全局规则文件身份，Skill 使用各自 frontmatter 和目录名。不要为它们建立重复的资产 TOML。
+Rule 与 Skill 的路径就是 `fact_source`；生成器按各自的原生格式读取，无需转换正文。
 
 ## 公共字段
 
@@ -77,7 +79,7 @@ target = "另一资产的完整 ID"
 - `domain` 判定口径：类型按形态划分（命令行工具、SDK 与运行时归 development-tool，桌面应用与游戏归 software）；领域按资产服务的主要场景归入唯一领域——development-tool 统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途，不按次要能力叠加。
 - `tool_kind`、`install_form`、`release_channel` 取 `taxonomy.toml` 枚举；`release_channel` 统一承载原 software 发行通道与 development-tool 更新通道语义。
 - 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`；`project` 必填 `backup_location`——无独立远端仓库时写 `archive/<slug>/`，已有远端时写该远端的逻辑引用。其余字段按适用性填写，不适用时省略。
-- `project` 只用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码或文档项目；能用 `skill`、`software`、`development-tool` 表达的不要归到这里。没有独立远端仓库的按 `AGENTS.md` 的「自有资产入仓备份」把正文放进 `archive/<slug>/`。
+- `project` 只用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码或文档项目；能用 `skill`、`software`、`development-tool` 表达的不要归到这里。正文备份按[项目规则](../AGENTS.md#自有资产入仓备份)处理。
 - 空版本只表示用户明确不固定版本；实际版本未知时记录不完整，不能用空值代替核验；用户尚未决定的个人偏好才可使用 `unknown`，不得自行猜测。
 - `status` 只取 `managed`、`excluded`、`retired`。后两者保留决策历史，但不进入恢复清单。
 - `preference_source` 只描述偏好依据：用户明确声明、已核验的公开事实或未知。公开事实不能代替个人偏好。
@@ -88,7 +90,7 @@ target = "另一资产的完整 ID"
 - 配置引用不能包含私有 registry token、认证信息或完整机器配置。
 - 关系只引用资产 ID，不复制对方事实。`depends-on` 不得形成循环；目标不存在时校验失败。
 - `fact_source`、配置引用和备份位置必须使用仓库相对路径或人能理解的逻辑位置，不保存机器绝对路径。
-- 逻辑引用不能是 URL；公开官网放在对应类型的官方来源字段，私有分享链接不入库。
+- 逻辑引用不能是 URL；公开官网放在对应类型的官方来源字段，私有分享链接不入库。许可证信息只记录公开条款的来源或自有凭据保管位置的逻辑引用，不保存许可证正文或密钥。
 
 ## 上游查询渠道
 
@@ -137,17 +139,8 @@ notes = "仅记录本配置档中的必要说明"
 - `backs-up-to`：目标资产承载其备份；具体位置仍只写逻辑引用。
 - `published-to`：本资产由流水线发布到目标资产代表的运行环境或服务。
 
-## 登记与安全边界
+## 生成与校验
 
-- 只有用户明确要求“登记”“纳管”或“更新”某项资产时，才能新增或修改正式记录。
-- 安装形态、版本通道、主要用途、恢复范围等个人偏好必须来自用户确认；不得由已安装软件扫描、普通对话或公开资料推断。
-- 可核验官网、支持版本、兼容性与最低要求等公开事实；关键事实未完成深度核验时暂不创建正式记录。
-- `unknown` 只表示用户尚未决定的偏好或已明确标记的历史缺口，不能代替来源调查或登记前核验。
-- 不做后台扫描、整机软件枚举、跨项目自动登记或定时巡检。
-- 不保存安装包、完整配置、账号、密码、密钥、token、私钥、许可证正文、私有分享链接或机器绝对路径。
-- 许可证只允许保存公开条款或用户自有凭据保管位置的逻辑引用，不能保存许可证密钥本身。
-- 自有项目是否把正文备份进本仓库，按 `AGENTS.md` 的「自有资产入仓备份」判定；正文副本放 `archive/<slug>/`，资产身份、字段与生命周期仍只以本目录为准。
+`python scripts/catalog.py check` 校验源记录、引用及生成目录；修改事实源后用 `python scripts/catalog.py render` 重建 `catalog.html` 和 `CATALOG.md`。这两个目录产物不手工编辑。
 
-首次登记与恢复分别遵循 `workflows/register-managed-asset.md` 和 `workflows/restore-workstation.md`。恢复清单只提供决策与核验依据，不自动安装软件、连接服务或恢复数据。
-
-生成恢复清单时，可重复传入 `--satisfied <asset-id>` 标记目标环境已经满足的资产；该状态只用于本次输出，不写回 Profile 或资产源。
+`python scripts/catalog.py plan <profile>` 只生成恢复清单，不执行安装或数据恢复。可重复传入 `--satisfied <asset-id>` 标记目标环境已满足的资产；该状态只用于本次输出，不写回 Profile 或资产源。
