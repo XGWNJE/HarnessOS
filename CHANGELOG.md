@@ -2,6 +2,13 @@
 
 条目标注类型：新增 / 修订 / 废止 / 框架。
 
+## 2026-09-29 — README 技能默认展示正式项目图标
+
+- [修订] 自有 Skill `readme-repository-constraints` 由 v1.0.0 升至 v1.0.1：仓库已有正式项目图标时，README 一级标题默认展示它；确无正式图标时只显示项目名，不生成或借用无关图片。应用、库与 SDK、CLI、数据与机器学习四类模板同步改为标题内图标。
+- [收敛] 将已在共享技能副本中使用的 README 重构、事实核验和旧截图检查约束回收到本仓库唯一事实源；修正该 Skill 的版本字段位置，使 YAML frontmatter 通过技能校验。
+- [命名] 技能显示名和正文标题改为「README 模板」，调用标识 `$readme-repository-constraints` 保持不变。
+- [发布] 四个 Skill 读取池已同步到 v1.0.1。`quick_validate.py`、`catalog.py check`、`publish_skills.py --check` 和 `git diff --check` 通过；`sync.py --check` 仍因与本次 Skill 无关的 Codex 全局 Rule 发布漂移失败，本次未覆盖该 Rule。
+
 ## 2026-09-20 — WebBridge 退出管理：移除 kimi-webbridge 与 webbridge-acceptance
 
 - 触发：owner 要求把 WebBridge 的删除登记进 HarnessOS。Skill 没有结构化资产 TOML，退役在源侧就是移除目录——本仓库的 `skills/`、`vendor/` 目录扫描即资产身份，无目录即无登记。
