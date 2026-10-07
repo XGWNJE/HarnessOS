@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 64 项资产、0 个配置档。
+共 65 项资产、0 个配置档。
 
 ## development-tool
 
@@ -64,6 +64,7 @@
 |---|---|---|---|---|---|---|---|---|
 | `software:android-studio` | Android Studio | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Android 项目的官方 IDE、Gradle 集成、调试与设备管理入口。 |
 | `software:clash-verge` | Clash Verge | `network-remote` | 第三方 | 跟踪（github-releases） | `managed` | `current` | owner-declared | 提供本机网络代理配置与连接管理。 |
+| `software:claude-desktop` | Claude | `ai-agent` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Claude 桌面入口，通过 Code 标签使用 Claude Code 进行本地项目开发与代码审阅。 |
 | `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪（store） | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
 | `software:feishu-desktop` | 飞书桌面端 | `communication` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
 | `software:fontbase` | FontBase | `creative-media` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供字体预览、分类与启用管理。 |
