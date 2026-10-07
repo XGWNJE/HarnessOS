@@ -1,12 +1,20 @@
+<div align="center">
+
 # HarnessOS
 
 HarnessOS 把个人 AI 工作台中需要长期保留的规则、技能、流程和其他受管资产放在可审阅的事实源中，并从这些事实源生成浏览目录与恢复清单。登记资产由用户明确发起；仓库不会扫描工作站来推断要管理什么。
+
+[查看资产](#查看资产) · [内容放在哪里](#内容放在哪里) · [登记与恢复](#登记与恢复) · [路线规划](#路线规划)
+
+[![运行时：Python 3.11+](assets/python-runtime.svg)](scripts/catalog.py)
+
+</div>
 
 ## 查看资产
 
 在 Windows 上双击仓库根目录的 [catalog.html](catalog.html)，即可搜索、筛选并查看资产详情。需要纯文本索引时打开 [CATALOG.md](CATALOG.md)。这两个文件由脚本生成，不直接编辑。
 
-已安装 Python 时，也可以在仓库根目录运行：
+已安装 Python 3.11 或更新版本时，也可以在仓库根目录运行：
 
 ```powershell
 python scripts/catalog.py list
@@ -35,3 +43,7 @@ python scripts/catalog.py list --type skill
 有目标配置档后，可用 `python scripts/catalog.py plan <profile>` 生成恢复清单；它只输出计划，不安装软件或恢复数据。实际迁移按 [恢复工作站](workflows/restore-workstation.md) 逐项核验。仓库目前没有配置档，执行 `plan` 前需按 [配置档格式](inventory/README.md#配置档与关系) 建立并校验。
 
 维护命令、发布方式与操作边界集中在 [AGENTS.md](AGENTS.md)。
+
+## 路线规划
+
+> **暂无。** 当前没有已公布的未来规划。

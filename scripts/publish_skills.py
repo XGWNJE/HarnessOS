@@ -5,7 +5,7 @@
     python scripts/publish_skills.py            # 发布全部映射
     python scripts/publish_skills.py --check    # 只检查同步状态，不写入
 
-发布映射（源 = skills/<name>/ 自有 + vendor/<name>/ 第三方原样中转，× 4 个读取池）：
+发布映射（源 = skills/<name>/ 自有 + vendor/<name>/ 第三方受管副本，× 4 个读取池）：
     ~/.agents/skills/<name>/   跨 Agent 共享池（agentskills.io 标准位置，OpenCode 等）
     ~/.codex/skills/<name>/    Codex 池
     ~/.claude/skills/<name>/   Claude Code 池
@@ -32,7 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 def publishable_skills() -> list[tuple[str, Path]]:
-    """可发布 skill = skills/（自有）与 vendor/（第三方，原样中转）下含 SKILL.md 的目录，自动扫描，不硬编码。"""
+    """扫描 skills/ 自有与 vendor/ 第三方受管副本中含 SKILL.md 的目录。"""
     out = []
     for base in (ROOT / "skills", ROOT / "vendor"):
         out += [(p.name, p) for p in base.iterdir()

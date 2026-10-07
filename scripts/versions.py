@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Batch-check the upstream channel version registered for each managed asset.
 
-Only queries the channel recorded in the asset's ``[upstream]`` table, at most
-one request per asset.  ``official-page`` assets still need a human look,
+Only queries the channel recorded in the asset's top-level ``upstream_*`` fields,
+calling at most one checker per asset. Pending channels are not queried.
+The official-api checker currently supports only Node.js LTS.
+``official-page`` assets still need a human look,
 ``launcher`` assets are anchored to the local launcher, and ``unavailable``
 assets have no checkable channel.  The report is read-only: no record, catalog
 or installed software is modified by this script.

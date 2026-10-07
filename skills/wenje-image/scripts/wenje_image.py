@@ -33,7 +33,7 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-VERSION = "2.4.0"
+VERSION = "2.4.1"
 SKILL_NAME = "wenje-image"
 
 CONFIG_DIR = Path(os.environ.get("WENJE_IMAGE_HOME") or (Path.home() / ".wenje-image"))
@@ -606,9 +606,9 @@ SETUP_HTML = """<!doctype html>
 
     <label for="tier">默认档位</label>
     <select id="tier" name="default_tier">
-      <option value="draft">draft — 便宜快速（nano-banana-fast）</option>
-      <option value="standard">standard — 均衡默认（gpt-image-2）</option>
-      <option value="premium">premium — 更高质量（nano-banana-pro）</option>
+      <option value="draft">draft — 便宜快速（gpt-image-2.5）</option>
+      <option value="standard">standard — 均衡默认（gpt-image-2.5-flare）</option>
+      <option value="premium">premium — 更高质量（gpt-image-2.5-sunburst）</option>
     </select>
 
     <label for="out">默认输出目录</label>

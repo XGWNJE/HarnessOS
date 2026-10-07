@@ -78,7 +78,7 @@ target = "另一资产的完整 ID"
 
 - `domain` 判定口径：类型按形态划分（命令行工具、SDK 与运行时归 development-tool，桌面应用与游戏归 software）；领域按资产服务的主要场景归入唯一领域——development-tool 统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途，不按次要能力叠加。
 - `tool_kind`、`install_form`、`release_channel` 取 `taxonomy.toml` 枚举；`release_channel` 统一承载原 software 发行通道与 development-tool 更新通道语义。
-- 类型必填字段（缺失或 `unknown` 时目录标为 incomplete）：`software` 必填 `install_form`、`release_channel`、`official_source`、`minimum_verified_version`；`development-tool` 必填 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands`；`project` 必填 `backup_location`——无独立远端仓库时写 `archive/<slug>/`，已有远端时写该远端的逻辑引用。其余字段按适用性填写，不适用时省略。
+- 完整度判定：公共字段 `fact_source`、`preference_source`、`provenance`、`declared_on`、`last_verified_on` 缺失或为空，未声明 `upstream_updates`，或 `preference_source` 为 `unknown` 时标为 incomplete。`software` 的 `install_form`、`release_channel`、`official_source`、`minimum_verified_version` 缺失、为空或为 `unknown` 时也标为 incomplete；`development-tool` 的 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands` 缺失或为空时标为 incomplete；`project` 的 `backup_location` 缺失、为空或为 `unknown` 时标为 incomplete。项目无独立远端仓库时写 `archive/<slug>/`，已有远端时写该远端的逻辑引用；其余字段按适用性填写。
 - `project` 只用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码或文档项目；能用 `skill`、`software`、`development-tool` 表达的不要归到这里。正文备份按[项目规则](../AGENTS.md#自有资产入仓备份)处理。
 - 空版本只表示用户明确不固定版本；实际版本未知时记录不完整，不能用空值代替核验；用户尚未决定的个人偏好才可使用 `unknown`，不得自行猜测。
 - `status` 只取 `managed`、`excluded`、`retired`。后两者保留决策历史，但不进入恢复清单。
@@ -108,8 +108,8 @@ upstream_pending_note = "下次版本更新时先核验新渠道口径与现渠�
 ```
 
 - `upstream_channel` 与 `upstream_pending_channel` 取 `taxonomy.toml` 的 `upstream_channels` 枚举。`unavailable` 表示未找到可核验的上游更新渠道，此时不填定位符与 `upstream_latest_stable`，并在 notes 说明原因；`launcher` 表示版本由本机启动器或应用内更新托管，以本机配置为版本证据。
-- 渠道切换流程：先登记 `upstream_pending_*` 与生效条件；`versions.py` 或人工核验新渠道口径一致后，在下一次版本更新时把 `upstream_pending_channel` 提升为 `upstream_channel` 并清空 pending 字段。不得用未核验的渠道值覆盖版本事实。
-- 低算力维护顺序：先运行 `python scripts/versions.py`（每资产至多一次请求，只读）；winget/npm/PyPI/GitHub Releases/Store/官方接口渠道零人工完成，`official-page` 渠道才需人工查看网页，`launcher` 以本机启动器配置为准，`unavailable` 等待渠道决策。核验后同步更新 `upstream_latest_stable` 与 notes，并刷新 `last_verified_on`。
+- 渠道切换流程：先登记 `upstream_pending_*` 与生效条件；人工核验新渠道口径一致后，在下一次版本更新时把 `upstream_pending_channel` 提升为 `upstream_channel`，同步定位符并清空 pending 字段。`versions.py` 只查询当前渠道，不验证待切换渠道，不自动更新记录。
+- 批量查询：运行 `python scripts/versions.py`，每资产至多调用一次当前渠道的查询器；脚本不修改资产记录、目录或已安装软件。winget/npm/PyPI/GitHub Releases/Store 渠道已有查询器，`official-api` 当前只实现 Node.js LTS 接口；`official-page` 需人工查看网页，`launcher` 需另外核验启动器，`unavailable` 等待渠道决策。查询失败或未实现的接口会逐项报告，不能把脚本退出成功当作全部核验成功。确认结果后再更新 `upstream_latest_stable`、notes 与 `last_verified_on`。
 - `upstream_latest_stable` 只记录渠道口径的版本号；渠道显示格式与上游命名不同（如 winget 包版本、商店包版本）时以渠道实际返回为准，在 notes 说明对应关系。
 
 ## 配置档与关系
