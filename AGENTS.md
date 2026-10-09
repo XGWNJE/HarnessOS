@@ -11,6 +11,7 @@
 - 只有用户明确要求登记、纳管或更新某项资产时，才能探索并写入对应记录；不得主动扫描已安装软件、枚举整机环境、从普通对话推断个人偏好或设置后台巡检。
 - 软件安装形态、版本通道、主要用途和恢复范围等偏好由用户确认；动态事实在真实迁移前重新核验官方来源、兼容性、支持版本与许可条件。
 - 资产字段、上游渠道、类型演进、关系与生命周期统一遵循 `inventory/README.md`；不要在本文件复制字段规则。
+- MCP 服务端按 `development-tool` 登记（`tool_kind = "mcp-server"`），只记录安装方式、版本约束与配置引用；客户端注册配置（Codex 用户级 `config.toml`、DSH profile 补丁层等）属于本机配置，不入库也不做自动还原，换机后按记录重新注册。
 
 ## 目录与发布
 
@@ -27,7 +28,8 @@
 | 单独发布全部 Skills | `python scripts/publish_skills.py` |
 
 - `catalog.py plan` 只生成恢复清单，不安装软件、连接服务或恢复数据。
-- `sync.py` 普通模式先重建 `catalog.html` 与 `CATALOG.md`，再沿用既有路径发布 Rules 与 Skills；`--check` 只检查，不修改文件或发布目标。Inventory 与 Workflows 不发布到 Agent Skills 池。
+- 发布点固定三处：Rules 发 `~/AGENTS.md`、`~/.codex/AGENTS.md`、`~/.dsh/AGENTS.md`；Skills 发 `~/.agents/skills`、`~/.codex/skills`、`~/.dsh/skills`。Claude Code 与 OpenCode 已停止发布，历史副本保留不清理。
+- `sync.py` 普通模式先重建 `catalog.html` 与 `CATALOG.md`，再按上述三个发布点发布 Rules 与 Skills；`--check` 只检查，不修改文件或发布目标。Inventory 与 Workflows 不发布到 Agent Skills 池。
 - 修改 `global/AGENTS.md` 后发布；修改自有 Skill 后递增其版本并发布；第三方 Skill 的上游更新采用整目录替换，本地补丁仅在用户明确授权后应用，并同步更新 `vendor/SOURCES.md` 的差异与验证记录。
 - 交付前运行与改动对应的检查、`python scripts/sync.py --check` 和 `git diff --check`。验证通过后自动创建一次仅含本次变更的中文本地提交，不推送。
 

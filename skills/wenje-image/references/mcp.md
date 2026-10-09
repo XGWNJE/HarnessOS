@@ -81,7 +81,7 @@ Claude Code 的每服务器超时字段名未在本机核实，因此不写；�
 
 ## 边界
 
-MCP 注册是**每台机器的本地动作**，不在 HarnessOS 仓库的发布流水线内——流水线只发布 skill 目录本身（发布进 `.agents` / `.codex` / `.claude` / `.dsh` 四个技能池，不碰任何 Agent 的 MCP 配置）。换机恢复时，恢复 skill 后要重跑一次 `install`。
+MCP 注册是**每台机器的本地动作**，不在 HarnessOS 仓库的发布流水线内——流水线只发布 skill 目录本身（发布进 `.agents` / `.codex` / `.dsh` 三个技能池，不碰任何 Agent 的 MCP 配置）。换机恢复时，恢复 skill 后要重跑一次 `install`。
 
 ## 排查
 

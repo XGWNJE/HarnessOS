@@ -11,19 +11,21 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-10-09"
 review_days = 90
-notes = "使用 Blender 官方 Lab MCP Server v1.0.0；Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。MCP 通过 uvx 按 1.0.0 固定版本运行，直接命令不在 PATH 中；MCP 运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。本次复核官方 Projects 仓库访问受限，未能核验到官方新版本；PyPI 同名 blender-mcp 包为社区项目，不作为本资产上游依据，仍按 1.0.0 固定运行。"
-tool_kind = "cli"
-commands = ["blender-mcp"]
-install_source = "Blender 官方 Projects 源码仓库，通过 uv 运行"
+notes = "使用 Blender 官方 Lab MCP Server v1.0.0（projects.blender.org/lab/blender_mcp，检出提交 03004fd，2026-04-27）；按官方做法克隆源码后用 uv 运行，不经 PyPI 安装——PyPI 同名 blender-mcp 为社区项目，不作为上游依据。运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。Codex 侧的 blender 服务条目当前为停用状态（enabled=false），启用前需确认 Blender 加载项与端口连通。上游只有源码仓库、无 releases 渠道，版本按官方页面人工核验。"
+tool_kind = "mcp-server"
+commands = ["uv run blender-mcp"]
+install_source = "克隆官方源码仓库 projects.blender.org/lab/blender_mcp 后以 uv 运行（在克隆的 mcp/ 目录执行 uv run --directory <克隆>/mcp blender-mcp）"
+official_source = "https://www.blender.org/lab/mcp-server/"
 package_id = "lab/blender_mcp"
 version_constraint = "==1.0.0"
 release_channel = "pinned"
 environment_variables = ["BLENDER_HOST", "BLENDER_PORT"]
-config_reference = "Codex 用户级 config.toml 中的 blender MCP 服务配置"
-verification_commands = ["uvx --from blender-mcp==1.0.0 blender-mcp --help", "MCP initialize", "MCP tools/list", "MCP get_objects_summary"]
-upstream_channel = "unavailable"
+config_reference = "Codex 用户级 config.toml 中的 blender MCP 服务配置（只记位置，不复制配置正文）"
+verification_commands = ["MCP initialize", "MCP tools/list", "MCP get_objects_summary"]
+upstream_channel = "official-page"
+upstream_identifier = "https://www.blender.org/lab/mcp-server/"
 
 [[relationships]]
 type = "depends-on"

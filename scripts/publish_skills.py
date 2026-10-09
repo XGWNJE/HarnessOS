@@ -5,11 +5,11 @@
     python scripts/publish_skills.py            # 发布全部映射
     python scripts/publish_skills.py --check    # 只检查同步状态，不写入
 
-发布映射（源 = skills/<name>/ 自有 + vendor/<name>/ 第三方受管副本，× 4 个读取池）：
-    ~/.agents/skills/<name>/   跨 Agent 共享池（agentskills.io 标准位置，OpenCode 等）
+发布映射（源 = skills/<name>/ 自有 + vendor/<name>/ 第三方受管副本，× 3 个读取池）：
+    ~/.agents/skills/<name>/   用户目录跨 Agent 共享池（agentskills.io 标准位置）
     ~/.codex/skills/<name>/    Codex 池
-    ~/.claude/skills/<name>/   Claude Code 池
     ~/.dsh/skills/<name>/      DSH 池（$DSH_HOME/skills，DSH user-dsh 根，rank 400 优先于共享池）
+Claude Code 池（~/.claude/skills）与 OpenCode 池已停止发布，历史副本保留不清理。
 Kimi Code CLI 无独立 skills 目录（config 有 merge_all_available_skills，推测读取共享池），不单独发布。
 
 发布以目录为单位做整目录镜像（源多余文件全拷、目标多余文件删除）。目标中的
@@ -17,10 +17,10 @@ node_modules 视为按锁文件生成的本地运行依赖缓存，不参与发�
 目标被视为发布产物：与源不一致时直接覆盖。
 
 退役残留检测：池中存在、源中不存在的 skill 目录 = 退役时未清理的残留（如
-security-review 退役后仍留在 ~/.config/opencode/skills）。--check 检出即失败；
-发布模式只报告不删除（池内可能混有 SOURCES.md 登记「仅登记来源」的第三方
-git 管理技能，不得误删），清理按报告清单人工执行。检测范围 = 4 个标准池 +
-~/.config/opencode/skills（opencode 私有池，历史手动放置副本，发布不入但残留要查）。
+security-review 退役后仍留在池中）。--check 检出即失败；发布模式只报告不删除
+（池内可能混有 SOURCES.md 登记「仅登记来源」的第三方 git 管理技能，不得误删），
+清理按报告清单人工执行。检测范围 = 3 个发布池 + 已停用的历史池
+（~/.claude/skills、~/.config/opencode/skills：只查残留，不发布）。
 """
 
 import filecmp
@@ -40,8 +40,8 @@ def publishable_skills() -> list[tuple[str, Path]]:
     return sorted(out)
 
 
-POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".claude" / "skills", HOME / ".dsh" / "skills"]
-EXTRA_RESIDUE_POOLS = [HOME / ".config" / "opencode" / "skills"]
+POOLS = [HOME / ".agents" / "skills", HOME / ".codex" / "skills", HOME / ".dsh" / "skills"]
+EXTRA_RESIDUE_POOLS = [HOME / ".claude" / "skills", HOME / ".config" / "opencode" / "skills"]
 IGNORED_TREE_NAMES = [".git", "__pycache__", "node_modules"]
 
 

@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 65 项资产、0 个配置档。
+共 68 项资产、0 个配置档。
 
 ## development-tool
 
@@ -11,14 +11,17 @@
 | `development-tool:android-sdk` | Android SDK | `development` | 第三方 | 跟踪（official-page），official-api 待切换 | `managed` | `current` | owner-declared | 提供 Android 平台、构建工具、ADB、模拟器与 SDK 命令行管理能力。 |
 | `development-tool:aws-cli` | AWS CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理和自动化 Amazon Web Services 资源。 |
 | `development-tool:azure-cli` | Azure CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理和自动化 Microsoft Azure 资源。 |
-| `development-tool:blender-mcp` | Blender MCP | `development` | 第三方 | 跟踪（渠道未确认） | `managed` | `current` | owner-declared | 通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。 |
+| `development-tool:blender-mcp` | Blender MCP | `development` | 第三方 | 跟踪（official-page） | `managed` | `current` | owner-declared | 通过 MCP 将 AI 客户端连接到 Blender，用于查询场景和调用 Blender Python API。 |
 | `development-tool:bun` | Bun | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供独立的 JavaScript 运行时、包管理器、测试与打包工具。 |
+| `development-tool:chrome-devtools-mcp` | Chrome DevTools MCP | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过 MCP 让 AI 客户端检查页面、抓取性能数据并执行浏览器操作。 |
 | `development-tool:claude-code` | Claude Code | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
 | `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
+| `development-tool:context7-mcp` | Context7 MCP | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过 MCP 为 AI 客户端提供最新的官方文档与代码示例检索。 |
 | `development-tool:deepseek-harness` | DeepSeek Harness | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
 | `development-tool:git` | Git for Windows | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。 |
 | `development-tool:github-cli` | GitHub CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。 |
 | `development-tool:google-cloud-sdk` | Google Cloud SDK | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。 |
+| `development-tool:inkscape-mcp` | Inkscape MCP | `development` | 第三方 | 跟踪（official-page） | `managed` | `current` | owner-declared | 通过 MCP 让 AI 客户端检查、编辑、渲染并导出 Inkscape / SVG 图纸。 |
 | `development-tool:jq` | jq | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 在脚本和终端中查询、转换与验证 JSON 数据。 |
 | `development-tool:kubectl` | kubectl | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 通过 kubectl 检查和管理 Kubernetes 集群资源与清单。 |
 | `development-tool:lark-cli` | 飞书 CLI | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过官方命令行工具访问飞书开放平台能力，并为人工或 AI Agent 提供结构化操作入口。 |
@@ -99,9 +102,12 @@
 | 来源 | 关系 | 目标 |
 |---|---|---|
 | `development-tool:blender-mcp` | `depends-on` | `development-tool:uv` |
+| `development-tool:chrome-devtools-mcp` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:claude-code` | `depends-on` | `development-tool:nodejs` |
+| `development-tool:context7-mcp` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:deepseek-harness` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:github-cli` | `uses` | `development-tool:git` |
+| `development-tool:inkscape-mcp` | `depends-on` | `development-tool:uv` |
 | `development-tool:lark-cli` | `depends-on` | `development-tool:nodejs` |
 | `development-tool:pen-dev-mcp` | `depends-on` | `software:pen-dev` |
 | `development-tool:pnpm` | `depends-on` | `development-tool:nodejs` |

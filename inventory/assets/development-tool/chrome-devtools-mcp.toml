@@ -1,0 +1,33 @@
+schema_version = 1
+id = "development-tool:chrome-devtools-mcp"
+type = "development-tool"
+name = "Chrome DevTools MCP"
+domain = "development"
+status = "managed"
+purpose = "通过 MCP 让 AI 客户端检查页面、抓取性能数据并执行浏览器操作。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/chrome-devtools-mcp.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-10-09"
+last_verified_on = "2026-10-09"
+review_days = 90
+notes = "官方仓库 ChromeDevTools/chrome-devtools-mcp，Apache-2.0；npm latest 1.10.1（2026-09-23），本机按 @latest 运行、不固定版本。需要 Node.js ^20.19.0 || ^22.12.0 || >=23 与本机 Chrome 稳定版（官方只保证 Google Chrome 与 Chrome for Testing），不需要账号或密钥。默认由服务端自启一个专用 profile 的 Chrome 实例，不连接本地调试端口；连接已打开的 Chrome 需 --browserUrl/--autoConnect 等参数。官方文档含 Windows 专门条目。"
+tool_kind = "mcp-server"
+commands = ["npx -y chrome-devtools-mcp@latest"]
+install_source = "npm 官方 registry；由 MCP 客户端以 stdio 方式运行（Windows 上客户端命令用 cmd /c npx）"
+official_source = "https://github.com/ChromeDevTools/chrome-devtools-mcp"
+package_id = "chrome-devtools-mcp"
+version_constraint = "跟随 npm latest，未固定版本"
+release_channel = "stable"
+environment_variables = ["PATH"]
+config_reference = "Codex 用户级 config.toml 中的 chrome-devtools MCP 服务配置（只记位置，不复制配置正文）"
+verification_commands = ["MCP initialize", "MCP tools/list"]
+upstream_channel = "npm"
+upstream_identifier = "chrome-devtools-mcp"
+upstream_latest_stable = "1.10.1"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:nodejs"

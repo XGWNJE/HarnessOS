@@ -78,6 +78,7 @@ target = "另一资产的完整 ID"
 
 - `domain` 判定口径：类型按形态划分（命令行工具、SDK 与运行时归 development-tool，桌面应用与游戏归 software）；领域按资产服务的主要场景归入唯一领域——development-tool 统一归 `development`，software 及后续类型按主要使用场景选择领域，场景并列时取主用途，不按次要能力叠加。
 - `tool_kind`、`install_form`、`release_channel` 取 `taxonomy.toml` 枚举；`release_channel` 统一承载原 software 发行通道与 development-tool 更新通道语义。
+- `tool_kind = "mcp-server"` 表示 MCP 服务端：`install_source` 写可复现的启动方式（包管理器命令、宿主应用捆绑或本地脚本），`commands` 写启动命令或服务名，`version_constraint` 写版本约束，`config_reference` 只写客户端注册配置的逻辑位置。客户端配置正文、密钥与机器绝对路径不入库，也不做自动还原；换机时按 `install_source` 重新注册。
 - 完整度判定：公共字段 `fact_source`、`preference_source`、`provenance`、`declared_on`、`last_verified_on` 缺失或为空，未声明 `upstream_updates`，或 `preference_source` 为 `unknown` 时标为 incomplete。`software` 的 `install_form`、`release_channel`、`official_source`、`minimum_verified_version` 缺失、为空或为 `unknown` 时也标为 incomplete；`development-tool` 的 `tool_kind`、`commands`、`install_source`、`version_constraint`、`verification_commands` 缺失或为空时标为 incomplete；`project` 的 `backup_location` 缺失、为空或为 `unknown` 时标为 incomplete。项目无独立远端仓库时写 `archive/<slug>/`，已有远端时写该远端的逻辑引用；其余字段按适用性填写。
 - `project` 只用于**既不是 Agent Skill、也不是可安装软件或工具链**的自有代码或文档项目；能用 `skill`、`software`、`development-tool` 表达的不要归到这里。正文备份按[项目规则](../AGENTS.md#自有资产入仓备份)处理。
 - 空版本只表示用户明确不固定版本；实际版本未知时记录不完整，不能用空值代替核验；用户尚未决定的个人偏好才可使用 `unknown`，不得自行猜测。

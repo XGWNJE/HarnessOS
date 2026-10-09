@@ -1,5 +1,5 @@
 ---
-version: 2.4.1
+version: 2.4.2
 name: wenje-image
 description: 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。
 ---

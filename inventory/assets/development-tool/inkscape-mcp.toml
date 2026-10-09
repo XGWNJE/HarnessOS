@@ -1,0 +1,31 @@
+schema_version = 1
+id = "development-tool:inkscape-mcp"
+type = "development-tool"
+name = "Inkscape MCP"
+domain = "development"
+status = "managed"
+purpose = "通过 MCP 让 AI 客户端检查、编辑、渲染并导出 Inkscape / SVG 图纸。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/inkscape-mcp.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-10-09"
+last_verified_on = "2026-10-09"
+review_days = 90
+notes = "上游仓库 jjjsood/inkscape-mcp-server，MIT，版本 0.1.0（CHANGELOG 标注 Unreleased），当前未发布到 PyPI，只能从源码或 git 安装。需要 Python >=3.12；渲染、导出、路径几何与 live 工具需要 PATH 上有 Inkscape 1.4.x（上游最低检测线 1.3.0），读取、编辑、校验与快照工具不需要 Inkscape；必须配置工作区根目录，否则沙箱拒绝越界文件。上游在 Linux 上完成含真实 Inkscape 的全量测试，Windows/macOS 除真实渲染/导出/路径几何外已验证，live 会话在 Windows 上是尽力支持。本机以本地克隆加 uv 环境运行，入口为本地自建 wrapper（把 Inkscape CLI 目录前置到 PATH 后调用 inkscape_mcp.server.main），该脚本不是上游文件。"
+tool_kind = "mcp-server"
+commands = ["uv run inkscape-mcp"]
+install_source = "克隆上游仓库后用 uv 运行（uv sync 后在仓库根执行 uv run inkscape-mcp；也可 uvx --from git+https://github.com/jjjsood/inkscape-mcp.git inkscape-mcp）"
+official_source = "https://github.com/jjjsood/inkscape-mcp-server"
+version_constraint = "==0.1.0（按上游源码检出运行）"
+release_channel = "pinned"
+environment_variables = ["INKSCAPE_MCP_WORKSPACE_ROOTS", "PATH"]
+config_reference = "Codex 用户级 config.toml 中的 inkscape MCP 服务配置（指向本地入口脚本；只记位置，不复制配置正文）"
+verification_commands = ["MCP initialize", "MCP tools/list", "MCP diagnose_runtime"]
+upstream_channel = "official-page"
+upstream_identifier = "https://github.com/jjjsood/inkscape-mcp-server"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:uv"

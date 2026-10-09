@@ -1,0 +1,33 @@
+schema_version = 1
+id = "development-tool:context7-mcp"
+type = "development-tool"
+name = "Context7 MCP"
+domain = "development"
+status = "managed"
+purpose = "通过 MCP 为 AI 客户端提供最新的官方文档与代码示例检索。"
+platforms = ["windows"]
+fact_source = "inventory/assets/development-tool/context7-mcp.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+declared_on = "2026-10-09"
+last_verified_on = "2026-10-09"
+review_days = 90
+notes = "官方仓库 upstash/context7（原仓库名 context7-mcp），MIT；npm latest 4.3.0（2026-10-09 发布，登记当日的新版本），本机按 latest 运行、不固定版本。需要 Node.js >=20.18.1；默认 stdio、不监听本地端口，API key 可选（CONTEXT7_API_KEY 或 --api-key，用于更高速率限制与私有仓库），不设密钥也能用。官方另有托管端点 https://mcp.context7.com/mcp；README 有 Windows 安装配置示例，但未作正式 OS 支持声明。"
+tool_kind = "mcp-server"
+commands = ["npx -y @upstash/context7-mcp"]
+install_source = "npm 官方 registry；由 MCP 客户端以 stdio 方式运行"
+official_source = "https://github.com/upstash/context7"
+package_id = "@upstash/context7-mcp"
+version_constraint = "跟随 npm latest，未固定版本"
+release_channel = "stable"
+environment_variables = ["CONTEXT7_API_KEY", "PATH"]
+config_reference = "Codex 用户级 config.toml 中的 context7 MCP 服务配置（只记位置，不复制配置正文）"
+verification_commands = ["MCP initialize", "MCP tools/list"]
+upstream_channel = "npm"
+upstream_identifier = "@upstash/context7-mcp"
+upstream_latest_stable = "4.3.0"
+
+[[relationships]]
+type = "depends-on"
+target = "development-tool:nodejs"

@@ -6,11 +6,11 @@
     python scripts/publish_global.py --check    # 只检查同步状态，不写入
 
 发布映射（源 = global/AGENTS.md）：
-    ~/AGENTS.md                         home 根
+    ~/AGENTS.md                        用户目录 home 根
     ~/.codex/AGENTS.md                  Codex
-    ~/.config/opencode/AGENTS.md        OpenCode
-    ~/.claude/CLAUDE.md                 Claude Code
     ~/.dsh/AGENTS.md                    DSH（$DSH_HOME/AGENTS.md）
+OpenCode（~/.config/opencode/AGENTS.md）与 Claude Code（~/.claude/CLAUDE.md）已停止发布，
+历史文件保留不清理。
 Kimi Code 无全局规则注入机制，不发布（规则走项目级 AGENTS.md / skills）。
 
 目标文件被视为发布产物：与源不一致时直接覆盖。读写均按字节进行，不经文本
@@ -24,11 +24,9 @@ ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 CORE = ROOT / "global" / "AGENTS.md"
 TARGETS = [
-    ("home",     HOME / "AGENTS.md"),
-    ("codex",    HOME / ".codex" / "AGENTS.md"),
-    ("opencode", HOME / ".config" / "opencode" / "AGENTS.md"),
-    ("claude",   HOME / ".claude" / "CLAUDE.md"),
-    ("dsh",      HOME / ".dsh" / "AGENTS.md"),
+    ("home",  HOME / "AGENTS.md"),
+    ("codex", HOME / ".codex" / "AGENTS.md"),
+    ("dsh",   HOME / ".dsh" / "AGENTS.md"),
 ]
 
 
