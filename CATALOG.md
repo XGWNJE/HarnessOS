@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 69 项资产、0 个配置档。
+共 68 项资产、0 个配置档。
 
 ## development-tool
 
@@ -57,7 +57,6 @@
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、转存分享更新查询、网盘文件搜索、批量重命名与整批撤销、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户要求将当前搜索结果批… |
 | `skill:readme-repository-constraints` | readme-repository-constraints | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | Create or revise software and data repository README files using a repository-specific structure, factual copy, and pro… |
-| `skill:vibehub` | vibehub | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 在任何 Vibe Coding 编程任务及其后续补充中持续识别准确术语。用户即使已经让 Agent 完成了一部分代码、正在追加修改，或只用口语描述效果、交互、状态和问题（如“鼠标放上去有个小提示”“点完变一下颜色”“内容太长省略”），也必… |
 | `skill:vps-server-info` | vps-server-info | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 连接、查询或部署受管 VPS 时提供 SSH、服务、路径和安全边界。 |
 | `skill:wenje-image` | wenje-image | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 需要生成或编辑图片而默认模型不能原生出图时，用本 skill 出图（Grsai，按张付费）；调用前需确认付费意图。 |
 
