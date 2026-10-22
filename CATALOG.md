@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 68 项资产、0 个配置档。
+共 69 项资产、0 个配置档。
 
 ## development-tool
 
@@ -17,7 +17,7 @@
 | `development-tool:claude-code` | Claude Code | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
 | `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
 | `development-tool:context7-mcp` | Context7 MCP | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过 MCP 为 AI 客户端提供最新的官方文档与代码示例检索。 |
-| `development-tool:deepseek-harness` | DeepSeek Harness | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
+| `development-tool:deepseek-harness` | DeepSeek Harness | `development` | 第三方 | 跟踪（npm） | `managed` | `stale` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
 | `development-tool:git` | Git for Windows | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。 |
 | `development-tool:github-cli` | GitHub CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。 |
 | `development-tool:google-cloud-sdk` | Google Cloud SDK | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。 |
@@ -69,6 +69,7 @@
 | `software:clash-verge` | Clash Verge | `network-remote` | 第三方 | 跟踪（github-releases） | `managed` | `current` | owner-declared | 提供本机网络代理配置与连接管理。 |
 | `software:claude-desktop` | Claude | `ai-agent` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Claude 桌面入口，通过 Code 标签使用 Claude Code 进行本地项目开发与代码审阅。 |
 | `software:codex-desktop` | Codex 桌面端 | `ai-agent` | 第三方 | 跟踪（store） | `managed` | `current` | owner-declared | 提供 Codex 桌面任务、工作区、浏览器与本地代理协作入口。 |
+| `software:ego-lite` | ego（lite） | `browser-web` | 第三方 | 跟踪（launcher） | `managed` | `current` | owner-declared | 作为 Windows 默认浏览器，并配合 ego-browser 技能优先完成 Agent 的浏览器任务。 |
 | `software:feishu-desktop` | 飞书桌面端 | `communication` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 在 Windows 工作站提供飞书即时沟通、会议、日历、文档与协作入口。 |
 | `software:fontbase` | FontBase | `creative-media` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供字体预览、分类与启用管理。 |
 | `software:genshin-impact` | 原神 | `entertainment` | 第三方 | 跟踪（launcher） | `managed` | `incomplete` | owner-declared | 提供 Windows 版原神客户端及其本地游戏资源。 |
@@ -121,6 +122,7 @@
 
 ## 待复核
 
+- `development-tool:deepseek-harness`：已过复核周期
 - `software:genshin-impact`：偏好或动态事实不完整
 - `software:krita`：偏好或动态事实不完整
 - `software:mi-hoyo-launcher`：偏好或动态事实不完整

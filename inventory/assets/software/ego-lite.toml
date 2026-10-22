@@ -1,0 +1,29 @@
+schema_version = 1
+id = "software:ego-lite"
+type = "software"
+name = "ego（lite）"
+domain = "browser-web"
+status = "managed"
+purpose = "作为 Windows 默认浏览器，并配合 ego-browser 技能优先完成 Agent 的浏览器任务。"
+platforms = ["windows"]
+fact_source = "inventory/assets/software/ego-lite.toml"
+preference_source = "owner-declared"
+provenance = "third-party"
+upstream_updates = true
+
+declared_on = "2026-10-22"
+last_verified_on = "2026-10-22"
+review_days = 90
+notes = "已核验 0.6.0.16 安装器与主程序的 Citro Labs 有效签名、Windows 默认项，以及 Agent 打开和读取网页。"
+
+install_form = "installer"
+install_source = "官网 Windows x64 安装包；安装后由应用自动更新。"
+official_source = "https://www.egolite.app/download"
+release_channel = "beta"
+minimum_verified_version = "0.6.0.16"
+commands = ["ego-browser"]
+config_reference = "Windows 默认应用；Agent 使用偏好见 global/AGENTS.md，配套技能来源与恢复见 vendor/SOURCES.md。首次设置后重开 Agent 或终端以加载技能和 PATH；账号、密码及 Profile 不入库。"
+verification_commands = ["ego-browser skill", "ego-browser nodejs -e \"console.log('ego-browser ready')\""]
+post_restore_checks = ["浏览器可启动并访问网页", "HTTP、HTTPS、.htm、.html 的默认应用为 ego（lite）", "ego-browser skill 输出完整指南", "Agent 可创建 Space、打开并读取网页，结束后关闭测试 Space"]
+upstream_channel = "launcher"
+upstream_identifier = "ego（lite）应用自动更新"
