@@ -31,7 +31,7 @@
 - 发布点固定三处：Rules 发 `~/AGENTS.md`、`~/.codex/AGENTS.md`、`~/.dsh/AGENTS.md`；Skills 发 `~/.agents/skills`、`~/.codex/skills`、`~/.dsh/skills`。Claude Code 与 OpenCode 已停止发布，历史副本保留不清理。
 - `sync.py` 普通模式先重建 `catalog.html` 与 `CATALOG.md`，再按上述三个发布点发布 Rules 与 Skills；`--check` 只检查，不修改文件或发布目标。Inventory 与 Workflows 不发布到 Agent Skills 池。
 - 修改 `global/AGENTS.md` 后发布；修改自有 Skill 后递增其版本并发布；第三方 Skill 的上游更新采用整目录替换，本地补丁仅在用户明确授权后应用，并同步更新 `vendor/SOURCES.md` 的差异与验证记录。
-- 交付前运行与改动对应的检查、`python scripts/sync.py --check` 和 `git diff --check`。验证通过后自动创建一次仅含本次变更的中文本地提交，不推送。
+- 交付前运行与改动对应的检查、`python scripts/sync.py --check` 和 `git diff --check`。本项目发生有效变更且验证通过后，自动创建仅含本次变更的中文提交并推送远端，无需再次确认；无有效变更不提交、不推送。
 
 ## 自有资产入仓备份
 
