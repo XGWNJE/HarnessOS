@@ -2,7 +2,7 @@
 
 > 此文件由 `python scripts/catalog.py render` 生成，请修改原生事实源而不是本文件。
 
-共 68 项资产、0 个配置档。
+共 69 项资产、0 个配置档。
 
 ## development-tool
 
@@ -54,6 +54,7 @@
 
 | ID | 名称 | 领域 | 来源性质 | 上游更新 | 状态 | 时效 | 偏好来源 | 用途 |
 |---|---|---|---|---|---|---|---|---|
+| `skill:agent-cleanup` | agent-cleanup | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | 预防和治理项目空间异常膨胀：改造项目 AGENTS.md、生成与验证入口，落实复用、预算和回收。用于 Agent 副本／构建现场持续增长、建立事前预防，以及治理效果不佳、执行失败或发现未覆盖膨胀机制时的证据驱动自我迭代；不必等磁盘告警才使… |
 | `skill:archify` | archify | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable stan… |
 | `skill:quarkclouddrive` | quarkclouddrive | `ai-agent` | 第三方 | 跟踪 | `managed` | `current` | — | 夸克网盘官方(Quark Drive)Skill，用于文件上传/下载（支持断点续传）、文件分享与转存、转存分享更新查询、网盘文件搜索、批量重命名与整批撤销、相册整理、AI助手（文件总结与知识问答，支持万级文件）。当用户要求将当前搜索结果批… |
 | `skill:readme-repository-constraints` | readme-repository-constraints | `ai-agent` | 用户自产 | 不适用 | `managed` | `current` | — | Create or revise software and data repository README files using a repository-specific structure, factual copy, and pro… |

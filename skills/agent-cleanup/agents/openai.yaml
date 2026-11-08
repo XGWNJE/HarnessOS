@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent 空间治理"
+  short_description: "预防项目空间膨胀，改造规则与生成入口，遇效果不佳、失败或新原因时依据证据自我迭代"
