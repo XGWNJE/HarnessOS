@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "当前通过 npm 全局安装，版本 11.25.0；npm v11 维护线标签为 11.26.0，跨大版本 latest 为 12.4.1；不是 Node.js 自带组件，可与其他 npm 全局工具合并为一次安装命令。PNPM_HOME 及 v11 全局 bin 子目录已注册到 Windows 用户 PATH。"
+notes = "本机 npm 全局 pnpm 11.25.0，不是 Node.js 自带组件；上游按已登记 v11 维护线查询，不用 npm 默认 latest 跨大版本替代。PNPM_HOME 与全局 bin 在恢复时核验。"
 tool_kind = "package-manager"
 commands = ["pnpm", "pnpx"]
 install_source = "npm 官方 registry"
@@ -25,7 +25,7 @@ config_reference = "pnpm 用户级配置与 store（仅逻辑引用）"
 verification_commands = ["pnpm --version"]
 upstream_channel = "npm"
 upstream_identifier = "pnpm@latest-11"
-upstream_latest_stable = "11.26.0"
+upstream_latest_stable = "11.28.9"
 
 [[relationships]]
 type = "depends-on"

@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-13"
-last_verified_on = "2026-09-13"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "本机 2026-09-13 静默安装 26H1u1，安装包签名有效、签署者为 Broadcom Inc，官方 build 25688693；程序内部版本为 26.0.1 build-25688693，即 26H1u1。官方条款为个人、商业与教育用途均免费且不再需要许可证密钥，安装时密钥框留空。按 owner 确认的版本策略关闭应用内自动更新（AUTOSOFTWAREUPDATE=0），上游升级走人工决策；CEIP 数据收集保持关闭（DATACOLLECTION=0，与图形向导默认不勾选一致）。主机 Hyper-V、虚拟机平台与 WSL2 均未启用，VMware 使用原生 VMM，无需共存配置。下载需 Broadcom 支持门户的免费账号，官方下载页已并入该门户。安装无需重启。上游定位符当前为 26H1 发布说明索引，官方发布下一版本线时需核验并前移到对应索引。虚拟机磁盘、运行状态与主机偏好设置属用户数据，不在本记录恢复范围。"
+notes = "本机主程序仍为 26.0.1 build-25688693（26H1u1）。官方发布说明页本轮返回 403，未能确认最新稳定版，上游字段沿用原核验值。保留自动更新关闭、CEIP 关闭的既有策略；虚拟机、快照、主机偏好与授权状态不在本记录恢复范围。Broadcom 下载要求账号与许可条件在真实恢复前重新核验；本轮未检查虚拟机、驱动或服务。"
 install_form = "installer"
 official_source = "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion"
 release_channel = "stable"

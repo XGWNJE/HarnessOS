@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-10-09"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "使用 Blender 官方 Lab MCP Server v1.0.0（projects.blender.org/lab/blender_mcp，检出提交 03004fd，2026-04-27）；按官方做法克隆源码后用 uv 运行，不经 PyPI 安装——PyPI 同名 blender-mcp 为社区项目，不作为上游依据。运行副本固定 mcp<2 以匹配 v1.0.0 使用的 FastMCP 接口。Blender 5.2.1 已安装，官方 MCP 扩展已启用并通过 127.0.0.1:9876 连接测试。Codex 侧的 blender 服务条目当前为停用状态（enabled=false），启用前需确认 Blender 加载项与端口连通。上游只有源码仓库、无 releases 渠道，版本按官方页面人工核验。"
+notes = "本机采用 Blender 官方 Lab MCP Server v1.0.0，源提交 03004fd；本地依赖固定 mcp<2，Codex 的 blender 注册项仍停用。官方发布页索引列出稳定版 v1.0.3（2cea8d566d），页面直连返回 403；未升级本机。安装来自官方源码而非 PyPI 同名第三方项目；恢复前核对 Blender 扩展与本地连接。"
 tool_kind = "mcp-server"
 commands = ["uv run blender-mcp"]
 install_source = "克隆官方源码仓库 projects.blender.org/lab/blender_mcp 后以 uv 运行（在克隆的 mcp/ 目录执行 uv run --directory <克隆>/mcp blender-mcp）"
@@ -25,7 +25,9 @@ environment_variables = ["BLENDER_HOST", "BLENDER_PORT"]
 config_reference = "Codex 用户级 config.toml 中的 blender MCP 服务配置（只记位置，不复制配置正文）"
 verification_commands = ["MCP initialize", "MCP tools/list", "MCP get_objects_summary"]
 upstream_channel = "official-page"
-upstream_identifier = "https://www.blender.org/lab/mcp-server/"
+upstream_identifier = "https://projects.blender.org/lab/blender_mcp/releases"
+
+upstream_latest_stable = "1.0.3"
 
 [[relationships]]
 type = "depends-on"

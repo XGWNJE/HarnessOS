@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "本机安装版本为 2025.3，WinGet 包 ID 为 Google.AndroidStudio；官方稳定版已发布 2026.1.4（Quail 4，构建 2026.1.4.7）。IDE 内置 JBR，不单独登记；Android SDK 作为由 SDK Manager 管理的独立安装单元登记。"
+notes = "本机 WinGet 安装项仍为 2025.3，主程序存在；上游按 Google.AndroidStudio 稳定包查询。IDE 内置 JBR 不另登记；Android SDK 作为 SDK Manager 管理的独立安装单元登记。"
 install_form = "package-manager"
 official_source = "https://developer.android.com/studio"
 release_channel = "stable"
@@ -23,7 +23,7 @@ backup_location = "unknown"
 post_restore_checks = ["Android Studio 可启动", "版本信息显示 2025.3 或兼容稳定版本", "Android SDK、ADB 与模拟器命令可解析"]
 upstream_channel = "winget"
 upstream_identifier = "Google.AndroidStudio"
-upstream_latest_stable = "2026.1.4.7"
+upstream_latest_stable = "2026.2.2.8"
 
 [[relationships]]
 type = "uses"

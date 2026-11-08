@@ -12,7 +12,7 @@ provenance = "third-party"
 upstream_updates = true
 
 declared_on = "2026-10-22"
-last_verified_on = "2026-11-08"
+last_verified_on = "2026-11-09"
 review_days = 90
 notes = "本机主程序文件与 WinGet 安装项均为 0.6.2.8，ego-browser 命令可解析。本轮只核对版本与安装证据，未重验默认应用、签名或浏览器交互。"
 

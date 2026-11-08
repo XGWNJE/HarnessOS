@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-11-08"
+last_verified_on = "2026-11-09"
 review_days = 30
-notes = "本机默认 dsh 来自 DeepSeek Harness 桌面端，命令与 WinGet 均报告 0.2.2-rc.1；npm 独立安装的 @deepseek-ai/dsh 为 0.1.6-alpha.2。原 npm 固定版本约束保留，当前两套安装均已偏离该约束；恢复前需确认采用哪套安装及版本。npm 上游字段沿用 2026-09-16 的核验值，本轮未查上游。配置、Provider 凭据、本地会话与附件不入库。"
+notes = "本机默认 dsh 来自 DeepSeek Harness 桌面端，命令与 WinGet 均报告 0.2.2-rc.1；npm 独立安装的 @deepseek-ai/dsh 为 0.1.6-alpha.2。原 npm 固定版本约束保留，当前两套安装均已偏离该约束；恢复前需确认安装形态及版本。npm latest 0.2.2-rc.1 仍为预发布版本。配置、Provider 凭据、本地会话与附件不入库。"
 tool_kind = "cli"
 commands = ["dsh"]
 install_source = "DeepSeek Harness 桌面端内置 CLI；另保留 npm 官方 registry 独立安装"
@@ -25,7 +25,7 @@ config_reference = "DeepSeek Harness 用户级配置与凭据存储"
 verification_commands = ["dsh --version", "npm ls -g @deepseek-ai/dsh --depth=0"]
 upstream_channel = "npm"
 upstream_identifier = "@deepseek-ai/dsh"
-upstream_latest_stable = "0.1.5-rc.1"
+upstream_latest_stable = "0.2.2-rc.1"
 
 [[relationships]]
 type = "depends-on"

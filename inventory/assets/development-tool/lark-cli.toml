@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "官方仓库为 larksuite/cli，npm `latest` 当前为 1.0.95；当前 npm 安装形态先由 Node.js 启动包内运行器，再调用原生 CLI。应用创建、账号登录、Skills 安装与 OAuth 授权需由用户另行确认，不纳入恢复步骤。"
+notes = "本机 @larksuite/cli 1.0.93，命令与 npm 包元数据一致；此安装形态需要 Node.js，并由入口调用原生 CLI。应用创建、账号登录、Skills 安装和 OAuth 授权须按当次授权处理，不作为默认恢复步骤。"
 tool_kind = "cli"
 commands = ["lark-cli"]
 install_source = "npm 官方 registry"
@@ -25,7 +25,7 @@ config_reference = "操作系统凭据存储与飞书 CLI 用户级配置（仅�
 verification_commands = ["lark-cli --version", "lark-cli --help"]
 upstream_channel = "npm"
 upstream_identifier = "@larksuite/cli"
-upstream_latest_stable = "1.0.95"
+upstream_latest_stable = "1.0.99"
 
 [[relationships]]
 type = "depends-on"

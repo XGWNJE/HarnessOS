@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-10-09"
-last_verified_on = "2026-11-08"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "官方仓库 ChromeDevTools/chrome-devtools-mcp（Apache-2.0）；本机运行中进程对应的 package.json 为 1.12.0，Codex 注册项已启用。按 npm latest 运行、不固定版本；上游字段沿用 2026-09-23 的核验值，本轮未查上游。需 Node.js ^20.19.0 || ^22.12.0 || >=23 与 Google Chrome / Chrome for Testing；无需账号或密钥，默认启动专用 profile 的 Chrome，连接既有实例需另配参数。"
+notes = "本机运行中进程对应的包版本 1.12.0，Codex 注册项已启用。按 npm latest 运行、不固定版本；默认 stdio，由服务管理专用 Chrome profile，连接既有浏览器需另配参数。无需账号或密钥，客户端注册配置不入库。"
 tool_kind = "mcp-server"
 commands = ["npx -y chrome-devtools-mcp@latest"]
 install_source = "npm 官方 registry；由 MCP 客户端以 stdio 方式运行（Windows 上客户端命令用 cmd /c npx）"
@@ -26,7 +26,7 @@ config_reference = "Codex 用户级 config.toml 中的 chrome-devtools MCP 服�
 verification_commands = ["MCP initialize", "MCP tools/list"]
 upstream_channel = "npm"
 upstream_identifier = "chrome-devtools-mcp"
-upstream_latest_stable = "1.10.1"
+upstream_latest_stable = "1.12.0"
 
 [[relationships]]
 type = "depends-on"

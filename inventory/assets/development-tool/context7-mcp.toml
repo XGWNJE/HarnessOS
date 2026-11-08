@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-10-09"
-last_verified_on = "2026-10-09"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "官方仓库 upstash/context7（原仓库名 context7-mcp），MIT；npm latest 4.3.0（2026-10-09 发布，登记当日的新版本），本机按 latest 运行、不固定版本。需要 Node.js >=20.18.1；默认 stdio、不监听本地端口，API key 可选（CONTEXT7_API_KEY 或 --api-key，用于更高速率限制与私有仓库），不设密钥也能用。官方另有托管端点 https://mcp.context7.com/mcp；README 有 Windows 安装配置示例，但未作正式 OS 支持声明。"
+notes = "官方仓库 upstash/context7（MIT）；本机 npx 缓存包为 4.5.1，Codex 注册项已启用，缓存版本不作为单次 MCP 会话版本的保证。按 npm latest 运行、不固定版本；默认 stdio，API key 可选，托管端点与本地注册配置按官方文档恢复，凭据不入库。"
 tool_kind = "mcp-server"
 commands = ["npx -y @upstash/context7-mcp"]
 install_source = "npm 官方 registry；由 MCP 客户端以 stdio 方式运行"
@@ -26,7 +26,7 @@ config_reference = "Codex 用户级 config.toml 中的 context7 MCP 服务配置
 verification_commands = ["MCP initialize", "MCP tools/list"]
 upstream_channel = "npm"
 upstream_identifier = "@upstash/context7-mcp"
-upstream_latest_stable = "4.3.0"
+upstream_latest_stable = "4.5.1"
 
 [[relationships]]
 type = "depends-on"

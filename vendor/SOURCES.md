@@ -6,8 +6,8 @@
 
 | Skill | 来源 | 引入时间 | 说明 |
 |---|---|---|---|
-| archify | https://github.com/tt-a1i/archify （archify/ 目录 + LICENSE，MIT，SKILL metadata v2.17） | 2026-08-28 | 当前受管提交 c1443b3（2026-09-11），2026-09-12 核验；架构、流程、时序、数据流和生命周期图的本地渲染与校验。迁移须保留完整目录、THIRD_PARTY_NOTICES.md 与字体许可；需 Node.js >=18，核心渲染不需安装 node_modules，视觉检查另需 Chrome/Chromium |
-| quarkclouddrive | 夸克网盘（Quark Drive）官方 Skill；非 git 来源，从部署副本回收；通过 `@ali/qkop-*` SDK 操作网盘 | 2026-09-02 | 当前受管版本 1.0.20-5be3987，2026-09-13 核验；上传/下载、分享与转存、搜索、批量重命名与撤销、相册整理、AI 助手。需 Node.js，`scripts/install.sh` 安装 CLI |
+| archify | https://github.com/tt-a1i/archify （archify/ 目录 + LICENSE，MIT，SKILL metadata v2.17） | 2026-08-28 | 当前受管提交 c1443b3（v2.17，MIT）；2026-11-09 核对上游 HEAD a4065941（v3.2，Apache-2.0），本轮仅更新登记信息，未替换受管实体；架构、流程、时序、数据流和生命周期图的本地渲染与校验。迁移须保留完整目录、THIRD_PARTY_NOTICES.md 与字体许可；需 Node.js >=18，核心渲染不需安装 node_modules，视觉检查另需 Chrome/Chromium |
+| quarkclouddrive | 夸克网盘（Quark Drive）官方 Skill；非 git 来源，从部署副本回收；通过 `@ali/qkop-*` SDK 操作网盘 | 2026-09-02 | 当前受管版本 1.0.20-5be3987，2026-11-09 核对事实源与发布副本；未登记可查询的独立上游版本接口，不推定其为最新版；上传/下载、分享与转存、搜索、批量重命名与撤销、相册整理、AI 助手。需 Node.js，`scripts/install.sh` 安装 CLI |
 
 本文件当前没有登记本地补丁；若以后出现补丁，在本节对应行记录上游提交、原因、差异范围、验证结果以及移除或重放条件，并明确标为补丁版。
 
@@ -23,7 +23,7 @@
 
 | Skill | 来源 | 登记时间 | 说明 |
 |---|---|---|---|
-| ego-browser | [Citro Labs 官方仓库](https://github.com/citrolabs/ego-lite/tree/d392204d1ea1a8027a591ab2b0129c2e11d85f26/skills/ego-browser)（MIT） | 2026-10-22 | Skill 2.1.0，22 个文件与该上游提交一致。由 Ego（lite）首次设置安装并维护目录链接，随应用更新；HarnessOS 不复制或发布。恢复时先安装 Ego、完成首次设置并重开 Agent，再运行 `ego-browser skill`。 |
+| ego-browser | [Citro Labs 官方仓库](https://github.com/citrolabs/ego-lite/tree/dde3413b01e5102f0f3d43960c167d183a2c473d/skills/ego-browser)（MIT） | 2026-10-22 | 本机 Skill 2.2.0；2026-11-09 核对 SKILL.md 与上游提交 dde3413b01e5102f0f3d43960c167d183a2c473d 一致，不据此声称整个目录完全一致。由 Ego（lite）首次设置安装并维护目录链接，随应用更新；HarnessOS 不复制或发布。恢复时先安装 Ego、完成首次设置并重开 Agent，再运行 `ego-browser skill`。 |
 
 ## 不受管的池内技能（2026-09-13 确认）
 

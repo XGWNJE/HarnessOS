@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-11-08"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "中国区飞书客户端，使用 ByteDance.Feishu 稳定源，不使用 Lark 国际版或企业批量部署工具。本轮 WinGet 按包 ID 与飞书名称均未匹配安装项，既有常见主程序位置和开始菜单也未找到；本机安装状态待确认，保留 managed。版本与上游字段沿用 2026-09-12 的历史核验值，不代表当前已安装。"
+notes = "使用中国区 ByteDance.Feishu 稳定源，不使用 Lark 国际版或企业批量部署工具。WinGet 按包 ID 与飞书名称均未匹配本机安装，常见主程序位置和开始菜单也未找到；安装状态待确认，保留 managed。minimum_verified_version 为历史核验值，不代表当前已安装；上游字段已复核。"
 install_form = "package-manager"
 official_source = "https://www.feishu.cn/download?lang=zh-CN"
 release_channel = "stable"
@@ -23,4 +23,4 @@ backup_location = "不适用（工作区数据由飞书服务端承载）"
 post_restore_checks = ["WinGet 显示 ByteDance.Feishu 已安装", "客户端可启动并显示登录页或主界面", "主程序 Authenticode 签名有效"]
 upstream_channel = "winget"
 upstream_identifier = "ByteDance.Feishu"
-upstream_latest_stable = "7.76.21"
+upstream_latest_stable = "8.4.7"

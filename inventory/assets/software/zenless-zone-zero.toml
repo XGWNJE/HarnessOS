@@ -11,7 +11,7 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-11-08"
+last_verified_on = "2026-11-09"
 review_days = 90
 notes = "本机米哈游启动器同级 games 下的绝区零 config.ini 显示 game_version=3.3.0。按已登记 launcher 渠道以本机配置为版本证据，未联网判断官方最新版本；安装已迁出用户文档目录，恢复时重新关联实际游戏目录，未启动游戏或校验完整资源。"
 install_form = "unknown"

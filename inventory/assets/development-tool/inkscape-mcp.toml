@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-10-09"
-last_verified_on = "2026-10-09"
+last_verified_on = "2026-11-09"
 review_days = 90
-notes = "上游仓库 jjjsood/inkscape-mcp-server，MIT，版本 0.1.0（CHANGELOG 标注 Unreleased），当前未发布到 PyPI，只能从源码或 git 安装。需要 Python >=3.12；渲染、导出、路径几何与 live 工具需要 PATH 上有 Inkscape 1.4.x（上游最低检测线 1.3.0），读取、编辑、校验与快照工具不需要 Inkscape；必须配置工作区根目录，否则沙箱拒绝越界文件。上游在 Linux 上完成含真实 Inkscape 的全量测试，Windows/macOS 除真实渲染/导出/路径几何外已验证，live 会话在 Windows 上是尽力支持。本机以本地克隆加 uv 环境运行，入口为本地自建 wrapper（把 Inkscape CLI 目录前置到 PATH 后调用 inkscape_mcp.server.main），该脚本不是上游文件。"
+notes = "上游 jjjsood/inkscape-mcp-server 的 pyproject.toml 仍为 0.1.0，MIT、Python >=3.12；这是源码版本，不据此声称已有稳定发行包。本机 Codex 的 inkscape 注册项已启用，使用本地适配 wrapper；本轮未执行渲染或 live 会话验收。配置脚本和机器路径不入库，既有 Windows 兼容性限制恢复时复核。"
 tool_kind = "mcp-server"
 commands = ["uv run inkscape-mcp"]
 install_source = "克隆上游仓库后用 uv 运行（uv sync 后在仓库根执行 uv run inkscape-mcp；也可 uvx --from git+https://github.com/jjjsood/inkscape-mcp.git inkscape-mcp）"

@@ -1,92 +1,41 @@
 # VPS 核验快照与命令
 
-## 最近核验（事实）
+## 事实源与连接
 
-- 核验时间：2026-09-12（Asia/Shanghai）
-- 核验方式：读取本机 SSH config（`~/.ssh/config`），并通过 SSH 在 VPS 上执行只读检查
-- 当前默认 SSH 别名：`xgwnje`
-- 兼容别名：`visionguard`、`server-infra-primary`、`server-infra-novixlink-lax`
-- **重要变更**：稳定别名已切换至 NovixLink LAX 节点；旧目标仅以带 `-retired` 后缀的别名保留，不得用于常规操作
+- 核验时间：2026-11-09（Asia/Shanghai）；使用本机 SSH 配置及远程只读命令。
+- 常规 SSH 别名：`server-infra-tokyo`，本轮连接成功。旧 `xgwnje` 入口连接关闭，不作为当前连接方案。
+- 资源清单、生命周期与现场资料：私有仓库 `Wenje-Server/Server-infra` 的 `inventory/resources.json`、`state/current.json` 和 `CURRENT.md`。
+- `CURRENT.md` 为 归属项目生成文件，本轮只读引用，未运行维护脚本或改写该项目。
+- 真实连接参数以本机 SSH 配置为准；换机先按私有仓库恢复说明重新配置，公开技能不保存 IP、端口、用户、私钥路径或生产配置。
 
-## SSH 连接（事实）
+## 本轮实测
 
-真实 IP / 端口 / 用户**不写进本文件**（本仓库为公开仓库）。以本机 `~/.ssh/config` 中的 `Host xgwnje` 条目为唯一事实源，用前现读：
+| 项目 | 观察 |
+|---|---|
+| 系统 / Kernel | Ubuntu 26.04 LTS / `7.0.0-30-generic` |
+| CPU | 2 vCPU |
+| 内存 | 总量 1930 MiB，可用约 1162 MiB |
+| Swap | 总量 2047 MiB，已用约 784 MiB |
+| 根分区 | 约 39G，已用 36G（96%），可用约 1.8G；部署前重新核验余量 |
+| Nginx / VisionGuard | 均为 active |
+| Docker | inactive，不据此推定应当启用 |
+| 定时器 | `certbot.timer` active；`wenje-bandwidth.timer` inactive，未核验其他调度入口或邮件送达 |
+| VisionGuard 健康检查 | `https://visionguard.xgwnje.cn/health` 返回 200；不代表设备、媒体与告警业务已验收 |
+
+## VisionGuard 与配置定位
+
+- 服务单元：`/etc/systemd/system/visionguard.service`。
+- 当前工作目录：`/opt/visionguard-server`。
+- Nginx `conf.d` 现有 `novix-visionguard-9443.conf`、`novix-subscription-9443.conf` 及订阅备份；文件存在不代表均生效，修改前按 归属项目核对加载链路。
+- 公网入口与内部转发的期望关系见资源清单；本轮未转储 Nginx 配置、监听端口、环境变量或凭据。
+- 旧主页、API、状态页和订阅入口不沿用 9 月快照推定在役；以 归属项目当前资源生命周期为准。
+
+## 最小只读检查
 
 ```bash
-ssh xgwnje                             # 登录默认 VPS
-ssh xgwnje "uptime"                    # 远程执行只读命令
-scp file.txt xgwnje:/var/www/          # 上传文件示例
+ssh -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=yes server-infra-tokyo "uptime; free -m; df -h /"
+ssh -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=yes server-infra-tokyo "systemctl is-active nginx visionguard; systemctl show visionguard -p WorkingDirectory -p FragmentPath"
+ssh -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=yes server-infra-tokyo "curl -ksS -o /dev/null -w '%{http_code}\n' https://visionguard.xgwnje.cn/health"
 ```
 
-在 Codex sandbox 中如果 `ssh xgwnje` 报 “Could not resolve hostname xgwnje”，通常是 sandbox 没读到用户 SSH config。可显式指定配置文件（路径以本机实际为准）。
-
-## 服务器基本信息（2026-09-12 核验）
-
-| 项目 | 当前值 |
-|---|---|
-| 系统 | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
-| Kernel | `5.15.0-190-generic` |
-| CPU | 1 vCPU |
-| 内存 | 705 MiB；swap 1.0 GiB（已用约 77 MiB） |
-| 根分区 | `/dev/vda1`，9.6G，已用 6.2G（65%） |
-| 公网 IP / SSH | 见本机 `~/.ssh/config`（公开仓库不落明文） |
-
-资源较此前 Debian 节点（1 vCPU / 961 MiB / 20G）进一步收缩，部署新服务前必须复核余量。
-
-## Nginx 架构（事实）
-
-配置文件在 `/etc/nginx/conf.d/`（不再是 sites-enabled）：
-
-- `novix-web-9443.conf`：主页与 API 配置；主页 root 到静态目录，API 反代本机 Node 服务
-- `novix-acme.conf`：`/.well-known/acme-challenge/` → `/var/www/acme`（证书签发）
-- `novix-subscription-9443.conf`：`sub.xgwnje.cn` 订阅入口
-- `novix-visionguard-9443.conf`：VisionGuard HTTPS / WebSocket 入口
-
-## 当前服务分工（2026-09-12 核验）
-
-| 域名 | 当前用途 | 后端 / 路径 | 核验结果 |
-|---|---|---|---|
-| `xgwnje.cn` / `www.xgwnje.cn` | 主页 | 静态 `/var/www/xgwnje-home` | `200` |
-| `api.xgwnje.cn` | 主页 API | 反代本机 Node 服务（`127.0.0.1:8787` / `8790`） | 根路径 `404`，进程与监听端口在跑 |
-| `visionguard.xgwnje.cn` | VisionGuard API / WebSocket | 反代 `127.0.0.1:3000` | `/health` 返回 `200` |
-| `sub.xgwnje.cn` | 订阅 | 见 `novix-subscription-9443.conf` | 根路径 `404`；不据此判断订阅专用路径失效 |
-| `m.xgwnje.cn` / `status.xgwnje.cn` / `mail.xgwnje.cn` | 旧机遗留域名 | 当前 Nginx 无对应站点配置 | HTTPS 连接失败，不得视为在役服务 |
-
-注意（事实）：Docker 当前 inactive；旧文档中的 `webhome/current`、Uptime Kuma、status 页、移动版和 mail 预留站点均不得沿用。
-
-## VisionGuard 部署（2026-09-12 核验）
-
-| 项目 | 当前值 |
-|---|---|
-| 服务名 | `visionguard.service`（enabled，active） |
-| systemd 文件 | `/etc/systemd/system/visionguard.service` |
-| 工作目录 | `/opt/visionguard-server`（**不再是** `/opt/visionguard/VisionGuard_Server`） |
-| 启动命令 | `/usr/bin/node dist/index.js` |
-| Node 端口 | `127.0.0.1:3000` |
-| 健康检查 | `curl -ksS https://visionguard.xgwnje.cn/health` |
-| API Key 变量 | `VISIONGUARD_API_KEY` / server `.env` 中的 `API_KEY`（见「密钥零暴露」验收标准） |
-
-常用只读检查：
-
-```bash
-ssh xgwnje "systemctl status visionguard --no-pager -l | sed -n '1,30p'"
-ssh xgwnje "systemctl is-active nginx visionguard"
-ssh xgwnje "curl -ksS -o /dev/null -w '%{http_code}\n' https://visionguard.xgwnje.cn/health"
-ssh xgwnje "ss -tlnp | grep -E ':(3000|8787|80|443|9443) ' || true"
-```
-
-## 密钥和敏感信息位置（事实）
-
-| 项目 | 路径 / 说明 |
-|---|---|
-| SSH 私钥 | 以 `ssh -G xgwnje` 解析出的 `identityfile` 为准，不在公开仓库固定文件名 |
-| 证书私钥 | `/etc/nginx/private/`（各站点 SSL 私钥） |
-| VisionGuard API Key | 环境变量 / server `.env` |
-
-## 核验参考命令
-
-```bash
-ssh xgwnje "hostname; uptime; free -h; df -h /"
-ssh xgwnje "systemctl is-active nginx visionguard"
-ssh xgwnje "curl -ksS -o /dev/null -w 'root %{http_code}\n' https://xgwnje.cn/; curl -ksS -o /dev/null -w 'vg %{http_code}\n' https://visionguard.xgwnje.cn/health; curl -ksS -o /dev/null -w 'status %{http_code}\n' https://status.xgwnje.cn/"
-```
+以上 curl 只记录 HTTP 响应，`-k` 不验证证书信任；TLS、业务链路和资源余量按实际操作需要另行核验。服务器写入、服务操作及业务验收不包含在这份快照里。
