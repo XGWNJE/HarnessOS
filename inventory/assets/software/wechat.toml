@@ -11,13 +11,13 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-06"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-11-08"
 review_days = 90
-notes = "本机版本 4.1.13.65 已由 ARP 清单核验；官方下载页当前提供 4.1.13（64 位）版本线，WinGet 包停留在 3.9.12.57 旧版本线、不作上游依据，恢复范围未单独确认。"
+notes = "本机 Weixin.exe 产品版本 4.1.15.56；上游字段沿用 2026-09-12 的核验值，本轮未查官网。Tencent.WeChat 的 WinGet 精确查询未匹配本机安装，不能据此判为卸载；恢复范围未单独确认。"
 install_form = "installer"
 official_source = "https://windows.weixin.qq.com/?lang=zh_CN"
 release_channel = "stable"
-minimum_verified_version = "4.1.13.65"
+minimum_verified_version = "4.1.15.56"
 config_reference = "通过官方来源恢复应用；账号、配置和个人数据按应用自身流程恢复。"
 backup_location = "unknown"
 post_restore_checks = ["应用可启动", "可完成账号登录"]

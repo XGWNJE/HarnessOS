@@ -17,7 +17,7 @@
 | `development-tool:claude-code` | Claude Code | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 Anthropic Claude 的终端 AI 编程代理入口。 |
 | `development-tool:cmake` | CMake | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供跨平台原生项目配置、构建生成、测试与打包入口。 |
 | `development-tool:context7-mcp` | Context7 MCP | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 通过 MCP 为 AI 客户端提供最新的官方文档与代码示例检索。 |
-| `development-tool:deepseek-harness` | DeepSeek Harness | `development` | 第三方 | 跟踪（npm） | `managed` | `stale` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
+| `development-tool:deepseek-harness` | DeepSeek Harness | `development` | 第三方 | 跟踪（npm） | `managed` | `current` | owner-declared | 提供 DeepSeek Harness 的本地命令行与 Web 工作台启动入口。 |
 | `development-tool:git` | Git for Windows | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供源代码版本控制、Git 仓库操作和 Windows Git 工具链。 |
 | `development-tool:github-cli` | GitHub CLI | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 从命令行管理 GitHub 仓库、Issue、Pull Request、Release 与工作流。 |
 | `development-tool:google-cloud-sdk` | Google Cloud SDK | `development` | 第三方 | 跟踪（winget） | `managed` | `current` | owner-declared | 提供 Google Cloud 资源、存储和 BigQuery 的命令行管理入口。 |
@@ -122,7 +122,6 @@
 
 ## 待复核
 
-- `development-tool:deepseek-harness`：已过复核周期
 - `software:genshin-impact`：偏好或动态事实不完整
 - `software:krita`：偏好或动态事实不完整
 - `software:mi-hoyo-launcher`：偏好或动态事实不完整

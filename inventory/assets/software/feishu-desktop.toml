@@ -11,9 +11,9 @@ preference_source = "owner-declared"
 provenance = "third-party"
 upstream_updates = true
 declared_on = "2026-09-04"
-last_verified_on = "2026-09-12"
+last_verified_on = "2026-11-08"
 review_days = 90
-notes = "使用 WinGet 稳定源中的 ByteDance.Feishu；本机 7.75.18，稳定源当前提供 7.76.21。中国区飞书客户端，不使用 Lark 国际版或企业批量部署工具。"
+notes = "中国区飞书客户端，使用 ByteDance.Feishu 稳定源，不使用 Lark 国际版或企业批量部署工具。本轮 WinGet 按包 ID 与飞书名称均未匹配安装项，既有常见主程序位置和开始菜单也未找到；本机安装状态待确认，保留 managed。版本与上游字段沿用 2026-09-12 的历史核验值，不代表当前已安装。"
 install_form = "package-manager"
 official_source = "https://www.feishu.cn/download?lang=zh-CN"
 release_channel = "stable"

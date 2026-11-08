@@ -12,15 +12,15 @@ provenance = "third-party"
 upstream_updates = true
 
 declared_on = "2026-10-22"
-last_verified_on = "2026-10-22"
+last_verified_on = "2026-11-08"
 review_days = 90
-notes = "已核验 0.6.0.16 安装器与主程序的 Citro Labs 有效签名、Windows 默认项，以及 Agent 打开和读取网页。"
+notes = "本机主程序文件与 WinGet 安装项均为 0.6.2.8，ego-browser 命令可解析。本轮只核对版本与安装证据，未重验默认应用、签名或浏览器交互。"
 
 install_form = "installer"
 install_source = "官网 Windows x64 安装包；安装后由应用自动更新。"
 official_source = "https://www.egolite.app/download"
 release_channel = "beta"
-minimum_verified_version = "0.6.0.16"
+minimum_verified_version = "0.6.2.8"
 commands = ["ego-browser"]
 config_reference = "Windows 默认应用；Agent 使用偏好见 global/AGENTS.md，配套技能来源与恢复见 vendor/SOURCES.md。首次设置后重开 Agent 或终端以加载技能和 PATH；账号、密码及 Profile 不入库。"
 verification_commands = ["ego-browser skill", "ego-browser nodejs -e \"console.log('ego-browser ready')\""]
