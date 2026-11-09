@@ -7,6 +7,7 @@
 - 需要浏览器相关能力时，优先使用 Ego，并配合 `ego-browser` 技能完成。
 - 完成后按改动自动选择性价比最高的验证方式，按需进行视觉检查或较强验证，并修复本次引入的问题。
 - 验证内容变更或阶段结束时，及时退出已不再需要的测试服务、实例及相关进程，避免资源堆积导致卡顿或崩溃；先核实归属和依赖，优先正常退出，保留当前验证依赖及其他任务仍在使用的实例，不误删业务数据与必要证据。
+- Windows 上本机 PowerShell 不是最新稳定版时提醒升级：每会话首次执行命令时对比 `$PSVersionTable.PSVersion` 与 `winget search --id Microsoft.PowerShell --source winget` 的稳定版（忽略 Preview），落后就一句话报当前/最新版本、`winget upgrade --id Microsoft.PowerShell` 与收益（旧版让现代语法报错、拖慢 agent），不阻塞任务。
 - 适时提醒我增加符合项目规模和技术栈的 CI，减少手工检查、构建和测试，提高开发效率。
 
 ## 沟通
